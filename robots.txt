@@ -1,0 +1,9 @@
+# রুহানি কাফেলা — robots.txt
+User-agent: *
+Allow: /
+Disallow: /admin.html
+Disallow: /profile.html
+Disallow: /login.html
+
+# নিচের লাইনে আপনার সাইটের আসল ঠিকানা বসান
+Sitemap: https://YOUR-USERNAME.github.io/ruhani-kafela/sitemap.xml

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- প্রাথমিক sitemap। প্রবন্ধ/বই/কোর্সসহ পূর্ণ sitemap পেতে: অ্যাডমিন প্যানেল → ব্যাকআপ ও SEO → "sitemap.xml তৈরি করুন" -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/zikr-meditation.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/knowledge.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/dua-amal.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/articles.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/books.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/courses.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/golden-chain.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/ahlul-bayt.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://YOUR-USERNAME.github.io/ruhani-kafela/about.html</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+</urlset>
