@@ -52,8 +52,9 @@ p{margin:0 0 1em}
 .brand-name{display:flex;flex-direction:column;line-height:1.15}
 .brand-name b{font:700 1.22rem/1.2 var(--f-head);color:var(--dark)}
 .brand-name small{font-size:.74rem;color:var(--muted);letter-spacing:.02em}
-.main-nav{flex:1}
-.main-nav ul{display:flex;gap:2px;list-style:none;margin:0;padding:0;justify-content:center;flex-wrap:wrap}
+.head-space{flex:1}
+.main-nav{border-top:1px solid var(--line)}
+.main-nav ul{display:flex;gap:2px;list-style:none;margin:0;padding:4px 0;justify-content:center;flex-wrap:wrap}
 .main-nav a{display:block;padding:8px 11px;border-radius:8px;color:var(--text);font-size:.95rem;font-weight:500;text-decoration:none;white-space:nowrap}
 .main-nav a:hover{background:var(--light);color:var(--dark)}
 .main-nav a[aria-current="page"]{color:var(--primary);box-shadow:inset 0 -2px 0 var(--gold)}
@@ -64,7 +65,30 @@ p{margin:0 0 1em}
 .lang-toggle{display:flex;border:1px solid var(--line);border-radius:10px;overflow:hidden;font-size:.82rem}
 .lang-toggle button{border:0;background:transparent;padding:6px 10px;cursor:pointer;font:600 .82rem var(--f-body);color:var(--muted)}
 .lang-toggle button[aria-pressed="true"]{background:var(--primary);color:#fff}
-.menu-btn{display:none}
+.menu-btn{display:grid}
+
+/* ---------- বাম পাশের মেনু (Side drawer) ---------- */
+.side-drawer{position:fixed;top:0;bottom:0;left:0;width:min(320px,86vw);background:#fff;z-index:56;overflow-y:auto;box-shadow:0 0 40px rgba(0,0,0,.18);transform:translateX(-102%);transition:transform .25s;display:flex;flex-direction:column;padding-bottom:env(safe-area-inset-bottom)}
+.side-drawer.open{transform:none}
+.nav-scrim{position:fixed;inset:0;background:rgba(15,76,58,.35);z-index:55}
+html.drawer-open{overflow:hidden}
+.sd-head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:14px 12px 12px 16px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#fff;z-index:1}
+.sd-head .brand img{width:40px;height:40px}
+.sd-nav{display:flex;flex-direction:column;padding:8px 10px;flex:1}
+.sd-link{display:block;padding:11px 12px;border-radius:8px;color:var(--text);font-weight:500;text-decoration:none!important;flex:1}
+.sd-link:hover{background:var(--light);color:var(--dark)}
+.sd-link[aria-current="page"]{color:var(--primary);background:var(--light)}
+.sd-group summary{display:flex;align-items:center;list-style:none;cursor:pointer;border-radius:8px}
+.sd-group summary::-webkit-details-marker{display:none}
+.sd-chev{display:grid;place-items:center;width:40px;height:40px;color:var(--muted);flex-shrink:0;border-radius:8px}
+.sd-chev:hover{background:var(--light)}
+.sd-chev .chev{transition:transform .2s}
+.sd-group[open] .sd-chev .chev{transform:rotate(180deg)}
+.sd-sub{display:flex;flex-direction:column;margin:0 0 6px 14px;padding-left:10px;border-left:2px solid var(--gold-soft)}
+.sd-sub a{padding:7px 10px;border-radius:6px;color:var(--muted);font-size:.93rem;text-decoration:none!important}
+.sd-sub a:hover{background:var(--light);color:var(--dark)}
+.sd-foot{padding:12px 16px 18px;border-top:1px solid var(--line)}
+.sd-foot .btn svg{width:18px;height:18px}
 
 /* Search overlay */
 .search-pop{position:fixed;inset:0;background:rgba(15,76,58,.45);z-index:60;display:flex;align-items:flex-start;justify-content:center;padding:12vh 16px 0}
@@ -229,24 +253,61 @@ audio,video{width:100%;margin:8px 0}
 .chain-list li::before{content:counter(c);min-width:34px;height:34px;border-radius:50%;background:var(--light);display:grid;place-items:center;font-weight:700;color:var(--dark);font-size:.9rem}
 .chain-list button{all:unset;cursor:pointer;flex:1}
 .chain-list .nm{font-weight:600;color:var(--dark)}
-/* Ahl al-Bayt tree */
-.tree-wrap{overflow-x:auto;padding-bottom:10px}
-.tree,.tree ul{list-style:none;margin:0;padding:0}
-.tree ul{padding-inline-start:34px;position:relative}
-.tree li{position:relative;padding:8px 0 0}
-.tree ul>li::before{content:"";position:absolute;left:-20px;top:0;height:100%;border-left:2px dotted var(--gold)}
-.tree ul>li:last-child::before{height:34px}
-.tree ul>li::after{content:"";position:absolute;left:-20px;top:34px;width:18px;border-top:2px dotted var(--gold)}
-.tree-node{all:unset;display:inline-flex;align-items:center;gap:12px;background:#fff;border:1px solid var(--line);border-radius:var(--r);padding:8px 16px 8px 8px;cursor:pointer;min-width:220px}
-.tree-node:hover{border-color:var(--primary)}
-.tree-node:focus-visible{outline:3px solid var(--gold)}
-.tree-node img{width:44px;height:44px;border-radius:50%;object-fit:cover}
-.tree-node .nm{font-weight:600;color:var(--dark);display:block;line-height:1.3}
-.tree-node small{color:var(--muted)}
+/* ---------- ফ্যামিলি ট্রি (গোল্ডেন চেইন, আহলে বাইত, রূহানী সিলসিলাহ) ---------- */
+.ftree-tools{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px;font-size:.88rem}
+.ftree-tools .zoom{display:flex;gap:6px}
+.ftree-tools .zoom .btn{min-width:38px;justify-content:center;font-size:1.1rem}
+.ftree-wrap{overflow-x:auto;background:#fff;border:1px solid var(--line);border-radius:var(--r-lg);padding:26px 10px 18px;-webkit-overflow-scrolling:touch}
+.ftree{width:max-content;min-width:100%;font-size:1em}
+.ftree ul{display:flex;justify-content:center;margin:0;padding:1.5em 0 0;position:relative;list-style:none}
+.ftree li{position:relative;display:flex;flex-direction:column;align-items:center;padding:1.5em .45em 0;list-style:none}
+/* সংযোগ রেখা */
+.ftree li::before,.ftree li::after{content:"";position:absolute;top:0;right:50%;width:50%;height:1.5em;border-top:2px solid var(--gold)}
+.ftree li::after{right:auto;left:50%;border-left:2px solid var(--gold)}
+.ftree li:only-child::before,.ftree li:only-child::after{display:none}
+.ftree li:only-child{padding-top:0}
+.ftree li:first-child::before,.ftree li:last-child::after{border:0 none}
+.ftree li:last-child::before{border-right:2px solid var(--gold);border-radius:0 10px 0 0}
+.ftree li:first-child::after{border-radius:10px 0 0 0}
+.ftree ul ul::before{content:"";position:absolute;top:0;left:50%;height:1.5em;border-left:2px solid var(--gold)}
+.ftree>ul{padding-top:0;gap:1.5em}
+.ftree>ul>li{padding-top:0}
+.ftree>ul>li::before,.ftree>ul>li::after{display:none}
+/* জোড়া (স্বামী/স্ত্রী) */
+.fam{display:flex;align-items:flex-start;position:relative;z-index:1}
+.fam-link{align-self:flex-start;margin-top:2.15em;width:1.2em;border-top:2px solid var(--gold);flex-shrink:0}
+.fam.couple:has(+ul)::after{content:"";position:absolute;left:50%;top:2.15em;bottom:0;border-left:2px solid var(--gold)}
+/* নামের ঘর */
+.fnode{all:unset;box-sizing:border-box;cursor:pointer;display:flex;flex-direction:column;align-items:center;text-align:center;width:8.4em;padding:0 .2em .3em;border-radius:12px}
+.fnode .ph{width:4.4em;height:4.4em;border-radius:50%;overflow:hidden;background:var(--light);border:3px solid #fff;box-shadow:0 0 0 2px var(--gold),0 6px 14px -8px rgba(15,76,58,.5);display:block;transition:box-shadow .15s}
+.fnode .ph img{width:100%;height:100%;object-fit:cover;display:block}
+.fnode .nm{margin-top:.45em;font-weight:600;color:var(--dark);font-size:.9em;line-height:1.3}
+.fnode small{color:var(--muted);font-size:.74em;line-height:1.3;margin-top:.1em;text-transform:uppercase;letter-spacing:.02em}
+.fnode:hover .ph,.fnode:focus-visible .ph{box-shadow:0 0 0 3px var(--primary),0 6px 14px -8px rgba(15,76,58,.5)}
+.fnode:focus-visible{outline:2px dashed var(--gold);outline-offset:2px}
+.fmore{margin-top:.4em;font-size:.75em;color:var(--muted);background:var(--light);border-radius:20px;padding:0 .7em}
+.linkish{all:unset;cursor:pointer;color:var(--primary);text-decoration:underline;text-underline-offset:2px}
 dialog.modal{border:0;border-radius:var(--r-lg);padding:0;width:min(620px,94vw);max-height:88vh;box-shadow:0 30px 60px -20px rgba(0,0,0,.35)}
 dialog.modal::backdrop{background:rgba(15,76,58,.45)}
 .modal .m-in{padding:28px}
 .modal .m-close{position:absolute;top:10px;right:10px}
+
+/* ---------- শপ ---------- */
+.product-card .thumb{display:block;position:relative;aspect-ratio:1/1;max-width:100%;overflow:hidden;background:var(--light)}
+.product-card .thumb img{width:100%;height:100%;object-fit:cover}
+.product-card .thumb .badge{position:absolute;top:10px;left:10px}
+.product-card h3 a{color:var(--dark);text-decoration:none}
+.product-card .price{margin:.2em 0 .7em;font-size:1.05rem}
+.product-card .price b{color:var(--primary)}
+.product-card .price s{color:var(--muted);font-size:.88rem}
+.product-card .body{display:flex;flex-direction:column}
+.product-card .btn-wa{margin-top:auto;align-self:stretch;justify-content:center;white-space:nowrap;padding-inline:.6em}
+.btn-wa{background:#1F8F55;color:#fff}
+.btn-wa:hover{background:#18744a}
+.btn-wa svg{width:18px;height:18px;fill:currentColor}
+.shop-contact{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:#FBF7EE;border:1px solid #EFE2C4;border-radius:var(--r);padding:12px 16px;margin:0 0 22px;font-size:.95rem}
+.shop-contact .num{font-size:1.1rem;letter-spacing:.02em;user-select:all;font-variant-numeric:tabular-nums}
+.detail .shop-contact{margin-top:24px}
 
 /* Search */
 .search-group{margin-bottom:34px}
@@ -281,12 +342,7 @@ dialog.modal::backdrop{background:rgba(15,76,58,.45)}
   .main-nav a{padding:8px 8px;font-size:.9rem}
 }
 @media (max-width:980px){
-  .menu-btn{display:grid}
-  .main-nav{position:fixed;top:0;bottom:0;left:0;width:min(320px,86vw);background:#fff;z-index:55;transform:translateX(-102%);transition:transform .25s;padding:80px 16px 20px;box-shadow:0 0 40px rgba(0,0,0,.15);overflow-y:auto}
-  .main-nav.open{transform:none}
-  .main-nav ul{flex-direction:column;justify-content:flex-start}
-  .main-nav a{padding:12px 14px;font-size:1.02rem}
-  .nav-scrim{position:fixed;inset:0;background:rgba(15,76,58,.35);z-index:50}
+  .main-nav{display:none}
   .g4{grid-template-columns:repeat(2,1fr)} .g3{grid-template-columns:repeat(2,1fr)} .tiles{grid-template-columns:repeat(2,1fr)}
   .zikr-feature,.community{grid-template-columns:1fr}
   .detail{grid-template-columns:1fr} .detail .side{max-width:300px}
@@ -299,7 +355,7 @@ dialog.modal::backdrop{background:rgba(15,76,58,.45)}
   .head-tools .hide-sm{display:none}
   .lang-toggle button{padding:5px 8px}
   .section{padding:44px 0}
-  .g2,.g3,.g4{grid-template-columns:1fr} .g4.books{grid-template-columns:repeat(2,1fr)}
+  .g2,.g3,.g4{grid-template-columns:1fr} .g4.books,.g4.products{grid-template-columns:repeat(2,1fr)}
   .tiles{grid-template-columns:1fr 1fr}
   .hero-in{min-height:auto;padding:56px 20px 70px}
   .hero::after{background:linear-gradient(180deg,rgba(11,61,47,.75),rgba(11,61,47,.85))}
@@ -308,10 +364,14 @@ dialog.modal::backdrop{background:rgba(15,76,58,.45)}
   .community{padding:24px}
   .foot-grid{grid-template-columns:1fr}
   .timeline::before{left:25px} .t-item{padding-left:68px} .t-item .dot{width:44px;height:44px;left:4px}
+  .ftree-wrap{font-size:.86rem;padding:20px 6px 14px}
+  .product-card .body{padding:12px}
+  .product-card .btn-wa{font-size:.8rem}
   .bottom-nav{display:grid;grid-template-columns:repeat(5,1fr);position:fixed;bottom:0;left:0;right:0;z-index:45;background:#fff;border-top:1px solid var(--line);padding:4px 0 max(4px,env(safe-area-inset-bottom))}
   .bottom-nav a,.bottom-nav button{all:unset;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:.7rem;color:var(--muted);padding:5px 0;cursor:pointer;text-align:center}
   .bottom-nav svg{width:22px;height:22px}
   .bottom-nav [aria-current="page"]{color:var(--primary)}
   .demo-flag{bottom:72px}
 }
-@media print{.site-header,.site-footer,.bottom-nav,.share,.comments,.announce{display:none!important}}
+@media (prefers-reduced-motion:reduce){.side-drawer{transition:none}}
+@media print{.side-drawer,.site-header,.site-footer,.bottom-nav,.share,.comments,.announce{display:none!important}}
