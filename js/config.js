@@ -1,15 +1,16 @@
 /* =========================================================
-   রুহানি কাফেলা — কনফিগারেশন (একমাত্র জায়গা যেখানে API URL বসবে)
+   রূহানী কাফেলা — কনফিগারেশন (একমাত্র জায়গা যেখানে API URL বসবে)
    ---------------------------------------------------------
    Google Apps Script ডিপ্লয় করার পর পাওয়া Web App URL
    নিচের লাইনে "YOUR_GOOGLE_APPS_SCRIPT_URL" এর জায়গায় বসান।
    URL না বসালে সাইট "ডেমো মোডে" চলবে (নমুনা ডেটা দেখাবে)।
    ========================================================= */
-const API_URL = "https://script.google.com/macros/s/AKfycby7e01oxxEvgNIEZawVdOz36s1g2menLJS2_UCqQfMqTuHaIQG62DKb396-9UNqZIJi/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycby5VbLUmmNqcDy-m4Iy8BAnffOZg32-WZTdWhSC5GnadU6JgmjPMIUd_F0ImLengdS0/exec";
 
 const CONFIG = {
   API_URL: API_URL,
   DEFAULT_LANG: "bn",      // ডিফল্ট ভাষা: "bn" = বাংলা, "en" = English
-  CACHE_MINUTES: 5,        // ব্রাউজারে ডেটা কত মিনিট জমা থাকবে (সাইট দ্রুত রাখতে)
-  VERSION: "1.0.0"
+  CACHE_MINUTES: 5,
+  SHOP_WHATSAPP: "8801682396399", // শপের অর্ডার এই WhatsApp নম্বরে যাবে (অ্যাডমিন → সোশ্যাল লিংক থেকেও বদলানো যায়)        // ব্রাউজারে ডেটা কত মিনিট জমা থাকবে (সাইট দ্রুত রাখতে)
+  VERSION: "1.1.0"
 };
