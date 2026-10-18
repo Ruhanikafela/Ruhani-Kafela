@@ -1,4 +1,4 @@
-# রুহানি কাফেলা — robots.txt
+# রূহানী কাফেলা — robots.txt
 User-agent: *
 Allow: /
 Disallow: /admin.html
