@@ -1,5 +1,5 @@
 /* =========================================================
-   রুহানি কাফেলা — ভাষা (বাংলা / English)
+   রূহানী কাফেলা — ভাষা (বাংলা / English)
    এখানে সাইটের স্থায়ী লেখাগুলো আছে। কনটেন্ট (প্রবন্ধ, বই ইত্যাদি)
    অ্যাডমিন প্যানেল থেকে আসে — এখানে নয়।
    ========================================================= */
@@ -37,7 +37,14 @@ const I18N = {
     profile:"প্রোফাইল", joined:"যোগদানের তারিখ", save:"সংরক্ষণ করুন", saved:"সংরক্ষিত হয়েছে",
     demoMode:"ডেমো মোড — নমুনা ডেটা", demoCode:"ডেমো মোডে কোড: 123456",
     zikrCat:{zikr:"জিকির",salawat:"সালাওয়াত",practice:"আধ্যাত্মিক অনুশীলন"},
-    articleCat:{spirituality:"আধ্যাত্মিকতা",zikr:"জিকির ও ধ্যান",education:"শিক্ষা",research:"গবেষণা / রেফারেন্স",history:"ইতিহাস",general:"সাধারণ"},
+    articleCat:{spirituality:"আধ্যাত্মিকতা",zikr:"জিকির ও ধ্যান",dua:"দোয়া",imam_mahdi:"ইমাম মাহদী",education:"শিক্ষা",research:"গবেষণা / রেফারেন্স",history:"ইতিহাস",general:"সাধারণ"},
+    productCat:{books:"বই",attar:"আতর",tasbih:"তসবি",jaynamaz:"জায়নামাজ",gilaf:"গিলাফ",cap:"টুপি",other:"অন্যান্য"},
+    duas:"দোয়া", duasSub:"বিভিন্ন দোয়া, ফজিলত ও আমল বিষয়ক লেখা", silsilah:"রূহানী সিলসিলাহ", silsilahSub:"রূহানী সিলসিলার ধারাবাহিক বংশধারা — উৎসসহ",
+    silsilahNote:"প্রতিটি নামে চাপ দিলে বর্ণনা ও উৎস দেখাবে। উপরের জন থেকে নিচের দিকে ধারাবাহিকতা সাজানো হয়েছে।",
+    mahdi:"ইমাম মাহদী", mahdiSub:"ইমাম মাহদী বিষয়ক লেখা ও আলোচনা", shop:"শপ", shopSub:"বই, আতর, তসবি, জায়নামাজ, গিলাফ ও অন্যান্য ইসলামী সামগ্রী",
+    orderWa:"WhatsApp-এ অর্ডার", orderMsg:"আসসালামু আলাইকুম। আমি এই পণ্যটি অর্ডার করতে চাই:", inStock:"স্টকে আছে", outStock:"স্টকে নেই",
+    orderHow:"অর্ডার করতে WhatsApp বা ফোনে যোগাযোগ করুন:", copyNumber:"নম্বর কপি", products:"পণ্য", spouse:"জীবনসঙ্গী", parentOf:"উপরের জন",
+    zoomIn:"বড় করুন", zoomOut:"ছোট করুন", tapHint:"নামে চাপ দিলে বিস্তারিত দেখাবে। গাছটি বড় হলে পাশে সরিয়ে দেখুন।", sideMenu:"সব মেনু",
     bookCat:{spirituality:"আধ্যাত্মিকতা",history:"ইতিহাস ও জীবনী",education:"শিক্ষা",reference:"রেফারেন্স",general:"সাধারণ"},
     duaCat:{morning:"সকাল",evening:"সন্ধ্যা",prayer:"নামাজ",travel:"সফর",protection:"সুরক্ষা",forgiveness:"ক্ষমা প্রার্থনা",ramadan:"রমজান",jumuah:"জুমা",general:"সাধারণ"},
     amalCat:{daily:"দৈনিক আমল",special:"বিশেষ আমল",monthly:"মাসভিত্তিক আমল",occasions:"রমজান / জুমা / বিশেষ দিন"},
@@ -76,7 +83,14 @@ const I18N = {
     profile:"Profile", joined:"Joined", save:"Save", saved:"Saved",
     demoMode:"Demo mode — sample data", demoCode:"Demo mode code: 123456",
     zikrCat:{zikr:"Zikr",salawat:"Salawat",practice:"Spiritual practice"},
-    articleCat:{spirituality:"Spirituality",zikr:"Zikr & Meditation",education:"Education",research:"Research / Reference",history:"History",general:"General"},
+    articleCat:{spirituality:"Spirituality",zikr:"Zikr & Meditation",dua:"Dua",imam_mahdi:"Imam Mahdi",education:"Education",research:"Research / Reference",history:"History",general:"General"},
+    productCat:{books:"Books",attar:"Attar",tasbih:"Tasbih",jaynamaz:"Prayer mats",gilaf:"Gilaf (covers)",cap:"Caps",other:"Other"},
+    duas:"Duas", duasSub:"Articles on duas, their virtues and practice", silsilah:"Ruhani Silsilah", silsilahSub:"The spiritual chain, generation by generation — with sources",
+    silsilahNote:"Tap any name to see its description and source. The chain runs from top to bottom.",
+    mahdi:"Imam Mahdi", mahdiSub:"Writings and discussions about Imam Mahdi", shop:"Shop", shopSub:"Books, attar, tasbih, prayer mats, covers and other Islamic items",
+    orderWa:"Order on WhatsApp", orderMsg:"Assalamu alaikum. I would like to order this item:", inStock:"In stock", outStock:"Out of stock",
+    orderHow:"To order, contact us on WhatsApp or phone:", copyNumber:"Copy number", products:"Products", spouse:"Spouse", parentOf:"Above",
+    zoomIn:"Zoom in", zoomOut:"Zoom out", tapHint:"Tap a name for details. Scroll sideways if the tree is wide.", sideMenu:"All menus",
     bookCat:{spirituality:"Spirituality",history:"History & Biography",education:"Education",reference:"Reference",general:"General"},
     duaCat:{morning:"Morning",evening:"Evening",prayer:"Prayer",travel:"Travel",protection:"Protection",forgiveness:"Forgiveness",ramadan:"Ramadan",jumuah:"Jumu'ah",general:"General"},
     amalCat:{daily:"Daily Amal",special:"Special Amal",monthly:"Monthly Amal",occasions:"Ramadan / Jumu'ah / Special days"},

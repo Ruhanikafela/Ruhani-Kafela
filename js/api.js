@@ -1,5 +1,5 @@
 /* =========================================================
-   রুহানি কাফেলা — API সংযোগ
+   রূহানী কাফেলা — API সংযোগ
    ---------------------------------------------------------
    সব ডেটা আনা-নেওয়া এই একটি ফাইল দিয়ে হয়। ভবিষ্যতে
    Google Sheets থেকে Supabase/Firebase-এ গেলে শুধু এই
@@ -7,7 +7,7 @@
    ========================================================= */
 const API = (() => {
   const DEMO = !CONFIG.API_URL || CONFIG.API_URL.indexOf("YOUR_") === 0;
-  const CACHE_KEY = "rk_cache_v1";
+  const CACHE_KEY = "rk_cache_v2";
 
   async function request(action, params = {}, method = "POST") {
     if (DEMO) return DemoBackend.handle(action, params);

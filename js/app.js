@@ -1,5 +1,5 @@
 /* =========================================================
-   রুহানি কাফেলা — মূল ফ্রন্টএন্ড (সব পাবলিক পাতা)
+   রূহানী কাফেলা — মূল ফ্রন্টএন্ড (সব পাবলিক পাতা)
    প্রতিটি HTML পাতার <body data-page="..."> দেখে এই ফাইল
    ঠিক করে কোন পাতা আঁকতে হবে। কনটেন্ট আসে API থেকে।
    ========================================================= */
@@ -23,7 +23,7 @@ const RK = (() => {
     if (!d) return ""; const x = new Date(String(d).replace(" ", "T")); if (isNaN(x)) return esc(d);
     return x.toLocaleDateString(S.lang === "bn" ? "bn-BD" : "en-GB", { day: "numeric", month: "long", year: "numeric" });
   }
-  const DEF = { article: "assets/images/default-article.svg", book: "assets/images/default-book.svg", course: "assets/images/default-course.svg", person: "assets/images/person.svg" };
+  const DEF = { article: "assets/images/default-article.svg", book: "assets/images/default-book.svg", course: "assets/images/default-course.svg", person: "assets/images/person.svg", product: "assets/images/default-product.svg" };
   const img = (src, def, alt, extra = "") => `<img src="${esc(safeUrl(src) || def)}" alt="${esc(alt || "")}" loading="lazy" decoding="async" ${extra} onerror="this.onerror=null;this.src='${def}'">`;
   const sortOrder = (a, b) => (Number(a.Order) || 999) - (Number(b.Order) || 999);
   const byDate = (a, b) => String(b.PublishDate || b.CreatedAt || "").localeCompare(String(a.PublishDate || a.CreatedAt || ""));
@@ -104,14 +104,12 @@ const RK = (() => {
     const user = S.user;
     $("#site-header").outerHTML = `${annHTML}
     <header class="site-header" id="site-header"><div class="wrap head-row">
-      <button class="icon-btn menu-btn" id="menuBtn" aria-label="${t("menu")}" aria-expanded="false" aria-controls="mainNav">${I.menu}</button>
+      <button class="icon-btn menu-btn" id="menuBtn" aria-label="${t("menu")}" aria-expanded="false" aria-controls="sideDrawer">${I.menu}</button>
       <a class="brand" href="index.html" aria-label="${esc(L(st, "SiteName"))}">
         <img src="${esc(safeUrl(st.Logo) || "assets/logo/logo.svg")}" alt="" width="46" height="46" onerror="this.src='assets/logo/logo.svg'">
-        <span class="brand-name"><b>${esc(st.SiteNameBN || "রুহানি কাফেলা")}</b><small>${esc(st.SiteNameEN || "Ruhani Kafela")}</small></span>
+        <span class="brand-name"><b>${esc(st.SiteNameBN || "রূহানী কাফেলা")}</b><small>${esc(st.SiteNameEN || "Ruhani Kafela")}</small></span>
       </a>
-      <nav class="main-nav" id="mainNav" aria-label="Main"><ul>
-        ${navItems().map(n => `<li><a href="${esc(safeUrl(n.URL))}" ${n.URL === cur ? 'aria-current="page"' : ""}>${esc(L(n, "Label"))}</a></li>`).join("")}
-      </ul></nav>
+      <span class="head-space"></span>
       <div class="head-tools">
         <div class="lang-toggle" role="group" aria-label="Language">
           <button data-lang="bn" aria-pressed="${S.lang === "bn"}">বাংলা</button><button data-lang="en" aria-pressed="${S.lang === "en"}">English</button>
@@ -119,15 +117,58 @@ const RK = (() => {
         <button class="icon-btn" id="searchBtn" aria-label="${t("search")}">${I.search}</button>
         <a class="icon-btn hide-sm" href="${user ? "profile.html" : "login.html"}" aria-label="${t("account")}" title="${user ? esc(user.name) : t("login")}">${I.user}</a>
       </div>
-    </div></header>`;
+    </div>
+    <nav class="main-nav" id="mainNav" aria-label="Main"><div class="wrap"><ul>
+        ${navItems().map(n => `<li><a href="${esc(safeUrl(n.URL))}" ${n.URL === cur ? 'aria-current="page"' : ""}>${esc(L(n, "Label"))}</a></li>`).join("")}
+    </ul></div></nav></header>`;
+    renderDrawer();
     $$(".lang-toggle button").forEach(b => b.onclick = () => { S.lang = b.dataset.lang; localStorage.setItem("rk_lang", S.lang); renderAll(); });
     $("#searchBtn").onclick = openSearch;
     $("#menuBtn").onclick = toggleMenu;
   }
+  /* ---------- বাম পাশের লুকানো মেনু (☰ চাপলে খোলে) ---------- */
+  // প্রতিটি মেনুর নিচে কোন সাব-মেনু দেখাবে
+  function subItems(url) {
+    const c = (grp, base, key = "cat") => Object.entries(t(grp) || {}).map(([k, v]) => [v, `${base}?${key}=${encodeURIComponent(k)}`]);
+    const map = {
+      "zikr-meditation.html": [[cat("zikrCat", "zikr"), "zikr-meditation.html?tab=zikr"], [cat("zikrCat", "salawat"), "zikr-meditation.html?tab=salawat"], [cat("zikrCat", "practice"), "zikr-meditation.html?tab=practice"], [t("meditation"), "zikr-meditation.html?tab=meditation"]],
+      "knowledge.html": [[t("articles"), "articles.html"], [t("books"), "books.html"], [t("courses"), "courses.html"]],
+      "dua-amal.html": [[t("dua"), "dua-amal.html"], [t("amal"), "dua-amal.html?tab=amal"]].concat(c("duaCat", "dua-amal.html", "occasion")),
+      "articles.html": c("articleCat", "articles.html"),
+      "books.html": c("bookCat", "books.html"),
+      "shop.html": [[t("all"), "shop.html"]].concat(c("productCat", "shop.html")),
+      "courses.html": [[t("free"), "courses.html?type=Free"], [t("paid"), "courses.html?type=Paid"], [t("online"), "courses.html?type=online"], [t("offline"), "courses.html?type=offline"]]
+    };
+    return map[url] || [];
+  }
+  function renderDrawer() {
+    let d = $("#sideDrawer"); if (d) d.remove(); const sc0 = $(".nav-scrim"); if (sc0) sc0.remove();
+    const st = S.data.Settings, cur = pageFile();
+    d = document.createElement("aside"); d.id = "sideDrawer"; d.className = "side-drawer"; d.hidden = true; d.setAttribute("aria-label", t("sideMenu"));
+    d.innerHTML = `<div class="sd-head"><a class="brand" href="index.html"><img src="${esc(safeUrl(st.Logo) || "assets/logo/logo.svg")}" alt="" width="40" height="40" onerror="this.src='assets/logo/logo.svg'"><span class="brand-name"><b>${esc(st.SiteNameBN || "রূহানী কাফেলা")}</b></span></a>
+      <button class="icon-btn" data-close aria-label="${t("close")}">${I.close}</button></div>
+      <nav class="sd-nav">${navItems().map(n => {
+        const url = safeUrl(n.URL), subs = subItems(n.URL), on = n.URL === cur ? 'aria-current="page"' : "";
+        if (!subs.length) return `<a class="sd-link" href="${esc(url)}" ${on}>${esc(L(n, "Label"))}</a>`;
+        return `<details class="sd-group" ${on ? "open" : ""}><summary><a class="sd-link" href="${esc(url)}" ${on}>${esc(L(n, "Label"))}</a><span class="sd-chev" aria-hidden="true">${I.chev}</span></summary>
+          <div class="sd-sub">${subs.map(([l, h]) => `<a href="${esc(h)}">${esc(l)}</a>`).join("")}</div></details>`;
+      }).join("")}</nav>
+      <div class="sd-foot"><a class="btn btn-ghost btn-sm" href="${S.user ? "profile.html" : "login.html"}">${I.user} ${S.user ? t("profile") : t("login")}</a></div>`;
+    document.body.appendChild(d);
+    // সাব-মেনুর তীর চাপলে খোলে/বন্ধ হয়; নামের উপর চাপলে সেই পাতায় যায়
+    $$(".sd-group summary", d).forEach(sm => sm.addEventListener("click", e => { if (e.target.closest("a")) { e.stopPropagation(); return; } }));
+    $$(".sd-group summary a", d).forEach(a => a.addEventListener("click", e => e.stopPropagation()));
+    $("[data-close]", d).onclick = () => toggleMenu(false);
+    d.addEventListener("keydown", e => { if (e.key === "Escape") toggleMenu(false); });
+  }
   function toggleMenu(force) {
-    const nav = $("#mainNav"), open = typeof force === "boolean" ? force : !nav.classList.contains("open");
-    nav.classList.toggle("open", open); $("#menuBtn").setAttribute("aria-expanded", open);
+    const d = $("#sideDrawer"); if (!d) return;
+    const open = typeof force === "boolean" ? force : d.hidden;
+    d.hidden = !open; requestAnimationFrame(() => d.classList.toggle("open", open));
+    const mb = $("#menuBtn"); if (mb) mb.setAttribute("aria-expanded", open);
+    document.documentElement.classList.toggle("drawer-open", open);
     let sc = $(".nav-scrim"); if (open && !sc) { sc = document.createElement("div"); sc.className = "nav-scrim"; sc.onclick = () => toggleMenu(false); document.body.appendChild(sc); } else if (!open && sc) sc.remove();
+    if (open) { const f = $(".sd-link", d); if (f) f.focus(); } else if (mb) mb.focus();
   }
   function openSearch() {
     if ($(".search-pop")) return;
@@ -147,10 +188,10 @@ const RK = (() => {
   }
   function renderFooter() {
     const st = S.data.Settings, y = new Date().getFullYear();
-    const links = [["zikr-meditation.html", "zikrMed"], ["knowledge.html", "knowledge"], ["dua-amal.html", "duaAmal"], ["courses.html", "courses"], ["books.html", "books"], ["golden-chain.html", "golden"], ["ahlul-bayt.html", "ahlulbayt"]];
+    const links = [["zikr-meditation.html", "zikrMed"], ["knowledge.html", "knowledge"], ["dua-amal.html", "duaAmal"], ["courses.html", "courses"], ["books.html", "books"], ["duas.html", "duas"], ["silsilah.html", "silsilah"], ["golden-chain.html", "golden"], ["ahlul-bayt.html", "ahlulbayt"], ["imam-mahdi.html", "mahdi"], ["shop.html", "shop"]];
     $("#site-footer").outerHTML = `<footer class="site-footer" id="site-footer"><div class="wrap">
       <div class="foot-grid">
-        <div><div class="foot-brand"><img src="${esc(safeUrl(st.Logo) || "assets/logo/logo.svg")}" alt="" width="48" height="48" loading="lazy"><div><b>${esc(st.SiteNameBN || "রুহানি কাফেলা")}</b><span>${esc(st.SiteNameEN || "Ruhani Kafela")}</span></div></div>
+        <div><div class="foot-brand"><img src="${esc(safeUrl(st.Logo) || "assets/logo/logo.svg")}" alt="" width="48" height="48" loading="lazy"><div><b>${esc(st.SiteNameBN || "রূহানী কাফেলা")}</b><span>${esc(st.SiteNameEN || "Ruhani Kafela")}</span></div></div>
           <p>${esc(L(st, "FooterText"))}</p><div class="socials">${socials()}</div></div>
         <div><h4>${t("quickLinks")}</h4><ul>${links.map(([u, k]) => `<li><a href="${u}">${t(k)}</a></li>`).join("")}</ul></div>
         <div><h4>${t("contact")}</h4><ul>
@@ -262,7 +303,7 @@ const RK = (() => {
       },
       ahlul_bayt() {
         const a = D("AhlulBayt"); if (!a.length) return "";
-        return `<section class="section tint"><div class="wrap">${secHead(t("ahlulbayt"), t("ahlSub"), "ahlul-bayt.html")}<div class="tree-wrap">${treeHTML(a, 2)}</div></div></section>`;
+        return `<section class="section tint"><div class="wrap">${secHead(t("ahlulbayt"), t("ahlSub"), "ahlul-bayt.html")}${treeBlock(a, "AhlulBayt", 3)}</div></section>`;
       },
       community() {
         const st2 = S.data.Settings, grp = st2.CommunityURL || st2.Telegram || st2.WhatsApp;
@@ -468,69 +509,149 @@ const RK = (() => {
   };
   ["zikr", "dua", "amal", "meditation"].forEach(k => pages[k].after = bindShare);
 
-  /* ---------- গোল্ডেন চেইন ---------- */
+  /* ---------- বংশধারা / সিলসিলাহ: ফ্যামিলি ট্রি (গোল্ডেন চেইন, আহলে বাইত, রূহানী সিলসিলাহ) ----------
+     প্রতিটি এন্ট্রিতে:
+       ParentID  = ট্রিতে যার নিচে বসবে (গোল্ডেন চেইনে খালি থাকলে TeacherID ধরা হয়)
+       SpouseID  = যার পাশে জোড়া হিসেবে বসবে (স্বামী/স্ত্রী)
+     একই উপরের জনের নিচে একাধিক নাম থাকলে তারা পাশাপাশি বসে। */
+  const TREE_SHEETS = { golden: "GoldenChain", ahl: "AhlulBayt", silsilah: "Silsilah" };
   function personDetails(p, extra) {
-    return `<p>${esc(L(p, "Biography"))}</p><dl>${extra || ""}
+    const yrs = [p.Birth ? `<dt>${t("birth")}</dt><dd>${esc(p.Birth)}</dd>` : "", p.Death ? `<dt>${t("death")}</dt><dd>${esc(p.Death)}</dd>` : ""].join("");
+    return `${L(p, "Biography") ? `<p>${esc(L(p, "Biography")).replace(/\n/g, "<br>")}</p>` : ""}<dl>${extra || ""}${yrs}
       <dt>${t("source")}</dt><dd>${p.Source ? esc(p.Source) : `<span class="muted">${t("refMissing")}</span>`}</dd>
       ${p.Tradition ? `<dt>${t("tradition")}</dt><dd>${esc(p.Tradition)}</dd>` : ""}${p.Note ? `<dt>${t("notes")}</dt><dd>${esc(p.Note)}</dd>` : ""}</dl>`;
   }
-  pages.golden = () => {
-    setMeta(t("golden"), t("goldenSub"));
-    const g = D("GoldenChain").slice().sort(sortOrder), byId = Object.fromEntries(g.map(p => [p.ID, p]));
-    const name = id => byId[id] ? `<a href="#p-${esc(id)}">${esc(L(byId[id], "Name"))}</a>` : "";
-    const yrs = p => [p.Birth ? `${t("birth")}: ${esc(p.Birth)}` : "", p.Death ? `${t("death")}: ${esc(p.Death)}` : ""].filter(Boolean).join(" | ");
-    const tree = `<div class="timeline">${g.map(p => `<div class="t-item" id="p-${esc(p.ID)}"><div class="dot">${img(p.Photo, DEF.person, "")}</div>
-      <div class="t-card"><header><button aria-expanded="false"><span class="nm">${esc(L(p, "Name"))}</span>${p.NameAR ? `<span class="nm-ar" lang="ar">${esc(p.NameAR)}</span>` : ""}<span class="yrs">${yrs(p)}</span></button>${I.chev}</header>
-      <div class="more-info" hidden>${personDetails(p, `${name(p.TeacherID) ? `<dt>${t("teacher")}</dt><dd>${name(p.TeacherID)}</dd>` : ""}${name(p.StudentID) ? `<dt>${t("student")}</dt><dd>${name(p.StudentID)}</dd>` : ""}`)}</div></div></div>`).join("")}</div>`;
-    const list = `<ol class="chain-list">${g.map(p => `<li><button data-goto="${esc(p.ID)}"><span class="nm">${esc(L(p, "Name"))}</span> <small class="muted">${yrs(p)}</small></button></li>`).join("")}</ol>`;
-    setTimeout(() => {
-      $$(".view-toggle button").forEach(b => b.onclick = () => { $$(".view-toggle button").forEach(x => x.setAttribute("aria-pressed", x === b)); $("#vTree").hidden = b.dataset.v !== "tree"; $("#vList").hidden = b.dataset.v !== "list"; });
-      $$(".t-card header").forEach(h => h.onclick = () => { const c = h.parentElement, open = !c.classList.contains("open"); c.classList.toggle("open", open); $(".more-info", c).hidden = !open; $("button", h).setAttribute("aria-expanded", open); });
-      $$("[data-goto]").forEach(b => b.onclick = () => { $('.view-toggle [data-v="tree"]').click(); openPerson(b.dataset.goto); });
-      if (location.hash) openPerson(decodeURIComponent(location.hash.slice(3)));
-      window.onhashchange = () => openPerson(decodeURIComponent(location.hash.slice(3)));
+  const parentOf = (p, sheet) => String(p.ParentID || (sheet === "GoldenChain" ? p.TeacherID : "") || "");
+  const subLine = p => L(p, "Relationship") || [p.Birth, p.Death].filter(Boolean).join(" – ");
+  function famTree(all, sheet, maxDepth = 99) {
+    const items = all.slice().sort(sortOrder), byId = Object.fromEntries(items.map(x => [String(x.ID), x]));
+    // জোড়া ঠিক করা: যার SpouseID আছে সে তার সঙ্গীর পাশে বসবে (দুজনই একে অপরকে দেখালে ছোট ক্রমের জন মূল)
+    const spouseOf = {}, attached = new Set();
+    items.forEach(x => {
+      const sid = String(x.SpouseID || ""); if (!sid || !byId[sid] || sid === String(x.ID) || attached.has(sid)) return;
+      const y = byId[sid];
+      if (String(y.SpouseID || "") === String(x.ID) && sortOrder(x, y) < 0) return; // পারস্পরিক হলে পরের জন যুক্ত হবে
+      attached.add(String(x.ID)); (spouseOf[sid] = spouseOf[sid] || []).push(x);
     });
-    function openPerson(id) { const el = document.getElementById("p-" + id); if (!el) return; const c = $(".t-card", el); if (!c.classList.contains("open")) $("header", c).click(); el.scrollIntoView({ block: "center" }); }
-    return pageHead(t("golden"), t("goldenSub"), [[t("golden")]]) + `<section class="section"><div class="wrap">
-      <div class="chain-note">${t("goldenNote")}</div>
-      <div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div class="view-toggle" role="group"><button data-v="tree" aria-pressed="true">${t("treeView")}</button><button data-v="list" aria-pressed="false">${t("listView")}</button></div></div>
-      ${g.length ? `<div id="vTree">${tree}</div><div id="vList" hidden>${list}</div>` : `<p class="empty">${t("empty")}</p>`}</div></section>`;
-  };
-
-  /* ---------- আহলে বাইত ---------- */
-  function treeHTML(all, maxDepth = 99) {
-    const items = all.slice().sort(sortOrder), ids = new Set(items.map(x => x.ID));
-    const kids = pid => items.filter(x => (x.ParentID || "") === pid || (pid === "" && x.ParentID && !ids.has(x.ParentID)));
-    const node = (p, d) => { const ch = d < maxDepth ? kids(p.ID) : []; return `<li><button class="tree-node" data-person="${esc(p.ID)}">${img(p.Photo, DEF.person, "")}<span><span class="nm">${esc(L(p, "Name"))}</span><small>${esc(L(p, "Relationship"))}</small></span></button>${ch.length ? `<ul>${ch.map(c => node(c, d + 1)).join("")}</ul>` : ""}</li>`; };
-    return `<ul class="tree">${kids("").map(p => node(p, 1)).join("")}</ul>`;
+    const unitOf = id => attached.has(id) ? String(byId[id].SpouseID) : id; // সন্তান সঙ্গীর নিচে থাকলেও জোড়ার নিচে বসবে
+    const kids = {};
+    items.forEach(x => {
+      const id = String(x.ID); if (attached.has(id)) return;
+      const pid = parentOf(x, sheet); const key = pid && byId[pid] && pid !== id ? unitOf(pid) : "";
+      (kids[key] = kids[key] || []).push(x);
+    });
+    const seen = new Set();
+    const nodeBtn = p => `<button type="button" class="fnode" data-person="${esc(p.ID)}" data-sheet="${sheet}"><span class="ph">${img(p.Photo, DEF.person, "")}</span><span class="nm">${esc(L(p, "Name"))}</span>${subLine(p) ? `<small>${esc(subLine(p))}</small>` : ""}</button>`;
+    const li = (p, d) => {
+      const id = String(p.ID); if (seen.has(id)) return ""; seen.add(id);
+      const sp = spouseOf[id] || [];
+      const ch = d < maxDepth ? (kids[id] || []) : [];
+      const fam = sp.length ? `<div class="fam couple">${nodeBtn(p)}${sp.map(x => `<span class="fam-link" aria-hidden="true"></span>${nodeBtn(x)}`).join("")}</div>` : `<div class="fam">${nodeBtn(p)}</div>`;
+      const more = d >= maxDepth && (kids[id] || []).length ? `<span class="fmore">+${num((kids[id] || []).length)}</span>` : "";
+      const inner = ch.map(c => li(c, d + 1)).join("");
+      return `<li>${fam}${more}${inner ? `<ul>${inner}</ul>` : ""}</li>`;
+    };
+    const roots = (kids[""] || []).map(r => li(r, 1)).join("");
+    // কোনো কারণে বাদ পড়া (চক্র) এন্ট্রি শেষে আলাদা দেখানো
+    const rest = items.filter(x => !seen.has(String(x.ID)) && !attached.has(String(x.ID))).map(r => li(r, 1)).join("");
+    return `<div class="ftree"><ul>${roots}${rest}</ul></div>`;
+  }
+  function treeBlock(all, sheet, maxDepth) {
+    return `<div class="ftree-tools"><span class="muted">${t("tapHint")}</span><span class="zoom"><button type="button" class="btn btn-ghost btn-sm" data-zoom="-1" aria-label="${t("zoomOut")}">−</button><button type="button" class="btn btn-ghost btn-sm" data-zoom="1" aria-label="${t("zoomIn")}">+</button></span></div>
+      <div class="ftree-wrap">${famTree(all, sheet, maxDepth)}</div>`;
   }
   function bindTree() {
-    $$("[data-person]").forEach(b => b.onclick = () => {
-      const p = D("AhlulBayt").find(x => x.ID === b.dataset.person); if (!p) return;
-      const parent = D("AhlulBayt").find(x => x.ID === p.ParentID);
-      let d = $("#personDlg"); if (!d) { d = document.createElement("dialog"); d.id = "personDlg"; d.className = "modal"; document.body.appendChild(d); d.onclick = e => { if (e.target === d) d.close(); }; }
-      d.innerHTML = `<button class="icon-btn m-close" aria-label="${t("close")}">${I.close}</button><div class="m-in t-card" style="border:0">
-        <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">${img(p.Photo, DEF.person, "", 'style="width:64px;height:64px;border-radius:50%;object-fit:cover"')}<div><h2 style="margin:0">${esc(L(p, "Name"))}</h2>${p.NameAR ? `<div class="nm-ar" lang="ar">${esc(p.NameAR)}</div>` : ""}</div></div>
-        <div class="more-info" style="border:0;margin:0;padding:0">${personDetails(p, `${L(p, "Relationship") ? `<dt>${t("relationship")}</dt><dd>${esc(L(p, "Relationship"))}</dd>` : ""}${parent ? `<dt>↑</dt><dd>${esc(L(parent, "Name"))}</dd>` : ""}`)}</div></div>`;
-      $(".m-close", d).onclick = () => d.close(); d.showModal();
-    });
+    $$(".ftree-wrap").forEach(w => { if (w.scrollWidth > w.clientWidth) w.scrollLeft = (w.scrollWidth - w.clientWidth) / 2; });
+    let z = 1; try { z = Number(localStorage.getItem("rk_tree_zoom")) || 1; } catch (e) {}
+    const applyZ = () => $$(".ftree").forEach(f => f.style.fontSize = z + "em");
+    applyZ();
+    $$("[data-zoom]").forEach(b => b.onclick = () => { z = Math.min(1.4, Math.max(0.6, +(z + 0.15 * +b.dataset.zoom).toFixed(2))); applyZ(); try { localStorage.setItem("rk_tree_zoom", z); } catch (e) {} });
+    $$("[data-person]").forEach(b => b.onclick = () => openPerson(b.dataset.sheet, b.dataset.person));
   }
-  pages.ahl = () => {
-    setMeta(t("ahlulbayt"), t("ahlSub"));
-    const a = D("AhlulBayt"), sorted = a.slice().sort(sortOrder);
-    setTimeout(() => { bindTree(); $$(".view-toggle button").forEach(b => b.onclick = () => { $$(".view-toggle button").forEach(x => x.setAttribute("aria-pressed", x === b)); $("#vTree").hidden = b.dataset.v !== "tree"; $("#vList").hidden = b.dataset.v !== "list"; }); });
-    return pageHead(t("ahlulbayt"), t("ahlSub"), [[t("ahlulbayt")]]) + `<section class="section"><div class="wrap">
-      <div class="chain-note">${t("ahlNote")}</div>
-      <div style="display:flex;justify-content:flex-end;margin-bottom:22px"><div class="view-toggle" role="group"><button data-v="tree" aria-pressed="true">${t("treeView")}</button><button data-v="list" aria-pressed="false">${t("listView")}</button></div></div>
-      ${a.length ? `<div id="vTree" class="tree-wrap">${treeHTML(a)}</div><div id="vList" hidden><ul class="chain-list" style="counter-reset:none">${sorted.map(p => `<li style="list-style:none"><button data-person="${esc(p.ID)}"><span class="nm">${esc(L(p, "Name"))}</span> <small class="muted">${esc(L(p, "Relationship"))}</small><br><small class="muted">${t("source")}: ${p.Source ? esc(p.Source) : t("refMissing")}</small></button></li>`).join("")}</ul></div>` : `<p class="empty">${t("empty")}</p>`}
+  function openPerson(sheet, id) {
+    const list = D(sheet), p = list.find(x => String(x.ID) === String(id)); if (!p) return;
+    const parent = list.find(x => String(x.ID) === parentOf(p, sheet));
+    const spouse = list.find(x => String(x.ID) === String(p.SpouseID || "")) || list.find(x => String(x.SpouseID || "") === String(p.ID));
+    const kidsOf = list.filter(x => parentOf(x, sheet) === String(p.ID));
+    let d = $("#personDlg"); if (!d) { d = document.createElement("dialog"); d.id = "personDlg"; d.className = "modal"; document.body.appendChild(d); d.onclick = e => { if (e.target === d) d.close(); }; }
+    const link = x => `<button type="button" class="linkish" data-jump="${esc(x.ID)}">${esc(L(x, "Name"))}</button>`;
+    d.innerHTML = `<button class="icon-btn m-close" aria-label="${t("close")}">${I.close}</button><div class="m-in t-card" style="border:0">
+      <div style="display:flex;gap:14px;align-items:center;margin-bottom:14px">${img(p.Photo, DEF.person, "", 'style="width:64px;height:64px;border-radius:50%;object-fit:cover"')}<div><h2 style="margin:0">${esc(L(p, "Name"))}</h2>${p.NameAR ? `<div class="nm-ar" lang="ar">${esc(p.NameAR)}</div>` : ""}</div></div>
+      <div class="more-info" style="border:0;margin:0;padding:0">${personDetails(p, `${L(p, "Relationship") ? `<dt>${t("relationship")}</dt><dd>${esc(L(p, "Relationship"))}</dd>` : ""}${parent ? `<dt>${t(sheet === "AhlulBayt" ? "parentOf" : "teacher")}</dt><dd>${link(parent)}</dd>` : ""}${spouse ? `<dt>${t("spouse")}</dt><dd>${link(spouse)}</dd>` : ""}${kidsOf.length ? `<dt>${t(sheet === "AhlulBayt" ? "details" : "student")}</dt><dd>${kidsOf.map(link).join(", ")}</dd>` : ""}`)}</div></div>`;
+    $(".m-close", d).onclick = () => d.close();
+    $$("[data-jump]", d).forEach(b => b.onclick = () => openPerson(sheet, b.dataset.jump));
+    if (!d.open) d.showModal();
+  }
+  function treePage(key, titleK, subK, noteK) {
+    const sheet = TREE_SHEETS[key], a = D(sheet), sorted = a.slice().sort(sortOrder);
+    setMeta(t(titleK), t(subK));
+    setTimeout(() => {
+      bindTree();
+      $$(".view-toggle button").forEach(b => b.onclick = () => { $$(".view-toggle button").forEach(x => x.setAttribute("aria-pressed", x === b)); $("#vTree").hidden = b.dataset.v !== "tree"; $("#vList").hidden = b.dataset.v !== "list"; if (b.dataset.v === "tree") bindTree(); });
+      const fromHash = () => { const m = location.hash.match(/^#p-(.+)$/); if (m) openPerson(sheet, decodeURIComponent(m[1])); };
+      fromHash(); window.onhashchange = fromHash;
+    });
+    return pageHead(t(titleK), t(subK), [[t(titleK)]]) + `<section class="section"><div class="wrap">
+      <div class="chain-note">${t(noteK)}</div>
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><div class="view-toggle" role="group"><button data-v="tree" aria-pressed="true">${t("treeView")}</button><button data-v="list" aria-pressed="false">${t("listView")}</button></div></div>
+      ${a.length ? `<div id="vTree">${treeBlock(a, sheet)}</div><div id="vList" hidden><ul class="chain-list" style="counter-reset:none">${sorted.map(p => `<li style="list-style:none"><button data-person="${esc(p.ID)}" data-sheet="${sheet}"><span class="nm">${esc(L(p, "Name"))}</span> <small class="muted">${esc(subLine(p))}</small><br><small class="muted">${t("source")}: ${p.Source ? esc(p.Source) : t("refMissing")}</small></button></li>`).join("")}</ul></div>` : `<p class="empty">${t("empty")}</p>`}
     </div></section>`;
+  }
+  pages.golden = () => treePage("golden", "golden", "goldenSub", "goldenNote");
+  pages.ahl = () => treePage("ahl", "ahlulbayt", "ahlSub", "ahlNote");
+  pages.silsilah = () => treePage("silsilah", "silsilah", "silsilahSub", "silsilahNote");
+
+  /* ---------- দোয়া ও ইমাম মাহদী (প্রবন্ধের নির্দিষ্ট বিভাগ) ---------- */
+  function articleCategoryPage(catKey, titleK, subK) {
+    setMeta(t(titleK), t(subK));
+    const list = D("Articles").filter(a => a.Category === catKey).sort(byDate);
+    return pageHead(t(titleK), t(subK), [[t(titleK)]]) + `<section class="section"><div class="wrap">${grid(list, "article")}</div></section>`;
+  }
+  pages.duas = () => articleCategoryPage("dua", "duas", "duasSub");
+  pages.mahdi = () => articleCategoryPage("imam_mahdi", "mahdi", "mahdiSub");
+
+  /* ---------- শপ ---------- */
+  const shopNumber = () => String((S.data.Settings || {}).ShopWhatsApp || CONFIG.SHOP_WHATSAPP || (S.data.Settings || {}).WhatsApp || "").replace(/\D/g, "");
+  const money = v => { v = String(v == null ? "" : v).trim(); if (!v) return ""; return /৳|tk|taka|টাকা|\$/i.test(v) ? v : "৳ " + v; };
+  const waOrder = p => { const n = shopNumber(); if (!n) return ""; const msg = `${t("orderMsg")} ${L(p, "Title")}${p.Price ? " (" + money(p.Price) + ")" : ""}\n${new URL("product.html?id=" + encodeURIComponent(p.ID), location.href).href}`; return `https://wa.me/${n}?text=${encodeURIComponent(msg)}`; };
+  const inStock = p => p.InStock === "" || p.InStock == null || bool(p.InStock);
+  cards.product = p => `<div class="card product-card">
+      <a class="thumb" href="product.html?id=${encodeURIComponent(p.ID)}">${img(p.Image, DEF.product, "")}${inStock(p) ? "" : `<span class="badge paid">${t("outStock")}</span>`}</a>
+      <div class="body"><span class="cat">${esc(cat("productCat", p.Category))}</span><h3><a href="product.html?id=${encodeURIComponent(p.ID)}">${esc(L(p, "Title"))}</a></h3>
+      <div class="price">${p.Price ? `<b>${esc(money(p.Price))}</b>` : ""}${p.OldPrice ? ` <s>${esc(money(p.OldPrice))}</s>` : ""}</div>
+      ${waOrder(p) && inStock(p) ? `<a class="btn btn-wa btn-sm" href="${esc(waOrder(p))}" target="_blank" rel="noopener">${I.whatsapp}${t("orderWa")}</a>` : ""}</div></div>`;
+  function contactStrip() {
+    const n = shopNumber(), st = S.data.Settings || {}, phone = st.Phone || (n ? "+" + n : "");
+    if (!n && !phone) return "";
+    return `<div class="shop-contact"><span>${t("orderHow")}</span><b class="num" id="shopNum">${esc(n ? "+" + n : phone)}</b>
+      <button type="button" class="btn btn-ghost btn-sm" id="copyNum">${t("copyNumber")}</button>
+      ${n ? `<a class="btn btn-wa btn-sm" href="https://wa.me/${n}" target="_blank" rel="noopener">${I.whatsapp}WhatsApp</a>` : ""}${phone ? `<a class="btn btn-ghost btn-sm" href="tel:${esc(String(phone).replace(/[^\d+]/g, ""))}">📞 ${esc(phone)}</a>` : ""}</div>`;
+  }
+  function bindCopyNum() { const b = $("#copyNum"); if (b) b.onclick = async () => { try { await navigator.clipboard.writeText($("#shopNum").textContent); b.textContent = t("copied"); } catch (e) { const r = document.createRange(); r.selectNodeContents($("#shopNum")); const sl = getSelection(); sl.removeAllRanges(); sl.addRange(r); } }; }
+  pages.shop = () => {
+    setMeta(t("shop"), t("shopSub"));
+    const cur = qs("cat") || "all";
+    setTimeout(() => { const draw = k => $("#pList").innerHTML = grid(D("Products").slice().sort(sortOrder).filter(p => k === "all" || p.Category === k), "product", "g4 products"); bindChips("pcat", draw); draw(cur); bindCopyNum(); });
+    return pageHead(t("shop"), t("shopSub"), [[t("shop")]]) + `<section class="section"><div class="wrap">${contactStrip()}${chips([["all", t("all")]].concat(Object.entries(t("productCat"))), cur, "pcat")}<div id="pList"></div></div></section>`;
   };
+  pages.product = () => {
+    const p = D("Products").find(x => String(x.ID) === qs("id")); if (!p) return pages.notfound();
+    setMeta(L(p, "Title"), L(p, "Description"), p.Image);
+    const wa = waOrder(p);
+    return `<div class="wrap detail"><div class="side">${img(p.Image, DEF.product, L(p, "Title"), 'loading="eager"')}</div><div>
+      <div class="crumbs"><a href="index.html">${t("home")}</a> / <a href="shop.html">${t("shop")}</a> / <a href="shop.html?cat=${encodeURIComponent(p.Category || "")}">${esc(cat("productCat", p.Category))}</a></div>
+      <h1>${esc(L(p, "Title"))}</h1>
+      <div class="facts">${p.Price ? `<div><small>${t("price")}</small><b>${esc(money(p.Price))}${p.OldPrice ? ` <s class="muted" style="font-weight:400">${esc(money(p.OldPrice))}</s>` : ""}</b></div>` : ""}<div><small>${t("category")}</small><b>${esc(cat("productCat", p.Category))}</b></div><div><small>&nbsp;</small><b>${inStock(p) ? t("inStock") : t("outStock")}</b></div></div>
+      ${wa && inStock(p) ? `<a class="btn btn-wa" href="${esc(wa)}" target="_blank" rel="noopener">${I.whatsapp}${t("orderWa")}</a>` : ""}
+      <div class="prose" style="margin-top:22px">${rich(L(p, "Description"))}</div>${contactStrip()}${shareHTML(L(p, "Title"), location.href)}</div></div>`;
+  };
+  pages.product.after = () => { bindShare(); bindCopyNum(); };
 
   /* ---------- সার্চ ---------- */
   pages.search = () => {
     const q = qs("q").trim(); setMeta(t("search") + (q ? ": " + q : ""));
-    const groups = [["Articles", "articles", "article", ["TitleBN", "TitleEN", "ExcerptBN", "ExcerptEN", "ContentBN", "ContentEN", "Tags", "Author"]], ["Books", "books", "book", ["TitleBN", "TitleEN", "Author", "DescriptionBN", "DescriptionEN"]], ["Courses", "courses", "course", ["TitleBN", "TitleEN", "ShortBN", "ShortEN", "Instructor"]], ["Zikr", "zikr", "zikr", ["TitleBN", "TitleEN", "Arabic", "PronunciationBN", "Transliteration", "MeaningBN", "MeaningEN"]], ["Meditation", "meditation", "meditation", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Dua", "dua", "dua", ["TitleBN", "TitleEN", "Arabic", "Transliteration", "MeaningBN", "MeaningEN"]], ["Amal", "amal", "amal", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]]];
-    const link = { article: x => `article.html?slug=${encodeURIComponent(x.Slug || x.ID)}`, book: x => `book.html?id=${x.ID}`, course: x => `course.html?id=${x.ID}`, zikr: x => `zikr.html?id=${x.ID}`, meditation: x => `meditation.html?id=${x.ID}`, dua: x => `dua.html?id=${x.ID}`, amal: x => `amal.html?id=${x.ID}` };
+    const groups = [["Articles", "articles", "article", ["TitleBN", "TitleEN", "ExcerptBN", "ExcerptEN", "ContentBN", "ContentEN", "Tags", "Author"]], ["Books", "books", "book", ["TitleBN", "TitleEN", "Author", "DescriptionBN", "DescriptionEN"]], ["Courses", "courses", "course", ["TitleBN", "TitleEN", "ShortBN", "ShortEN", "Instructor"]], ["Zikr", "zikr", "zikr", ["TitleBN", "TitleEN", "Arabic", "PronunciationBN", "Transliteration", "MeaningBN", "MeaningEN"]], ["Meditation", "meditation", "meditation", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Dua", "dua", "dua", ["TitleBN", "TitleEN", "Arabic", "Transliteration", "MeaningBN", "MeaningEN"]], ["Amal", "amal", "amal", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Products", "products", "product", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]]];
+    const link = { article: x => `article.html?slug=${encodeURIComponent(x.Slug || x.ID)}`, book: x => `book.html?id=${x.ID}`, course: x => `course.html?id=${x.ID}`, zikr: x => `zikr.html?id=${x.ID}`, meditation: x => `meditation.html?id=${x.ID}`, dua: x => `dua.html?id=${x.ID}`, amal: x => `amal.html?id=${x.ID}`, product: x => `product.html?id=${encodeURIComponent(x.ID)}` };
     let body = "";
     if (!q) body = `<p class="muted">${t("typeToSearch")}</p>`;
     else {

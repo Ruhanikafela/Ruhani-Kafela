@@ -1,5 +1,5 @@
 /* =========================================================
-   রুহানি কাফেলা — ডেমো ডেটা ও ডেমো ব্যাকএন্ড
+   রূহানী কাফেলা — ডেমো ডেটা ও ডেমো ব্যাকএন্ড
    ---------------------------------------------------------
    API_URL বসানো না থাকলে সাইট এই নমুনা ডেটা দিয়ে চলে,
    যাতে Google Sheet যুক্ত করার আগেই পুরো সাইট ও অ্যাডমিন
@@ -10,16 +10,16 @@
    ========================================================= */
 const DEMO_SEED = {
   Settings: {
-    SiteNameBN: "রুহানি কাফেলা", SiteNameEN: "Ruhani Kafela", SiteNameAR: "رُوحَانِي كَافِلَة",
+    SiteNameBN: "রূহানী কাফেলা", SiteNameEN: "Ruhani Kafela", SiteNameAR: "رُوحَانِي كَافِلَة",
     TaglineBN: "জ্ঞান, জিকির ও আত্মশুদ্ধির পথে", TaglineEN: "On the Path of Knowledge, Remembrance and Spiritual Refinement",
     Logo: "assets/logo/logo.svg", Favicon: "assets/logo/favicon.svg",
     PrimaryColor: "#176B4D", AccentColor: "#B58A3A",
-    AboutBN: "রুহানি কাফেলা একটি আধ্যাত্মিক জ্ঞানভান্ডার — প্রবন্ধ, জিকির, মুরাকাবা, দোয়া, আমল, বই ও কোর্সের একটি শান্ত ডিজিটাল পাঠাগার। এখানে প্রতিটি ধর্মীয় তথ্যের সাথে উৎস উল্লেখ করার নীতি অনুসরণ করা হয়।",
+    AboutBN: "রূহানী কাফেলা একটি আধ্যাত্মিক জ্ঞানভান্ডার — প্রবন্ধ, জিকির, মুরাকাবা, দোয়া, আমল, বই ও কোর্সের একটি শান্ত ডিজিটাল পাঠাগার। এখানে প্রতিটি ধর্মীয় তথ্যের সাথে উৎস উল্লেখ করার নীতি অনুসরণ করা হয়।",
     AboutEN: "Ruhani Kafela is a spiritual knowledge library — a calm digital home for articles, zikr, muraqabah, duas, amal, books and courses. Every religious statement here is published with its source.",
     FooterTextBN: "জ্ঞান, জিকির ও আত্মশুদ্ধির একটি শান্ত ডিজিটাল পাঠাগার।",
     FooterTextEN: "A calm digital library of knowledge, remembrance and spiritual refinement.",
     Facebook: "", YouTube: "", Instagram: "", Telegram: "", WhatsApp: "", Email: "info@example.com", Phone: "",
-    CommunityURL: "", SiteURL: ""
+    CommunityURL: "", SiteURL: "", ShopWhatsApp: "8801682396399"
   },
   Sections: [
     { Key: "hero", TitleBN: "হিরো ব্যানার", TitleEN: "Hero banner", Visible: true, Order: 1 },
@@ -39,10 +39,14 @@ const DEMO_SEED = {
     { ID: "n2", LabelBN: "জিকির ও ধ্যান", LabelEN: "Zikr & Meditation", URL: "zikr-meditation.html", Order: 2, Visible: true },
     { ID: "n3", LabelBN: "ইলম ও পাঠ", LabelEN: "Knowledge & Reading", URL: "knowledge.html", Order: 3, Visible: true },
     { ID: "n4", LabelBN: "দোয়া ও আমল", LabelEN: "Dua & Amal", URL: "dua-amal.html", Order: 4, Visible: true },
-    { ID: "n5", LabelBN: "গোল্ডেন চেইন", LabelEN: "Golden Chain", URL: "golden-chain.html", Order: 5, Visible: true },
-    { ID: "n6", LabelBN: "আহলে বাইত", LabelEN: "Ahl al-Bayt", URL: "ahlul-bayt.html", Order: 6, Visible: true },
-    { ID: "n7", LabelBN: "কোর্স", LabelEN: "Courses", URL: "courses.html", Order: 7, Visible: true },
-    { ID: "n8", LabelBN: "পরিচিতি", LabelEN: "About", URL: "about.html", Order: 8, Visible: true }
+    { ID: "n9", LabelBN: "দোয়া", LabelEN: "Duas", URL: "duas.html", Order: 5, Visible: true },
+    { ID: "n10", LabelBN: "রূহানী সিলসিলাহ", LabelEN: "Ruhani Silsilah", URL: "silsilah.html", Order: 6, Visible: true },
+    { ID: "n5", LabelBN: "গোল্ডেন চেইন", LabelEN: "Golden Chain", URL: "golden-chain.html", Order: 7, Visible: true },
+    { ID: "n6", LabelBN: "আহলে বাইত", LabelEN: "Ahl al-Bayt", URL: "ahlul-bayt.html", Order: 8, Visible: true },
+    { ID: "n11", LabelBN: "ইমাম মাহদী", LabelEN: "Imam Mahdi", URL: "imam-mahdi.html", Order: 9, Visible: true },
+    { ID: "n12", LabelBN: "শপ", LabelEN: "Shop", URL: "shop.html", Order: 10, Visible: true },
+    { ID: "n7", LabelBN: "কোর্স", LabelEN: "Courses", URL: "courses.html", Order: 11, Visible: true },
+    { ID: "n8", LabelBN: "পরিচিতি", LabelEN: "About", URL: "about.html", Order: 12, Visible: true }
   ],
   Banners: [
     { ID: "b1", Position: "hero", Image: "assets/images/hero.svg", TitleBN: "জ্ঞান, জিকির ও আত্মশুদ্ধির পথে", TitleEN: "Knowledge, Remembrance and the Spiritual Journey", SubtitleBN: "প্রবন্ধ, জিকির, মুরাকাবা, দোয়া ও আমলের একটি শান্ত ডিজিটাল পাঠাগার — উৎসসহ।", SubtitleEN: "A calm digital library of articles, zikr, muraqabah, duas and amal — with sources.", ButtonBN: "শুরু করুন", ButtonEN: "Explore", URL: "zikr-meditation.html", Active: true, Order: 1 },
@@ -53,15 +57,17 @@ const DEMO_SEED = {
     { ID: "b6", Position: "before_article", Image: "", TitleBN: "", TitleEN: "", SubtitleBN: "", SubtitleEN: "", ButtonBN: "", ButtonEN: "", URL: "", Active: false, Order: 1 }
   ],
   Articles: [
+    { ID: "a4", Slug: "sample-dua-article", TitleBN: "নমুনা দোয়ার প্রবন্ধ", TitleEN: "Sample dua article", ExcerptBN: "‘দোয়া’ পাতায় এই বিভাগের প্রবন্ধ দেখায়। অ্যাডমিন → প্রবন্ধ → বিভাগ: দোয়া।", ExcerptEN: "Articles in the Dua category appear on the Duas page.", ContentBN: "<p>এটি নমুনা লেখা। আসল দোয়া, অর্থ ও উৎস অ্যাডমিন যোগ করবেন।</p>", ContentEN: "<p>Sample text.</p>", Image: "", Category: "dua", Author: "রূহানী কাফেলা", Tags: "নমুনা", Featured: false, Status: "Published", PublishDate: "2026-10-01", CreatedAt: "2026-10-01", UpdatedAt: "2026-10-01" },
+    { ID: "a5", Slug: "sample-imam-mahdi-article", TitleBN: "নমুনা লেখা: ইমাম মাহদী", TitleEN: "Sample article: Imam Mahdi", ExcerptBN: "‘ইমাম মাহদী’ পাতায় এই বিভাগের লেখা দেখায়। অ্যাডমিন → প্রবন্ধ → বিভাগ: ইমাম মাহদী।", ExcerptEN: "Articles in the Imam Mahdi category appear on that page.", ContentBN: "<p>এটি নমুনা লেখা। আসল লেখা ও উৎস অ্যাডমিন যোগ করবেন।</p>", ContentEN: "<p>Sample text.</p>", Image: "", Category: "imam_mahdi", Author: "রূহানী কাফেলা", Tags: "নমুনা", Featured: false, Status: "Published", PublishDate: "2026-10-01", CreatedAt: "2026-10-01", UpdatedAt: "2026-10-01" },
     { ID: "a1", Slug: "first-step-of-inner-journey", TitleBN: "অন্তরের যাত্রার প্রথম পদক্ষেপ (নমুনা প্রবন্ধ)", TitleEN: "The First Step of the Inner Journey (sample article)",
       ExcerptBN: "এটি একটি নমুনা প্রবন্ধ। অ্যাডমিন প্যানেল থেকে এটি সম্পাদনা বা মুছে ফেলুন এবং নিজের লেখা প্রকাশ করুন।", ExcerptEN: "This is a sample article. Edit or delete it from the admin panel and publish your own writing.",
       ContentBN: "<p>এটি একটি <strong>নমুনা প্রবন্ধ</strong>, যাতে আপনি দেখতে পারেন একটি প্রবন্ধ সাইটে কেমন দেখায়।</p><h2>উপশিরোনাম</h2><p>বাংলা লেখার জন্য বড় অক্ষর ও প্রশস্ত লাইন-স্পেসিং রাখা হয়েছে, যাতে দীর্ঘ লেখা পড়তে চোখে চাপ না পড়ে।</p><blockquote>উদ্ধৃতি এভাবে দেখাবে। ধর্মীয় উদ্ধৃতি দিলে অবশ্যই উৎস উল্লেখ করুন।</blockquote><ul><li>তালিকার প্রথম বিষয়</li><li>তালিকার দ্বিতীয় বিষয়</li></ul>",
       ContentEN: "<p>This is a <strong>sample article</strong> so you can see how an article looks on the site.</p><h2>A subheading</h2><p>Typography is tuned for long, comfortable reading.</p><blockquote>Quotations look like this. Always cite the source of any religious quotation.</blockquote>",
-      Image: "", Category: "spirituality", Author: "রুহানি কাফেলা", Tags: "নমুনা, আত্মশুদ্ধি", Featured: true, Status: "Published", PublishDate: "2026-09-01", SEOTitle: "", MetaDescription: "", CreatedAt: "2026-09-01", UpdatedAt: "2026-09-01" },
+      Image: "", Category: "spirituality", Author: "রূহানী কাফেলা", Tags: "নমুনা, আত্মশুদ্ধি", Featured: true, Status: "Published", PublishDate: "2026-09-01", SEOTitle: "", MetaDescription: "", CreatedAt: "2026-09-01", UpdatedAt: "2026-09-01" },
     { ID: "a2", Slug: "how-to-use-this-library", TitleBN: "এই পাঠাগার কীভাবে ব্যবহার করবেন (নমুনা)", TitleEN: "How to Use This Library (sample)",
       ExcerptBN: "তিনটি মূল বিভাগ — জিকির ও ধ্যান, ইলম ও পাঠ, দোয়া ও আমল — এবং দুটি সিলসিলা পাতার সংক্ষিপ্ত পরিচয়।", ExcerptEN: "A short tour of the three main sections and the two chain pages.",
       ContentBN: "<p>উপরের মেনু থেকে তিনটি মূল বিভাগে যান। যেকোনো কিছু খুঁজতে সার্চ আইকন ব্যবহার করুন। ভাষা বদলাতে উপরে ডান দিকের বাংলা | English বোতাম চাপুন।</p>", ContentEN: "<p>Use the top menu to open the three main sections. Use the search icon to find anything. Switch language with the বাংলা | English toggle.</p>",
-      Image: "", Category: "education", Author: "রুহানি কাফেলা", Tags: "নির্দেশিকা", Featured: false, Status: "Published", PublishDate: "2026-09-10", SEOTitle: "", MetaDescription: "", CreatedAt: "2026-09-10", UpdatedAt: "2026-09-10" },
+      Image: "", Category: "education", Author: "রূহানী কাফেলা", Tags: "নির্দেশিকা", Featured: false, Status: "Published", PublishDate: "2026-09-10", SEOTitle: "", MetaDescription: "", CreatedAt: "2026-09-10", UpdatedAt: "2026-09-10" },
     { ID: "a3", Slug: "draft-example", TitleBN: "খসড়া প্রবন্ধ (প্রকাশিত নয়)", TitleEN: "Draft article (not published)", ExcerptBN: "খসড়া অবস্থায় থাকা লেখা সাইটে দেখা যায় না।", ExcerptEN: "Drafts are not visible on the site.", ContentBN: "<p>খসড়া</p>", ContentEN: "<p>Draft</p>", Image: "", Category: "general", Author: "", Tags: "", Featured: false, Status: "Draft", PublishDate: "2026-09-15", SEOTitle: "", MetaDescription: "", CreatedAt: "2026-09-15", UpdatedAt: "2026-09-15" }
   ],
   Books: [
@@ -89,9 +95,25 @@ const DEMO_SEED = {
   GoldenChain: [1, 2, 3, 4, 5].map(i => ({ ID: "g" + i, Order: i, NameBN: "নমুনা ব্যক্তি " + i.toLocaleString("bn-BD"), NameEN: "Sample person " + i, NameAR: "", Birth: "", Death: "", BiographyBN: "এটি নমুনা এন্ট্রি। আসল নাম, জীবনী, সাল ও উৎস অ্যাডমিন প্যানেল → গোল্ডেন চেইন থেকে যোগ করুন।", BiographyEN: "Sample entry. Add real names, biography, dates and sources from Admin → Golden Chain.", Photo: "", TeacherID: i > 1 ? "g" + (i - 1) : "", StudentID: i < 5 ? "g" + (i + 1) : "", Source: "", Tradition: "", Note: "", Status: "Published" })),
   AhlulBayt: [
     { ID: "h1", Order: 1, NameBN: "নমুনা এন্ট্রি (মূল)", NameEN: "Sample entry (root)", NameAR: "", RelationshipBN: "মূল", RelationshipEN: "Root", BiographyBN: "নমুনা। আসল তথ্য, উৎস ও ঐতিহ্য অ্যাডমিন যোগ করবেন।", BiographyEN: "Sample. The admin adds real details, source and tradition.", Photo: "", ParentID: "", Source: "", Tradition: "", Note: "", Status: "Published" },
+    { ID: "h5", Order: 2, NameBN: "নমুনা জীবনসঙ্গী", NameEN: "Sample spouse", NameAR: "", RelationshipBN: "জীবনসঙ্গী", RelationshipEN: "Spouse", BiographyBN: "SpouseID দিয়ে যুক্ত — ট্রিতে পাশাপাশি বসে।", BiographyEN: "Linked with SpouseID — sits side by side in the tree.", Photo: "", ParentID: "", SpouseID: "h1", Source: "", Tradition: "", Note: "", Status: "Published" },
     { ID: "h2", Order: 2, NameBN: "নমুনা সন্তান ১", NameEN: "Sample child 1", NameAR: "", RelationshipBN: "সন্তান", RelationshipEN: "Child", BiographyBN: "", BiographyEN: "", Photo: "", ParentID: "h1", Source: "", Tradition: "", Note: "", Status: "Published" },
     { ID: "h3", Order: 3, NameBN: "নমুনা সন্তান ২", NameEN: "Sample child 2", NameAR: "", RelationshipBN: "সন্তান", RelationshipEN: "Child", BiographyBN: "", BiographyEN: "", Photo: "", ParentID: "h1", Source: "", Tradition: "", Note: "", Status: "Published" },
     { ID: "h4", Order: 4, NameBN: "নমুনা নাতি", NameEN: "Sample grandchild", NameAR: "", RelationshipBN: "নাতি", RelationshipEN: "Grandchild", BiographyBN: "", BiographyEN: "", Photo: "", ParentID: "h2", Source: "", Tradition: "", Note: "", Status: "Published" }
+  ],
+  Silsilah: [
+    { ID: "s1", Order: 1, NameBN: "নমুনা পীর / শায়খ", NameEN: "Sample Shaykh", RelationshipBN: "সিলসিলার শুরু", RelationshipEN: "Head of the chain", BiographyBN: "নমুনা এন্ট্রি। আসল নাম, জীবনী ও উৎস অ্যাডমিন প্যানেল → রূহানী সিলসিলাহ থেকে যোগ করুন।", BiographyEN: "Sample entry.", Photo: "", ParentID: "", SpouseID: "", Source: "", Status: "Published" },
+    { ID: "s2", Order: 2, NameBN: "নমুনা খলিফা ১", NameEN: "Sample Khalifa 1", RelationshipBN: "খলিফা", RelationshipEN: "Khalifa", BiographyBN: "", Photo: "", ParentID: "s1", Source: "", Status: "Published" },
+    { ID: "s3", Order: 3, NameBN: "নমুনা খলিফা ২", NameEN: "Sample Khalifa 2", RelationshipBN: "খলিফা", RelationshipEN: "Khalifa", BiographyBN: "", Photo: "", ParentID: "s1", Source: "", Status: "Published" },
+    { ID: "s4", Order: 4, NameBN: "নমুনা খলিফা ৩", NameEN: "Sample Khalifa 3", RelationshipBN: "খলিফা", RelationshipEN: "Khalifa", BiographyBN: "", Photo: "", ParentID: "s1", Source: "", Status: "Published" },
+    { ID: "s5", Order: 5, NameBN: "নমুনা মুরিদ", NameEN: "Sample Murid", RelationshipBN: "মুরিদ", RelationshipEN: "Murid", BiographyBN: "", Photo: "", ParentID: "s2", Source: "", Status: "Published" },
+    { ID: "s6", Order: 6, NameBN: "নমুনা মুরিদ", NameEN: "Sample Murid", RelationshipBN: "মুরিদ", RelationshipEN: "Murid", BiographyBN: "", Photo: "", ParentID: "s3", Source: "", Status: "Published" }
+  ],
+  Products: [
+    { ID: "p1", Order: 1, TitleBN: "নমুনা বই", TitleEN: "Sample book", Category: "books", Price: "৩৫০", OldPrice: "৪০০", Image: "", DescriptionBN: "নমুনা পণ্য। অ্যাডমিন → শপ থেকে আসল পণ্য, ছবি ও দাম দিন।", DescriptionEN: "Sample product.", InStock: true, Featured: true, Status: "Published" },
+    { ID: "p2", Order: 2, TitleBN: "নমুনা আতর (৬ মিলি)", TitleEN: "Sample attar (6 ml)", Category: "attar", Price: "২৫০", OldPrice: "", Image: "", DescriptionBN: "নমুনা পণ্য।", DescriptionEN: "Sample product.", InStock: true, Featured: false, Status: "Published" },
+    { ID: "p3", Order: 3, TitleBN: "নমুনা তসবি", TitleEN: "Sample tasbih", Category: "tasbih", Price: "১৮০", OldPrice: "", Image: "", DescriptionBN: "নমুনা পণ্য।", DescriptionEN: "Sample product.", InStock: true, Featured: false, Status: "Published" },
+    { ID: "p4", Order: 4, TitleBN: "নমুনা জায়নামাজ", TitleEN: "Sample prayer mat", Category: "jaynamaz", Price: "৬৫০", OldPrice: "", Image: "", DescriptionBN: "নমুনা পণ্য।", DescriptionEN: "Sample product.", InStock: false, Featured: false, Status: "Published" },
+    { ID: "p5", Order: 5, TitleBN: "নমুনা গিলাফ", TitleEN: "Sample cover (gilaf)", Category: "gilaf", Price: "৩০০", OldPrice: "", Image: "", DescriptionBN: "নমুনা পণ্য।", DescriptionEN: "Sample product.", InStock: true, Featured: false, Status: "Published" }
   ],
   Users: [{ ID: "u1", Name: "ডেমো ব্যবহারকারী", Email: "user@demo.com", Status: "Active", JoinedAt: "2026-09-05", LastLogin: "", Photo: "" }],
   Comments: [
@@ -102,7 +124,7 @@ const DEMO_SEED = {
 };
 
 /* -------- শেয়ার্ড: পাবলিক ডেটা ফিল্টার (সার্ভারের সাথে একই নিয়ম) -------- */
-const CONTENT_SHEETS = ["Articles", "Books", "Courses", "Zikr", "Meditation", "Dua", "Amal", "GoldenChain", "AhlulBayt"];
+const CONTENT_SHEETS = ["Articles", "Books", "Courses", "Zikr", "Meditation", "Dua", "Amal", "GoldenChain", "AhlulBayt", "Silsilah", "Products"];
 function rkBool(v) { return v === true || String(v).toLowerCase() === "true" || v === 1 || v === "1" || String(v).toLowerCase() === "yes"; }
 function rkPublicView(db) {
   const today = new Date().toISOString().slice(0, 10);
@@ -124,6 +146,9 @@ const DemoBackend = (() => {
     if (db) return db;
     try { db = JSON.parse(localStorage.getItem(KEY)); } catch (e) { db = null; }
     if (!db) db = JSON.parse(JSON.stringify(DEMO_SEED));
+    // পুরোনো ডেমো ডেটায় নতুন শিট/মেনু না থাকলে যোগ করা
+    Object.keys(DEMO_SEED).forEach(k => { if (!(k in db)) db[k] = JSON.parse(JSON.stringify(DEMO_SEED[k])); });
+    DEMO_SEED.Navigation.forEach(n => { if (!db.Navigation.some(x => x.URL === n.URL)) db.Navigation.push(Object.assign({}, n)); });
     return db;
   }
   function persist() { try { localStorage.setItem(KEY, JSON.stringify(db)); } catch (e) {} }

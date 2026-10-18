@@ -1,5 +1,5 @@
 /* =========================================================
-   রুহানি কাফেলা — অ্যাডমিন প্যানেল
+   রূহানী কাফেলা — অ্যাডমিন প্যানেল
    সব কনটেন্ট, ব্যানার, লোগো, রং, মেনু ও মন্তব্য এখান থেকে
    পরিচালনা করা যায়। প্রতিটি পরিবর্তন সার্ভারে (Code.gs)
    অ্যাডমিন টোকেন যাচাইয়ের পর সংরক্ষিত হয়।
@@ -28,7 +28,7 @@
     articles: { sheet: "Articles", title: "প্রবন্ধ", cols: ["Image", "TitleBN", "Category", "Status", "PublishDate"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"],
       ["Slug", "Slug (লিংকের অংশ, ইংরেজিতে)", "text", { hint: "খালি রাখলে ইংরেজি শিরোনাম থেকে তৈরি হবে। যেমন: path-of-zikr" }],
-      ["Category", "বিভাগ", "select", opt(BN.articleCat)], ["ExcerptBN", "সারাংশ (বাংলা)", "textarea"], ["ExcerptEN", "Excerpt (English)", "textarea"],
+      ["Category", "বিভাগ", "select", opt(BN.articleCat), { hint: "‘দোয়া’ বিভাগের লেখা দোয়া পাতায় এবং ‘ইমাম মাহদী’ বিভাগের লেখা ইমাম মাহদী পাতায় দেখাবে।" }], ["ExcerptBN", "সারাংশ (বাংলা)", "textarea"], ["ExcerptEN", "Excerpt (English)", "textarea"],
       ["ContentBN", "মূল লেখা (বাংলা)", "rich"], ["ContentEN", "Content (English)", "rich"],
       ["Image", "ফিচার্ড ছবি", "image"], ["Author", "লেখক", "text"], ["Tags", "ট্যাগ (কমা দিয়ে আলাদা)", "text"], ["PublishDate", "প্রকাশের তারিখ", "date"],
       ["Featured", "হোমপেজে ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS],
@@ -62,15 +62,29 @@
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["DescriptionBN", "বিবরণ (বাংলা)", "rich"], ["DescriptionEN", "Description (English)", "rich"],
       ["StepsBN", "ধাপ (বাংলা) — প্রতি লাইনে একটি", "lines"], ["StepsEN", "Steps (English)", "lines"], ["TimeBN", "উপযুক্ত সময় (বাংলা)", "text"], ["TimeEN", "Recommended time (English)", "text"],
       ["Count", "প্রস্তাবিত সংখ্যা", "text"], ["Category", "বিভাগ", "select", opt(BN.amalCat)], ["Reference", "উৎস / রেফারেন্স", "ref"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
-    golden: { sheet: "GoldenChain", title: "গোল্ডেন চেইন", order: 1, religious: 1, refKey: "Source", cols: ["Order", "Photo", "NameBN", "Source", "Status"], fields: [
+    golden: { sheet: "GoldenChain", title: "গোল্ডেন চেইন", order: 1, religious: 1, refKey: "Source", cols: ["Order", "Photo", "NameBN", "ParentID", "Source", "Status"], fields: [
       ["NameBN", "নাম (বাংলা)", "text", { req: 1 }], ["NameEN", "Name (English)", "text"], ["NameAR", "আরবি নাম", "arabic"], ["Birth", "জন্ম (সাল)", "text"], ["Death", "ওফাত (সাল)", "text"],
       ["BiographyBN", "সংক্ষিপ্ত জীবনী (বাংলা)", "textarea"], ["BiographyEN", "Short biography (English)", "textarea"], ["Photo", "ছবি", "image"],
-      ["TeacherID", "শিক্ষক (চেইনের আগের ব্যক্তি)", "idref"], ["StudentID", "শিষ্য (চেইনের পরের ব্যক্তি)", "idref"],
+      ["ParentID", "উপরের জন / শিক্ষক (ট্রিতে কার নিচে বসবে)", "idref", { hint: "ট্রিতে যার নিচে বসবে। খালি রাখলে একদম উপরে থাকবে। একই জনের নিচে একাধিক নাম দিলে পাশাপাশি বসবে।" }], ["SpouseID", "জীবনসঙ্গী (পাশে বসবে)", "idref", { hint: "স্বামী/স্ত্রী — ট্রিতে এই নামের পাশে জোড়া হিসেবে বসবে। জোড়ার যেকোনো একজনের ঘরে দিলেই হবে।" }],
+      ["RelationshipBN", "পরিচয় / সম্পর্ক (বাংলা, ঘরের নিচে ছোট লেখা)", "text"], ["RelationshipEN", "Relationship (English)", "text"],
+      ["TeacherID", "পুরোনো: শিক্ষক (উপরের জন খালি থাকলে এটি ধরা হয়)", "idref"], ["StudentID", "পুরোনো: শিষ্য", "idref"],
       ["Source", "উৎস / রেফারেন্স", "ref"], ["Tradition", "ঐতিহ্য / ব্যাখ্যামূলক টীকা", "textarea"], ["Note", "অতিরিক্ত নোট", "textarea"], ["Order", "ক্রম (১ = প্রথম)", "number"], ["Status", "অবস্থা", "select", STATUS]] },
     ahl: { sheet: "AhlulBayt", title: "আহলে বাইত", order: 1, religious: 1, refKey: "Source", cols: ["Order", "Photo", "NameBN", "ParentID", "Source", "Status"], fields: [
       ["NameBN", "নাম (বাংলা)", "text", { req: 1 }], ["NameEN", "Name (English)", "text"], ["NameAR", "আরবি নাম", "arabic"], ["RelationshipBN", "সম্পর্ক (বাংলা)", "text"], ["RelationshipEN", "Relationship (English)", "text"],
-      ["ParentID", "পিতা/মাতা (ট্রিতে কার নিচে বসবে)", "idref", { hint: "খালি রাখলে ট্রির একদম উপরে থাকবে" }], ["BiographyBN", "জীবনী (বাংলা)", "textarea"], ["BiographyEN", "Biography (English)", "textarea"], ["Photo", "ছবি", "image"],
+      ["ParentID", "পিতা/মাতা (ট্রিতে কার নিচে বসবে)", "idref", { hint: "ট্রিতে যার নিচে বসবে। খালি রাখলে একদম উপরে থাকবে। একই জনের নিচে একাধিক নাম দিলে পাশাপাশি বসবে।" }], ["SpouseID", "জীবনসঙ্গী (পাশে বসবে)", "idref", { hint: "স্বামী/স্ত্রী — ট্রিতে এই নামের পাশে জোড়া হিসেবে বসবে। জোড়ার যেকোনো একজনের ঘরে দিলেই হবে।" }],
+      ["Birth", "জন্ম (সাল)", "text"], ["Death", "ওফাত (সাল)", "text"], ["BiographyBN", "জীবনী (বাংলা)", "textarea"], ["BiographyEN", "Biography (English)", "textarea"], ["Photo", "ছবি", "image"],
       ["Source", "উৎস / রেফারেন্স", "ref"], ["Tradition", "ঐতিহ্য / ব্যাখ্যামূলক টীকা", "textarea", { hint: "মতভেদ থাকলে কোন ঐতিহ্যের মত তা লিখুন" }], ["Note", "অতিরিক্ত নোট", "textarea"], ["Order", "ক্রম", "number"], ["Status", "অবস্থা", "select", STATUS]] },
+    silsilah: { sheet: "Silsilah", title: "রূহানী সিলসিলাহ", order: 1, religious: 1, refKey: "Source", cols: ["Order", "Photo", "NameBN", "ParentID", "Source", "Status"], fields: [
+      ["NameBN", "নাম (বাংলা)", "text", { req: 1 }], ["NameEN", "Name (English)", "text"], ["NameAR", "আরবি নাম", "arabic"],
+      ["RelationshipBN", "পরিচয় (যেমন: খলিফা, মুরিদ — ঘরের নিচে ছোট লেখা)", "text"], ["RelationshipEN", "Title / relation (English)", "text"],
+      ["ParentID", "উপরের জন (ট্রিতে কার নিচে বসবে)", "idref", { hint: "ট্রিতে যার নিচে বসবে। খালি রাখলে একদম উপরে থাকবে। একই জনের নিচে একাধিক নাম দিলে পাশাপাশি বসবে।" }], ["SpouseID", "জীবনসঙ্গী (পাশে বসবে, ঐচ্ছিক)", "idref", { hint: "স্বামী/স্ত্রী — ট্রিতে এই নামের পাশে জোড়া হিসেবে বসবে। জোড়ার যেকোনো একজনের ঘরে দিলেই হবে।" }],
+      ["Birth", "জন্ম (সাল)", "text"], ["Death", "ওফাত (সাল)", "text"], ["BiographyBN", "বর্ণনা / জীবনী (বাংলা)", "textarea"], ["BiographyEN", "Description (English)", "textarea"], ["Photo", "ছবি", "image"],
+      ["Source", "উৎস / রেফারেন্স", "ref"], ["Tradition", "ঐতিহ্য / ব্যাখ্যামূলক টীকা", "textarea"], ["Note", "অতিরিক্ত নোট", "textarea"], ["Order", "ক্রম", "number"], ["Status", "অবস্থা", "select", STATUS]] },
+    products: { sheet: "Products", title: "শপ — পণ্য", order: 1, cols: ["Order", "Image", "TitleBN", "Category", "Price", "InStock", "Status"], fields: [
+      ["TitleBN", "পণ্যের নাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Product name (English)", "text"], ["Category", "বিভাগ", "select", opt(BN.productCat)],
+      ["Price", "দাম (যেমন: ৩৫০)", "text", { hint: "শুধু সংখ্যা দিলে সাইটে ৳ চিহ্ন যোগ হবে" }], ["OldPrice", "আগের দাম (ঐচ্ছিক, কেটে দেখাবে)", "text"],
+      ["Image", "পণ্যের ছবি (বর্গাকার হলে ভালো)", "image"], ["DescriptionBN", "বিবরণ (বাংলা)", "rich"], ["DescriptionEN", "Description (English)", "rich"],
+      ["InStock", "স্টকে আছে", "bool"], ["Featured", "ফিচার্ড", "bool"], ["Order", "ক্রম", "number"], ["Status", "অবস্থা", "select", STATUS]] },
     banners: { sheet: "Banners", title: "ব্যানার", order: 1, cols: ["Image", "Position", "TitleBN", "Active"], fields: [
       ["Position", "ব্যানারের স্থান", "select", [["hero", "হোমপেজ হিরো (বড় ব্যানার)"], ["announcement", "উপরের ঘোষণা বার"], ["home_mid", "হোমপেজের মাঝখানে"], ["before_article", "প্রবন্ধের শুরুতে"], ["course_promo", "কোর্স পাতায় প্রচার"], ["book_promo", "বই পাতায় প্রচার"]]],
       ["Image", "ব্যানার ছবি", "image", { hint: "হিরোর জন্য চওড়া ছবি (১৬০০×৭০০ বা কাছাকাছি)" }], ["TitleBN", "শিরোনাম (বাংলা)", "text"], ["TitleEN", "Title (English)", "text"],
@@ -85,12 +99,12 @@
       ["AboutBN", "পরিচিতি পাতা (বাংলা)", "rich"], ["AboutEN", "About page (English)", "rich"], ["SiteURL", "সাইটের পূর্ণ ঠিকানা (sitemap-এর জন্য)", "text", { hint: "যেমন: https://username.github.io/ruhani-kafela/" }]] },
     logo: { title: "লোগো ও ফেভিকন", fields: [["Logo", "লোগো", "image", { hint: "বর্গাকার PNG/SVG, স্বচ্ছ ব্যাকগ্রাউন্ড হলে ভালো। মূল লোগো: assets/logo/logo.svg" }], ["Favicon", "ফেভিকন (ব্রাউজার ট্যাবের ছোট আইকন)", "image"]] },
     social: { title: "সোশ্যাল ও যোগাযোগ", fields: [["Facebook", "Facebook লিংক", "text"], ["YouTube", "YouTube লিংক", "text"], ["Instagram", "Instagram লিংক", "text"], ["Telegram", "Telegram লিংক", "text"],
-      ["WhatsApp", "WhatsApp নম্বর (দেশের কোডসহ, যেমন 8801XXXXXXXXX)", "text"], ["Email", "ইমেইল", "text"], ["Phone", "ফোন", "text"], ["CommunityURL", "কমিউনিটি গ্রুপ লিংক (ঐচ্ছিক)", "text"]] }
+      ["WhatsApp", "WhatsApp নম্বর (দেশের কোডসহ, যেমন 8801XXXXXXXXX)", "text"], ["ShopWhatsApp", "শপের অর্ডারের WhatsApp নম্বর (যেমন 8801682396399)", "text"], ["Email", "ইমেইল", "text"], ["Phone", "ফোন", "text"], ["CommunityURL", "কমিউনিটি গ্রুপ লিংক (ঐচ্ছিক)", "text"]] }
   };
 
   /* ================ লগইন ================ */
   function loginView() {
-    document.body.innerHTML = `<div class="a-login"><form class="box form" id="lf"><img src="assets/logo/logo.svg" alt=""><h1>অ্যাডমিন লগইন</h1><p class="muted" style="text-align:center;margin-bottom:6px">রুহানি কাফেলা পরিচালনা প্যানেল</p>
+    document.body.innerHTML = `<div class="a-login"><form class="box form" id="lf"><img src="assets/logo/logo.svg" alt=""><h1>অ্যাডমিন লগইন</h1><p class="muted" style="text-align:center;margin-bottom:6px">রূহানী কাফেলা পরিচালনা প্যানেল</p>
       ${API.DEMO ? `<p class="msg ok">ডেমো মোড: ইমেইল <b>admin@demo.com</b>, পাসওয়ার্ড <b>demo1234</b></p>` : ""}
       <label>ইমেইল<input name="email" type="email" required autocomplete="username"></label><label>পাসওয়ার্ড<input name="password" type="password" required autocomplete="current-password"></label>
       <button class="btn" style="justify-content:center">লগইন</button><div id="lm"></div><a href="index.html" style="text-align:center;font-size:.9rem">← সাইটে ফিরুন</a></form></div>`;
@@ -103,12 +117,12 @@
 
   /* ================ কাঠামো ================ */
   const NAV = [["ড্যাশবোর্ড", [["dashboard", "ড্যাশবোর্ড"]]], ["কনটেন্ট", [["articles", "প্রবন্ধ"], ["books", "বই"], ["courses", "কোর্স"], ["zikr", "জিকির"], ["meditation", "মেডিটেশন"], ["dua", "দোয়া"], ["amal", "আমল"]]],
-    ["বংশধারা", [["golden", "গোল্ডেন চেইন"], ["ahl", "আহলে বাইত"]]], ["কমিউনিটি", [["comments", "মন্তব্য"], ["users", "ব্যবহারকারী"]]],
+    ["বংশধারা ও সিলসিলাহ", [["silsilah", "রূহানী সিলসিলাহ"], ["golden", "গোল্ডেন চেইন"], ["ahl", "আহলে বাইত"]]], ["শপ", [["products", "পণ্য"]]], ["কমিউনিটি", [["comments", "মন্তব্য"], ["users", "ব্যবহারকারী"]]],
     ["ওয়েবসাইট", [["s-general", "সাধারণ সেটিংস"], ["homepage", "হোমপেজ সেকশন"], ["banners", "ব্যানার"], ["s-logo", "লোগো"], ["s-social", "সোশ্যাল লিংক"], ["navigation", "নেভিগেশন"]]],
     ["সিস্টেম", [["backup", "ব্যাকআপ ও SEO"], ["logs", "লগ"], ["system", "পাসওয়ার্ড ও সিস্টেম"]]]];
   function shell() {
     document.body.innerHTML = `${API.DEMO ? `<div class="demo-bar"><span>ডেমো মোড — পরিবর্তন শুধু এই ব্রাউজারে জমা থাকে। আসল সাইটের জন্য js/config.js-এ API URL বসান।</span><button class="btn btn-light btn-sm" id="resetDemo">ডেমো রিসেট</button></div>` : ""}
-    <div class="a-shell"><aside class="a-side" id="aside"><div class="brand-sm"><img src="assets/logo/logo.svg" alt=""><div><b>রুহানি কাফেলা</b><small>অ্যাডমিন প্যানেল</small></div></div>
+    <div class="a-shell"><aside class="a-side" id="aside"><div class="brand-sm"><img src="assets/logo/logo.svg" alt=""><div><b>রূহানী কাফেলা</b><small>অ্যাডমিন প্যানেল</small></div></div>
       ${NAV.map(([g, items]) => `<h6>${g}</h6>${items.map(([k, l]) => `<a href="#/${k}" data-k="${k}">${l}${k === "comments" ? '<span class="cnt" id="pendCnt" hidden></span>' : ""}</a>`).join("")}`).join("")}</aside>
       <div class="a-main"><div class="a-top"><div style="display:flex;gap:10px;align-items:center"><button class="icon-btn a-menu" id="am" aria-label="মেনু"><svg viewBox="0 0 24 24" width="22" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg></button><h1 id="pt"></h1></div>
       <div class="who"><a class="btn btn-ghost btn-sm" href="index.html" target="_blank">সাইট দেখুন</a><span class="hide-m">${esc(session.email || "")}</span><button class="btn btn-ghost btn-sm" id="lo">লগআউট</button></div></div>
@@ -155,6 +169,8 @@
     if (["Status", "Active", "Visible", "Featured"].includes(c)) return `<span class="st st-${esc(String(bool(v) && c !== "Status" ? true : c === "Status" ? v : false))}">${c === "Status" ? esc(v) : bool(v) ? "হ্যাঁ" : "না"}</span>`;
     if (c === "Source") return v ? esc(String(v).slice(0, 40)) : `<span class="st st-Spam">উৎস নেই</span>`;
     if (c === "Arabic") return `<span class="arabic" style="font-size:1.2rem">${esc(String(v).slice(0, 40))}</span>`;
+    if (c === "Price") return esc(v);
+    if (c === "InStock") return `<span class="st st-${v === "" || v == null || bool(v) ? "true" : "false"}">${v === "" || v == null || bool(v) ? "আছে" : "নেই"}</span>`;
     if (c === "ParentID") { const p = (cache[m.sheet] || []).find(x => x.ID === v); return p ? esc(p.NameBN) : "—"; }
     const f = m.fields.find(x => x[0] === c); if (f && f[2] === "select" && Array.isArray(f[3])) { const o = f[3].find(x => x[0] === v); return esc(o ? o[1] : v); }
     return `<span class="${c.startsWith("Title") || c.startsWith("Name") || c.startsWith("Label") ? "title-cell" : ""}">${esc(String(v == null ? "" : v).slice(0, 90))}</span>`;
@@ -190,7 +206,7 @@
 
   /* ================ ফর্ম ফিল্ড ================ */
   function fieldHTML(f, val, ctx) {
-    const [k, label, type, o] = f, opts = Array.isArray(o) ? o : [], extra = Array.isArray(o) ? {} : (o || {});
+    const [k, label, type, o] = f, opts = Array.isArray(o) ? o : [], extra = Array.isArray(o) ? (f[4] || {}) : (o || {});
     const v = val == null ? "" : val, id = "f_" + k, full = ["rich", "textarea", "lines", "ref", "arabic", "image"].includes(type) ? "full" : "";
     const hint = extra.hint ? `<div class="hint">${esc(extra.hint)}</div>` : "";
     const L = `<label for="${id}">${esc(label)}${extra.req ? " *" : ""}</label>`;
@@ -272,7 +288,7 @@
     let rows; try { rows = await fetchList(key); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
     let item = id ? rows.find(r => r.ID === id) : null;
     if (id && !item) return body(`<p class="msg err">এন্ট্রিটি পাওয়া যায়নি।</p><a class="btn" href="#/${key}">তালিকায় ফিরুন</a>`);
-    if (!item) { item = { Status: "Draft", Active: true, Visible: true, PublishDate: new Date().toISOString().slice(0, 10) }; if (m.order) item.Order = rows.length + 1; }
+    if (!item) { item = { Status: "Draft", Active: true, Visible: true, InStock: true, PublishDate: new Date().toISOString().slice(0, 10) }; if (m.order) item.Order = rows.length + 1; }
     body(`<form id="ef"><div class="a-card"><div class="ed-grid">${m.fields.map(f => fieldHTML(f, item[f[0]], { rows, id })).join("")}</div></div>
       <div class="ed-actions"><button class="btn">সংরক্ষণ করুন</button>${m.fields.some(f => f[0] === "Status") ? `<button type="button" class="btn btn-gold" id="pub">সংরক্ষণ ও প্রকাশ</button>` : ""}<a class="btn btn-ghost" href="#/${key}">বাতিল</a>
       ${id && key === "articles" ? `<a class="btn btn-ghost" target="_blank" href="article.html?slug=${encodeURIComponent(item.Slug || item.ID)}">সাইটে দেখুন</a>` : ""}</div></form>`);
@@ -386,7 +402,7 @@
   function system() {
     setTitle("পাসওয়ার্ড ও সিস্টেম", "system");
     body(`<div class="a-card" style="max-width:520px"><h3>পাসওয়ার্ড পরিবর্তন</h3><form class="form" id="pw"><label>বর্তমান পাসওয়ার্ড<input type="password" name="old" required autocomplete="current-password"></label><label>নতুন পাসওয়ার্ড (কমপক্ষে ১০ অক্ষর)<input type="password" name="nw" required minlength="10" autocomplete="new-password"></label><button class="btn">পাসওয়ার্ড বদলান</button></form></div>
-      <div class="a-card" style="max-width:520px;margin-top:16px"><h3>সিস্টেম তথ্য</h3><p class="muted">ভার্সন: ${esc(CONFIG.VERSION)}<br>মোড: ${API.DEMO ? "ডেমো" : "লাইভ (Google Sheets)"}<br>নতুন অ্যাডমিন যোগ করতে: Google Sheet খুলুন → উপরের মেনু "রুহানি কাফেলা" → "অ্যাডমিন যোগ করুন"।</p></div>`);
+      <div class="a-card" style="max-width:520px;margin-top:16px"><h3>সিস্টেম তথ্য</h3><p class="muted">ভার্সন: ${esc(CONFIG.VERSION)}<br>মোড: ${API.DEMO ? "ডেমো" : "লাইভ (Google Sheets)"}<br>নতুন অ্যাডমিন যোগ করতে: Google Sheet খুলুন → উপরের মেনু "রূহানী কাফেলা" → "অ্যাডমিন যোগ করুন"।</p></div>`);
     $("#pw").onsubmit = async e => { e.preventDefault(); try { await call("changePassword", { oldPassword: e.target.old.value, newPassword: e.target.nw.value }); toast("পাসওয়ার্ড পরিবর্তিত হয়েছে"); e.target.reset(); } catch (err) { toast(err.message, true); } };
   }
 
