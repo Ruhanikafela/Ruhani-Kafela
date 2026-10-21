@@ -183,7 +183,8 @@
     const f = m.fields.find(x => x[0] === c); if (f && f[2] === "select" && Array.isArray(f[3])) { const o = f[3].find(x => x[0] === v); return esc(o ? o[1] : v); }
     return `<span class="${c.startsWith("Title") || c.startsWith("Name") || c.startsWith("Label") ? "title-cell" : ""}">${esc(String(v == null ? "" : v).slice(0, 90))}</span>`;
   }
-  const onlyMine = (m, r) => !m.filter ? r : r.filter(x => Object.keys(m.filter).every(k => String(x[k]) === String(m.filter[k])));
+  const MAHDI_RE = /^(imam_mahdi|imam[\s_-]*(mahdi|mehdi|mahadi)|ইমাম\s*(মাহদী|মাহদি|মেহেদী|মেহেদি|মাহাদী))$/i;
+  const onlyMine = (m, r) => !m.filter ? r : r.filter(x => Object.keys(m.filter).every(k => String(x[k]).trim() === String(m.filter[k]) || (m.filter[k] === "imam_mahdi" && MAHDI_RE.test(String(x[k]).trim()))));
   async function list(key) {
     const m = M[key]; setTitle(m.title, key); loading();
     let rows; try { rows = onlyMine(m, await fetchList(key, true)); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
@@ -298,6 +299,7 @@
     let item = id ? rows.find(r => r.ID === id) : null;
     if (id && !item) return body(`<p class="msg err">এন্ট্রিটি পাওয়া যায়নি।</p><a class="btn" href="#/${key}">তালিকায় ফিরুন</a>`);
     if (!item) { item = { Status: "Draft", Active: true, Visible: true, InStock: true, PublishDate: new Date().toISOString().slice(0, 10) }; if (m.order) item.Order = rows.length + 1; if (m.filter) Object.assign(item, m.filter); }
+    else if (m.filter && onlyMine(m, [item]).length) item = Object.assign({}, item, m.filter); // হাতে লেখা বিভাগ ঠিক করে নেয়
     body(`<form id="ef"><div class="a-card"><div class="ed-grid">${m.fields.map(f => fieldHTML(f, item[f[0]], { rows, id })).join("")}</div></div>
       <div class="ed-actions"><button class="btn">সংরক্ষণ করুন</button>${m.fields.some(f => f[0] === "Status") ? `<button type="button" class="btn btn-gold" id="pub">সংরক্ষণ ও প্রকাশ</button>` : ""}<a class="btn btn-ghost" href="#/${key}">বাতিল</a>
       ${id && m.sheet === "Articles" ? `<a class="btn btn-ghost" target="_blank" href="article.html?slug=${encodeURIComponent(item.Slug || item.ID)}">সাইটে দেখুন</a>` : ""}</div></form>`);

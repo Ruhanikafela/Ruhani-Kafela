@@ -16,7 +16,10 @@ const RK = (() => {
   const bool = v => v === true || String(v).toLowerCase() === "true" || v === 1 || v === "1" || String(v).toLowerCase() === "yes";
   /* দ্বিভাষিক ফিল্ড: L(item,"Title") → TitleBN বা TitleEN (না থাকলে অন্যটা) */
   const L = (o, base) => { if (!o) return ""; const a = o[base + (S.lang === "bn" ? "BN" : "EN")], b = o[base + (S.lang === "bn" ? "EN" : "BN")]; return (a != null && String(a).trim() !== "") ? a : (b || ""); };
-  const cat = (group, key) => (t(group) && t(group)[key]) || key || "";
+  // শিটে বিভাগ হাতে লিখলেও (যেমন "ইমাম মেহেদী") সঠিক বিভাগ ধরা হবে
+  const CAT_ALIAS = { imam_mahdi: /^(imam[\s_-]*(mahdi|mehdi|mahadi)|ইমাম\s*(মাহদী|মাহদি|মেহেদী|মেহেদি|মাহাদী))$/i, durood: /^(durood|durud|darood|দরুদ|দরূদ)(\s*(sharif|শরীফ|শরিফ))?$/i, dua: /^(dua|duas|দোয়া|দোআ|দুআ)$/i };
+  const normCat = v => { v = String(v == null ? "" : v).trim(); for (const k in CAT_ALIAS) if (v === k || CAT_ALIAS[k].test(v)) return k; return v; };
+  const cat = (group, key) => (t(group) && t(group)[normCat(key)]) || key || "";
   const num = n => (n === "" || n == null) ? "" : (isNaN(n) ? n : Number(n).toLocaleString(S.lang === "bn" ? "bn-BD" : "en-US"));
   const safeUrl = u => { u = String(u || "").trim(); if (!u) return ""; if (/^(https?:|mailto:|tel:|data:image\/)/i.test(u) || /^[\w\-./?=&#%]+$/.test(u)) return u; return ""; };
   function fmtDate(d) {
@@ -618,12 +621,12 @@ const RK = (() => {
   /* ---------- দোয়া ও ইমাম মাহদী (প্রবন্ধের নির্দিষ্ট বিভাগ) ---------- */
   function articleCategoryPage(catKey, titleK, subK) {
     setMeta(t(titleK), t(subK));
-    const list = D("Articles").filter(a => a.Category === catKey).sort(byDate);
+    const list = D("Articles").filter(a => normCat(a.Category) === catKey).sort(byDate);
     return pageHead(t(titleK), t(subK), [[t(titleK)]]) + `<section class="section"><div class="wrap">${grid(list, "article")}</div></section>`;
   }
   pages.duas = () => {
     setMeta(t("duas"), t("duasSub"));
-    const list = D("Durood").slice().sort(sortOrder), arts = D("Articles").filter(a => a.Category === "durood").sort(byDate);
+    const list = D("Durood").slice().sort(sortOrder), arts = D("Articles").filter(a => normCat(a.Category) === "durood").sort(byDate);
     return pageHead(t("duas"), t("duasSub"), [[t("duas")]]) + `<section class="section"><div class="wrap">${list.length ? grid(list, "durood", "g3") : (arts.length ? "" : `<p class="empty">${t("empty")}</p>`)}</div></section>`
       + (arts.length ? `<section class="section tint"><div class="wrap"><h2>${t("duroodArticles")}</h2>${grid(arts, "article")}</div></section>` : "");
   };

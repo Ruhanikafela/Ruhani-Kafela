@@ -10,7 +10,7 @@
 
 /* ---------------- মূল সেটিংস ---------------- */
 var RK = {
-  VERSION: '1.1.0',
+  VERSION: '1.1.1',
   UPLOAD_FOLDER: 'RuhaniKafela-Uploads',
   ADMIN_SESSION_SECONDS: 6 * 60 * 60,   // অ্যাডমিন সেশন ৬ ঘণ্টা
   PUBLIC_CACHE_SECONDS: 300,            // পাবলিক ডেটা ক্যাশ ৫ মিনিট
@@ -545,8 +545,26 @@ function withLock_(fn) {
    ৬. শিট পড়া-লেখার সহায়ক
    ===================================================================== */
 function ss_() { return SpreadsheetApp.getActiveSpreadsheet(); }
+/* দরকারি শিট বা কলাম না থাকলে নিজে থেকেই তৈরি হয় (আগের তথ্য মোছে না) */
+var ENSURED_ = {};
+function ensureSheet_(name) {
+  var cols = SCHEMA[name]; if (!cols) return ss_().getSheetByName(name);
+  var s = ss_().getSheetByName(name), isNew = !s;
+  if (!s) s = ss_().insertSheet(name);
+  var have = headers_(s);
+  if (!have.length || !have[0]) { s.getRange(1, 1, 1, cols.length).setValues([cols]); }
+  else cols.forEach(function (c) { if (have.indexOf(c) < 0) { s.getRange(1, s.getLastColumn() + 1).setValue(c); have.push(c); } });
+  if (isNew) {
+    var w = s.getLastColumn();
+    s.getRange(1, 1, 1, w).setFontWeight('bold').setBackground('#0F4C3A').setFontColor('#ffffff');
+    s.setFrozenRows(1);
+    s.getRange(1, 1, s.getMaxRows(), w).setNumberFormat('@');
+  }
+  ENSURED_[name] = true;
+  return s;
+}
 function sh_(name) {
-  var s = ss_().getSheetByName(name);
+  var s = (SCHEMA[name] && !ENSURED_[name]) ? ensureSheet_(name) : ss_().getSheetByName(name);
   if (!s) throw new Error('"' + name + '" শিট পাওয়া যায়নি — মেনু থেকে "শিট তৈরি করুন" চালান।');
   return s;
 }
@@ -690,6 +708,8 @@ function clearCacheMenu() { clearPublicCache_(); SpreadsheetApp.getUi().alert('�
 
 function systemCheck() {
   var lines = [];
+  Object.keys(SCHEMA).forEach(function (n) { try { ensureSheet_(n); } catch (e) {} }); // অনুপস্থিত শিট/কলাম তৈরি
+  clearPublicCache_();
   Object.keys(SCHEMA).forEach(function (n) {
     var s = ss_().getSheetByName(n);
     lines.push((s ? '✅ ' : '❌ ') + n + (s ? ' — ' + Math.max(0, s.getLastRow() - 1) + ' সারি' : ' — নেই'));
