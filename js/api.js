@@ -7,7 +7,7 @@
    ========================================================= */
 const API = (() => {
   const DEMO = !CONFIG.API_URL || CONFIG.API_URL.indexOf("YOUR_") === 0;
-  const CACHE_KEY = "rk_cache_v2";
+  const CACHE_KEY = "rk_cache_v3";
 
   async function request(action, params = {}, method = "POST") {
     if (DEMO) return DemoBackend.handle(action, params);

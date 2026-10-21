@@ -5,7 +5,7 @@
    নিচের লাইনে "YOUR_GOOGLE_APPS_SCRIPT_URL" এর জায়গায় বসান।
    URL না বসালে সাইট "ডেমো মোডে" চলবে (নমুনা ডেটা দেখাবে)।
    ========================================================= */
-const API_URL = "https://script.google.com/macros/s/AKfycby5VbLUmmNqcDy-m4Iy8BAnffOZg32-WZTdWhSC5GnadU6JgmjPMIUd_F0ImLengdS0/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzhqSGUOjrkCJ3Y8IRZEYRQ89czjcRl78KD5612sUbDljq-btAveVRaKcAp8UxXcgie/exec";
 
 const CONFIG = {
   API_URL: API_URL,
