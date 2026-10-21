@@ -238,15 +238,15 @@ const RK = (() => {
       <div class="thumb">${img(c.Image, DEF.course, "")}<span class="badge ${c.Type === "Paid" ? "paid" : ""}">${c.Type === "Paid" ? t("paid") : t("free")}</span></div>
       <div class="body"><h3>${esc(L(c, "Title"))}</h3><p class="excerpt">${esc(L(c, "Short"))}</p>
       <div class="meta"><span>${esc(c.Instructor)}${c.Duration ? " | " + esc(c.Duration) : ""}</span><span class="read">${t("viewCourse")}</span></div></div></a>`,
-    zikr: z => `<a class="card ar-card" href="zikr.html?id=${encodeURIComponent(z.ID)}"><div class="ar" lang="ar">${esc(z.Arabic)}</div>
+    zikr: z => `<a class="card ar-card" href="zikr.html?id=${encodeURIComponent(z.ID)}">${z.Image ? `<div class="thumb">${img(z.Image, DEF.article, "")}</div>` : ""}${z.Arabic || !z.Image ? `<div class="ar" lang="ar">${esc(z.Arabic)}</div>` : ""}
       <div class="body"><h3>${esc(L(z, "Title"))}</h3><span class="muted">${z.Count ? `${t("count")}: ${esc(num(z.Count))} ${t("times")}` : esc(cat("zikrCat", z.Category))}</span><span class="read">${t("readMore")}</span></div></a>`,
     dua: d => `<a class="card ar-card" href="dua.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${esc(d.Arabic)}</div>` : ""}
       <div class="body"><h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(cat("duaCat", d.Occasion))}</span><span class="read">${t("readMore")}</span></div></a>`,
     durood: d => `<a class="card ar-card" href="durood.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${esc(d.Arabic)}</div>` : ""}
       <div class="body"><h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(String(L(d, "Meaning") || "").slice(0, 90))}</span><span class="read">${t("readMore")}</span></div></a>`,
-    amal: a => `<a class="card" href="amal.html?id=${encodeURIComponent(a.ID)}"><div class="body"><span class="cat">${esc(cat("amalCat", a.Category))}</span>
+    amal: a => `<a class="card" href="amal.html?id=${encodeURIComponent(a.ID)}">${a.Image ? `<div class="thumb">${img(a.Image, DEF.article, "")}</div>` : ""}<div class="body"><span class="cat">${esc(cat("amalCat", a.Category))}</span>
       <h3>${esc(L(a, "Title"))}</h3><p class="excerpt">${esc(String(L(a, "Description")).replace(/<[^>]+>/g, ""))}</p><div class="meta"><span>${esc(L(a, "Time"))}</span><span class="read">${t("readMore")}</span></div></div></a>`,
-    meditation: m => `<a class="card" href="meditation.html?id=${encodeURIComponent(m.ID)}"><div class="body"><span class="cat">${t("meditation")}</span>
+    meditation: m => `<a class="card" href="meditation.html?id=${encodeURIComponent(m.ID)}">${m.Image ? `<div class="thumb">${img(m.Image, DEF.article, "")}</div>` : ""}<div class="body"><span class="cat">${t("meditation")}</span>
       <h3>${esc(L(m, "Title"))}</h3><p class="excerpt">${esc(String(L(m, "Description")).replace(/<[^>]+>/g, ""))}</p><div class="meta"><span>${esc(m.Duration)}</span><span class="read">${t("readMore")}</span></div></div></a>`
   };
   const grid = (items, type, cls = "g3") => items.length ? `<div class="grid ${cls}">${items.map(cards[type]).join("")}</div>` : `<p class="empty">${t("empty")}</p>`;
@@ -475,6 +475,7 @@ const RK = (() => {
   pages.course.after = bindShare;
 
   /* ---------- জিকির / দোয়া / আমল / মেডিটেশন বিস্তারিত ---------- */
+  const photo2 = src => src ? `<figure style="margin:0 0 24px"><img src="${esc(safeUrl(src))}" alt="" loading="lazy" style="display:block;width:100%;max-height:520px;object-fit:contain;border-radius:16px;background:var(--light)" onerror="this.parentNode.remove()"></figure>` : "";
   const refBlock = r => `<div class="field-block"><h3>${t("reference")}</h3><div class="ref ${r ? "" : "missing"}">${r ? rich(r) : t("refMissing")}</div></div>`;
   const block = (title, html) => html ? `<div class="field-block"><h3>${esc(title)}</h3>${html}</div>` : "";
   function mediaBlock(audio, video) {
@@ -494,18 +495,17 @@ const RK = (() => {
   pages.zikr = () => {
     const z = D("Zikr").find(x => x.ID === qs("id")); if (!z) return pages.notfound();
     setMeta(L(z, "Title"), L(z, "Meaning"));
-    return detailWrap([[t("zikrMed"), "zikr-meditation.html"]], L(z, "Title"), arabicDetail(z, `${z.Count ? `<dt>${t("count")}</dt><dd>${esc(num(z.Count))} ${t("times")}</dd>` : ""}<dt>${t("category")}</dt><dd>${esc(cat("zikrCat", z.Category))}</dd>`) + refBlock(z.Reference) + block(t("notes"), rich(L(z, "Notes"))) + mediaBlock(z.AudioURL));
+    return detailWrap([[t("zikrMed"), "zikr-meditation.html"]], L(z, "Title"), photo2(z.Image) + arabicDetail(z, `${z.Count ? `<dt>${t("count")}</dt><dd>${esc(num(z.Count))} ${t("times")}</dd>` : ""}<dt>${t("category")}</dt><dd>${esc(cat("zikrCat", z.Category))}</dd>`) + refBlock(z.Reference) + block(t("notes"), rich(L(z, "Notes"))) + mediaBlock(z.AudioURL));
   };
-  const photo = src => src ? `<figure style="margin:0 0 24px"><img src="${esc(safeUrl(src))}" alt="" loading="lazy" style="display:block;width:100%;max-height:520px;object-fit:contain;border-radius:16px;background:var(--light)" onerror="this.parentNode.remove()"></figure>` : "";
   pages.dua = () => {
     const d = D("Dua").find(x => x.ID === qs("id")); if (!d) return pages.notfound();
     setMeta(L(d, "Title"), L(d, "Meaning"));
-    return detailWrap([[t("duaAmal"), "dua-amal.html"]], L(d, "Title"), photo(d.Image) + arabicDetail(d, `<dt>${t("occasion")}</dt><dd>${esc(cat("duaCat", d.Occasion))}</dd>`) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
+    return detailWrap([[t("duaAmal"), "dua-amal.html"]], L(d, "Title"), photo2(d.Image) + arabicDetail(d, `<dt>${t("occasion")}</dt><dd>${esc(cat("duaCat", d.Occasion))}</dd>`) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
   };
   pages.durood = () => {
     const d = D("Durood").find(x => String(x.ID) === qs("id")); if (!d) return pages.notfound();
     setMeta(L(d, "Title"), L(d, "Meaning"));
-    return detailWrap([[t("duas"), "duas.html"]], L(d, "Title"), photo(d.Image) + arabicDetail(d, d.Count ? `<dt>${t("duroodRule")}</dt><dd>${esc(num(d.Count))}</dd>` : "") + block(t("fazilat"), rich(L(d, "Fazilat"))) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
+    return detailWrap([[t("duas"), "duas.html"]], L(d, "Title"), photo2(d.Image) + arabicDetail(d, d.Count ? `<dt>${t("duroodRule")}</dt><dd>${esc(num(d.Count))}</dd>` : "") + block(t("fazilat"), rich(L(d, "Fazilat"))) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
   };
   pages.durood.after = bindShare;
   pages.amal = () => {
@@ -513,7 +513,7 @@ const RK = (() => {
     setMeta(L(a, "Title"), L(a, "Description"));
     const st = lines(L(a, "Steps"));
     return detailWrap([[t("duaAmal"), "dua-amal.html?tab=amal"]], L(a, "Title"),
-      `<div class="facts"><div><small>${t("category")}</small><b>${esc(cat("amalCat", a.Category))}</b></div>${L(a, "Time") ? `<div><small>${t("time")}</small><b>${esc(L(a, "Time"))}</b></div>` : ""}${a.Count ? `<div><small>${t("count")}</small><b>${esc(num(a.Count))}</b></div>` : ""}</div>
+      `${photo2(a.Image)}<div class="facts"><div><small>${t("category")}</small><b>${esc(cat("amalCat", a.Category))}</b></div>${L(a, "Time") ? `<div><small>${t("time")}</small><b>${esc(L(a, "Time"))}</b></div>` : ""}${a.Count ? `<div><small>${t("count")}</small><b>${esc(num(a.Count))}</b></div>` : ""}</div>
       <div class="prose">${rich(L(a, "Description"))}</div>${st.length ? block(t("steps"), `<ol class="steps">${st.map(s => `<li>${esc(s)}</li>`).join("")}</ol>`) : ""}${refBlock(a.Reference)}`);
   };
   pages.meditation = () => {
@@ -521,7 +521,7 @@ const RK = (() => {
     setMeta(L(m, "Title"), L(m, "Description"));
     const st = lines(L(m, "Steps"));
     return detailWrap([[t("zikrMed"), "zikr-meditation.html?tab=meditation"]], L(m, "Title"),
-      `${m.Duration ? `<div class="facts"><div><small>${t("duration")}</small><b>${esc(m.Duration)}</b></div></div>` : ""}<div class="prose">${rich(L(m, "Description"))}</div>
+      `${photo2(m.Image)}${m.Duration ? `<div class="facts"><div><small>${t("duration")}</small><b>${esc(m.Duration)}</b></div></div>` : ""}<div class="prose">${rich(L(m, "Description"))}</div>
       ${st.length ? block(t("steps"), `<ol class="steps">${st.map(s => `<li>${esc(s)}</li>`).join("")}</ol>`) : ""}${mediaBlock(m.AudioURL, m.VideoURL)}${L(m, "Notes") ? `<div class="note" style="margin-bottom:20px">${rich(L(m, "Notes"))}</div>` : ""}${refBlock(m.Reference)}`);
   };
   ["zikr", "dua", "amal", "meditation"].forEach(k => pages[k].after = bindShare);

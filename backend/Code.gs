@@ -10,7 +10,7 @@
 
 /* ---------------- মূল সেটিংস ---------------- */
 var RK = {
-  VERSION: '1.1.1',
+  VERSION: '1.2.0',
   UPLOAD_FOLDER: 'RuhaniKafela-Uploads',
   ADMIN_SESSION_SECONDS: 6 * 60 * 60,   // অ্যাডমিন সেশন ৬ ঘণ্টা
   PUBLIC_CACHE_SECONDS: 300,            // পাবলিক ডেটা ক্যাশ ৫ মিনিট
@@ -27,11 +27,11 @@ var SCHEMA = {
   Articles: ['ID', 'Slug', 'TitleBN', 'TitleEN', 'ExcerptBN', 'ExcerptEN', 'ContentBN', 'ContentEN', 'Image', 'Category', 'Author', 'Tags', 'Featured', 'Status', 'PublishDate', 'SEOTitle', 'MetaDescription', 'CreatedAt', 'UpdatedAt'],
   Books: ['ID', 'TitleBN', 'TitleEN', 'Author', 'DescriptionBN', 'DescriptionEN', 'Cover', 'Category', 'Price', 'PurchaseURL', 'PDFURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Courses: ['ID', 'TitleBN', 'TitleEN', 'ShortBN', 'ShortEN', 'DescriptionBN', 'DescriptionEN', 'Instructor', 'Image', 'Duration', 'Lessons', 'Type', 'Price', 'EnrollmentURL', 'StartDate', 'Mode', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Zikr: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'Count', 'Category', 'Reference', 'NotesBN', 'NotesEN', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Meditation: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'Duration', 'StepsBN', 'StepsEN', 'AudioURL', 'VideoURL', 'Reference', 'NotesBN', 'NotesEN', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Zikr: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'Count', 'Category', 'Image', 'Reference', 'NotesBN', 'NotesEN', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Meditation: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'Duration', 'StepsBN', 'StepsEN', 'AudioURL', 'VideoURL', 'Image', 'Reference', 'NotesBN', 'NotesEN', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Dua: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'Transliteration', 'PronunciationBN', 'MeaningBN', 'MeaningEN', 'Occasion', 'Image', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Durood: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'FazilatBN', 'FazilatEN', 'Count', 'Image', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Amal: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'StepsBN', 'StepsEN', 'TimeBN', 'TimeEN', 'Count', 'Reference', 'Category', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Amal: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'StepsBN', 'StepsEN', 'TimeBN', 'TimeEN', 'Count', 'Image', 'Reference', 'Category', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   GoldenChain: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'RelationshipBN', 'RelationshipEN', 'TeacherID', 'StudentID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
   AhlulBayt: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
   Silsilah: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],

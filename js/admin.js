@@ -47,12 +47,12 @@
     zikr: { sheet: "Zikr", title: "জিকির", order: 1, religious: 1, cols: ["Order", "TitleBN", "Arabic", "Category", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["Arabic", "আরবি", "arabic"], ["PronunciationBN", "বাংলা উচ্চারণ", "text"], ["Transliteration", "English transliteration", "text"],
       ["MeaningBN", "অর্থ (বাংলা)", "textarea"], ["MeaningEN", "Meaning (English)", "textarea"], ["Count", "প্রস্তাবিত সংখ্যা", "text"], ["Category", "বিভাগ", "select", opt(BN.zikrCat)],
-      ["Reference", "উৎস / রেফারেন্স", "ref"], ["NotesBN", "টীকা / ফজিলত (বাংলা)", "textarea"], ["NotesEN", "Notes (English)", "textarea"], ["AudioURL", "অডিও লিংক (ঐচ্ছিক)", "text"],
+      ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে কার্ডে ও বিস্তারিত পাতায় দেখাবে" }], ["Reference", "উৎস / রেফারেন্স", "ref"], ["NotesBN", "টীকা / ফজিলত (বাংলা)", "textarea"], ["NotesEN", "Notes (English)", "textarea"], ["AudioURL", "অডিও লিংক (ঐচ্ছিক)", "text"],
       ["Order", "ক্রম", "number"], ["Featured", "আজকের জিকিরে দেখাবে", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
     meditation: { sheet: "Meditation", title: "মেডিটেশন / মুরাকাবা", order: 1, religious: 1, cols: ["Order", "TitleBN", "Duration", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["DescriptionBN", "বিবরণ (বাংলা)", "rich"], ["DescriptionEN", "Description (English)", "rich"],
       ["Duration", "সময়কাল", "text"], ["StepsBN", "ধাপ (বাংলা) — প্রতি লাইনে একটি ধাপ", "lines"], ["StepsEN", "Steps (English) — one per line", "lines"],
-      ["AudioURL", "অডিও লিংক", "text"], ["VideoURL", "ভিডিও লিংক (YouTube চলবে)", "text"], ["Reference", "উৎস / রেফারেন্স", "ref"],
+      ["AudioURL", "অডিও লিংক", "text"], ["VideoURL", "ভিডিও লিংক (YouTube চলবে)", "text"], ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে কার্ডে ও বিস্তারিত পাতায় দেখাবে" }], ["Reference", "উৎস / রেফারেন্স", "ref"],
       ["NotesBN", "সতর্কতা / টীকা (বাংলা)", "textarea"], ["NotesEN", "Warning / notes (English)", "textarea"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
     dua: { sheet: "Dua", title: "দোয়া", order: 1, religious: 1, cols: ["Order", "TitleBN", "Arabic", "Occasion", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["Arabic", "আরবি", "arabic"], ["PronunciationBN", "বাংলা উচ্চারণ", "text"], ["Transliteration", "English transliteration", "text"],
@@ -67,7 +67,7 @@
     amal: { sheet: "Amal", title: "আমল", order: 1, religious: 1, cols: ["Order", "TitleBN", "Category", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["DescriptionBN", "বিবরণ (বাংলা)", "rich"], ["DescriptionEN", "Description (English)", "rich"],
       ["StepsBN", "ধাপ (বাংলা) — প্রতি লাইনে একটি", "lines"], ["StepsEN", "Steps (English)", "lines"], ["TimeBN", "উপযুক্ত সময় (বাংলা)", "text"], ["TimeEN", "Recommended time (English)", "text"],
-      ["Count", "প্রস্তাবিত সংখ্যা", "text"], ["Category", "বিভাগ", "select", opt(BN.amalCat)], ["Reference", "উৎস / রেফারেন্স", "ref"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
+      ["Count", "প্রস্তাবিত সংখ্যা", "text"], ["Category", "বিভাগ", "select", opt(BN.amalCat)], ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে কার্ডে ও বিস্তারিত পাতায় দেখাবে" }], ["Reference", "উৎস / রেফারেন্স", "ref"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
     golden: { sheet: "GoldenChain", title: "গোল্ডেন চেইন", order: 1, religious: 1, refKey: "Source", cols: ["Order", "Photo", "NameBN", "ParentID", "Source", "Status"], fields: [
       ["NameBN", "নাম (বাংলা)", "text", { req: 1 }], ["NameEN", "Name (English)", "text"], ["NameAR", "আরবি নাম", "arabic"], ["Birth", "জন্ম (সাল)", "text"], ["Death", "ওফাত (সাল)", "text"],
       ["BiographyBN", "সংক্ষিপ্ত জীবনী (বাংলা)", "textarea"], ["BiographyEN", "Short biography (English)", "textarea"], ["Photo", "ছবি", "image"],
@@ -139,6 +139,21 @@
     $("#am").onclick = () => $("#aside").classList.toggle("open");
     if ($("#resetDemo")) $("#resetDemo").onclick = async () => { if (confirm("সব ডেমো পরিবর্তন মুছে শুরুর অবস্থায় ফিরবে। নিশ্চিত?")) { await API.request("resetDemo"); location.reload(); } };
     window.onhashchange = route; route();
+    checkServerVersion();
+  }
+  /* সার্ভারের Code.gs পুরনো থাকলে সতর্কবার্তা */
+  const NEED_VERSION = "1.2.0";
+  async function checkServerVersion() {
+    if (API.DEMO) return;
+    let v = "অজানা";
+    try { const r = await fetch(CONFIG.API_URL, { redirect: "follow" }); const j = await r.json(); v = (j && j.data && j.data.version) || v; } catch (e) { return; }
+    const older = String(v).split(".").map(Number), need = NEED_VERSION.split(".").map(Number);
+    const isOld = v === "অজানা" || need.some((n, i) => (older[i] || 0) !== n && (older[i] || 0) < n && older.slice(0, i).every((o, j) => o === need[j]));
+    if (!isOld) return;
+    const bar = document.createElement("div");
+    bar.className = "msg err"; bar.style.cssText = "margin:12px 16px;font-weight:600;line-height:1.7";
+    bar.innerHTML = `⚠️ সার্ভারের Code.gs পুরনো (ভার্সন ${esc(v)}), দরকার ${NEED_VERSION}। তাই কিছু বিভাগে সেভ বা লোড হবে না।<br>সমাধান: Apps Script → Deploy → Manage deployments → ✏️ Edit → Version: <b>New version</b> → Deploy।`;
+    const main = $(".a-main"); if (main) main.insertBefore(bar, main.children[1] || null);
   }
   function setTitle(t, key) { $("#pt").textContent = t; document.title = t + " | অ্যাডমিন"; $$(".a-side a").forEach(a => a.classList.toggle("on", a.dataset.k === key)); $("#aside").classList.remove("open"); }
   const body = html => { $("#ab").innerHTML = html; window.scrollTo(0, 0); };
