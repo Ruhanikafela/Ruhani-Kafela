@@ -96,7 +96,12 @@ const RK = (() => {
   function banner(pos) { return (S.data.Banners || []).filter(b => b.Position === pos).sort(sortOrder)[0]; }
   function navItems() {
     const n = S.data.Navigation || [];
-    return n.length ? n : DEMO_SEED.Navigation;
+    const list = (n.length ? n : DEMO_SEED.Navigation).slice().sort(sortOrder);
+    // "পরিচিতি" (about.html) সবসময় মেনুর একদম শেষে থাকবে
+    const isAbout = x => String(x.URL || "").split(/[?#]/)[0].replace(/^\.?\//, "") === "about.html";
+    // duas.html এখন দরুদ শরীফের পাতা — মেনুতে নাম সবসময় "দরুদ শরীফ"
+    const fixed = list.map(x => String(x.URL || "").split(/[?#]/)[0] === "duas.html" ? Object.assign({}, x, { LabelBN: I18N.bn.duas, LabelEN: I18N.en.duas }) : x);
+    return fixed.filter(x => !isAbout(x)).concat(fixed.filter(isAbout));
   }
   function renderHeader() {
     const st = S.data.Settings, ann = banner("announcement"), cur = pageFile();
@@ -232,8 +237,10 @@ const RK = (() => {
       <div class="meta"><span>${esc(c.Instructor)}${c.Duration ? " | " + esc(c.Duration) : ""}</span><span class="read">${t("viewCourse")}</span></div></div></a>`,
     zikr: z => `<a class="card ar-card" href="zikr.html?id=${encodeURIComponent(z.ID)}"><div class="ar" lang="ar">${esc(z.Arabic)}</div>
       <div class="body"><h3>${esc(L(z, "Title"))}</h3><span class="muted">${z.Count ? `${t("count")}: ${esc(num(z.Count))} ${t("times")}` : esc(cat("zikrCat", z.Category))}</span><span class="read">${t("readMore")}</span></div></a>`,
-    dua: d => `<a class="card ar-card" href="dua.html?id=${encodeURIComponent(d.ID)}"><div class="ar" lang="ar">${esc(d.Arabic)}</div>
+    dua: d => `<a class="card ar-card" href="dua.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${esc(d.Arabic)}</div>` : ""}
       <div class="body"><h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(cat("duaCat", d.Occasion))}</span><span class="read">${t("readMore")}</span></div></a>`,
+    durood: d => `<a class="card ar-card" href="durood.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${esc(d.Arabic)}</div>` : ""}
+      <div class="body"><h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(String(L(d, "Meaning") || "").slice(0, 90))}</span><span class="read">${t("readMore")}</span></div></a>`,
     amal: a => `<a class="card" href="amal.html?id=${encodeURIComponent(a.ID)}"><div class="body"><span class="cat">${esc(cat("amalCat", a.Category))}</span>
       <h3>${esc(L(a, "Title"))}</h3><p class="excerpt">${esc(String(L(a, "Description")).replace(/<[^>]+>/g, ""))}</p><div class="meta"><span>${esc(L(a, "Time"))}</span><span class="read">${t("readMore")}</span></div></div></a>`,
     meditation: m => `<a class="card" href="meditation.html?id=${encodeURIComponent(m.ID)}"><div class="body"><span class="cat">${t("meditation")}</span>
@@ -486,11 +493,18 @@ const RK = (() => {
     setMeta(L(z, "Title"), L(z, "Meaning"));
     return detailWrap([[t("zikrMed"), "zikr-meditation.html"]], L(z, "Title"), arabicDetail(z, `${z.Count ? `<dt>${t("count")}</dt><dd>${esc(num(z.Count))} ${t("times")}</dd>` : ""}<dt>${t("category")}</dt><dd>${esc(cat("zikrCat", z.Category))}</dd>`) + refBlock(z.Reference) + block(t("notes"), rich(L(z, "Notes"))) + mediaBlock(z.AudioURL));
   };
+  const photo = src => src ? `<figure style="margin:0 0 24px"><img src="${esc(safeUrl(src))}" alt="" loading="lazy" style="display:block;width:100%;max-height:520px;object-fit:contain;border-radius:16px;background:var(--light)" onerror="this.parentNode.remove()"></figure>` : "";
   pages.dua = () => {
     const d = D("Dua").find(x => x.ID === qs("id")); if (!d) return pages.notfound();
     setMeta(L(d, "Title"), L(d, "Meaning"));
-    return detailWrap([[t("duaAmal"), "dua-amal.html"]], L(d, "Title"), arabicDetail(d, `<dt>${t("occasion")}</dt><dd>${esc(cat("duaCat", d.Occasion))}</dd>`) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
+    return detailWrap([[t("duaAmal"), "dua-amal.html"]], L(d, "Title"), photo(d.Image) + arabicDetail(d, `<dt>${t("occasion")}</dt><dd>${esc(cat("duaCat", d.Occasion))}</dd>`) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
   };
+  pages.durood = () => {
+    const d = D("Durood").find(x => String(x.ID) === qs("id")); if (!d) return pages.notfound();
+    setMeta(L(d, "Title"), L(d, "Meaning"));
+    return detailWrap([[t("duas"), "duas.html"]], L(d, "Title"), photo(d.Image) + arabicDetail(d, d.Count ? `<dt>${t("duroodRule")}</dt><dd>${esc(num(d.Count))}</dd>` : "") + block(t("fazilat"), rich(L(d, "Fazilat"))) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
+  };
+  pages.durood.after = bindShare;
   pages.amal = () => {
     const a = D("Amal").find(x => x.ID === qs("id")); if (!a) return pages.notfound();
     setMeta(L(a, "Title"), L(a, "Description"));
@@ -607,7 +621,12 @@ const RK = (() => {
     const list = D("Articles").filter(a => a.Category === catKey).sort(byDate);
     return pageHead(t(titleK), t(subK), [[t(titleK)]]) + `<section class="section"><div class="wrap">${grid(list, "article")}</div></section>`;
   }
-  pages.duas = () => articleCategoryPage("dua", "duas", "duasSub");
+  pages.duas = () => {
+    setMeta(t("duas"), t("duasSub"));
+    const list = D("Durood").slice().sort(sortOrder), arts = D("Articles").filter(a => a.Category === "durood").sort(byDate);
+    return pageHead(t("duas"), t("duasSub"), [[t("duas")]]) + `<section class="section"><div class="wrap">${list.length ? grid(list, "durood", "g3") : (arts.length ? "" : `<p class="empty">${t("empty")}</p>`)}</div></section>`
+      + (arts.length ? `<section class="section tint"><div class="wrap"><h2>${t("duroodArticles")}</h2>${grid(arts, "article")}</div></section>` : "");
+  };
   pages.mahdi = () => articleCategoryPage("imam_mahdi", "mahdi", "mahdiSub");
 
   /* ---------- শপ ---------- */
@@ -650,8 +669,8 @@ const RK = (() => {
   /* ---------- সার্চ ---------- */
   pages.search = () => {
     const q = qs("q").trim(); setMeta(t("search") + (q ? ": " + q : ""));
-    const groups = [["Articles", "articles", "article", ["TitleBN", "TitleEN", "ExcerptBN", "ExcerptEN", "ContentBN", "ContentEN", "Tags", "Author"]], ["Books", "books", "book", ["TitleBN", "TitleEN", "Author", "DescriptionBN", "DescriptionEN"]], ["Courses", "courses", "course", ["TitleBN", "TitleEN", "ShortBN", "ShortEN", "Instructor"]], ["Zikr", "zikr", "zikr", ["TitleBN", "TitleEN", "Arabic", "PronunciationBN", "Transliteration", "MeaningBN", "MeaningEN"]], ["Meditation", "meditation", "meditation", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Dua", "dua", "dua", ["TitleBN", "TitleEN", "Arabic", "Transliteration", "MeaningBN", "MeaningEN"]], ["Amal", "amal", "amal", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Products", "products", "product", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]]];
-    const link = { article: x => `article.html?slug=${encodeURIComponent(x.Slug || x.ID)}`, book: x => `book.html?id=${x.ID}`, course: x => `course.html?id=${x.ID}`, zikr: x => `zikr.html?id=${x.ID}`, meditation: x => `meditation.html?id=${x.ID}`, dua: x => `dua.html?id=${x.ID}`, amal: x => `amal.html?id=${x.ID}`, product: x => `product.html?id=${encodeURIComponent(x.ID)}` };
+    const groups = [["Articles", "articles", "article", ["TitleBN", "TitleEN", "ExcerptBN", "ExcerptEN", "ContentBN", "ContentEN", "Tags", "Author"]], ["Books", "books", "book", ["TitleBN", "TitleEN", "Author", "DescriptionBN", "DescriptionEN"]], ["Courses", "courses", "course", ["TitleBN", "TitleEN", "ShortBN", "ShortEN", "Instructor"]], ["Zikr", "zikr", "zikr", ["TitleBN", "TitleEN", "Arabic", "PronunciationBN", "Transliteration", "MeaningBN", "MeaningEN"]], ["Meditation", "meditation", "meditation", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Dua", "dua", "dua", ["TitleBN", "TitleEN", "Arabic", "Transliteration", "MeaningBN", "MeaningEN"]], ["Durood", "durood", "durood", ["TitleBN", "TitleEN", "Arabic", "PronunciationBN", "Transliteration", "MeaningBN", "MeaningEN", "FazilatBN", "FazilatEN"]], ["Amal", "amal", "amal", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]], ["Products", "products", "product", ["TitleBN", "TitleEN", "DescriptionBN", "DescriptionEN"]]];
+    const link = { article: x => `article.html?slug=${encodeURIComponent(x.Slug || x.ID)}`, book: x => `book.html?id=${x.ID}`, course: x => `course.html?id=${x.ID}`, zikr: x => `zikr.html?id=${x.ID}`, meditation: x => `meditation.html?id=${x.ID}`, dua: x => `dua.html?id=${x.ID}`, durood: x => `durood.html?id=${encodeURIComponent(x.ID)}`, amal: x => `amal.html?id=${x.ID}`, product: x => `product.html?id=${encodeURIComponent(x.ID)}` };
     let body = "";
     if (!q) body = `<p class="muted">${t("typeToSearch")}</p>`;
     else {

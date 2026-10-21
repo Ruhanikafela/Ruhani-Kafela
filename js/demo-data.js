@@ -39,7 +39,7 @@ const DEMO_SEED = {
     { ID: "n2", LabelBN: "জিকির ও ধ্যান", LabelEN: "Zikr & Meditation", URL: "zikr-meditation.html", Order: 2, Visible: true },
     { ID: "n3", LabelBN: "ইলম ও পাঠ", LabelEN: "Knowledge & Reading", URL: "knowledge.html", Order: 3, Visible: true },
     { ID: "n4", LabelBN: "দোয়া ও আমল", LabelEN: "Dua & Amal", URL: "dua-amal.html", Order: 4, Visible: true },
-    { ID: "n9", LabelBN: "দোয়া", LabelEN: "Duas", URL: "duas.html", Order: 5, Visible: true },
+    { ID: "n9", LabelBN: "দরুদ শরীফ", LabelEN: "Durood Sharif", URL: "duas.html", Order: 5, Visible: true },
     { ID: "n10", LabelBN: "রূহানী সিলসিলাহ", LabelEN: "Ruhani Silsilah", URL: "silsilah.html", Order: 6, Visible: true },
     { ID: "n5", LabelBN: "গোল্ডেন চেইন", LabelEN: "Golden Chain", URL: "golden-chain.html", Order: 7, Visible: true },
     { ID: "n6", LabelBN: "আহলে বাইত", LabelEN: "Ahl al-Bayt", URL: "ahlul-bayt.html", Order: 8, Visible: true },
@@ -100,6 +100,9 @@ const DEMO_SEED = {
     { ID: "h3", Order: 3, NameBN: "নমুনা সন্তান ২", NameEN: "Sample child 2", NameAR: "", RelationshipBN: "সন্তান", RelationshipEN: "Child", BiographyBN: "", BiographyEN: "", Photo: "", ParentID: "h1", Source: "", Tradition: "", Note: "", Status: "Published" },
     { ID: "h4", Order: 4, NameBN: "নমুনা নাতি", NameEN: "Sample grandchild", NameAR: "", RelationshipBN: "নাতি", RelationshipEN: "Grandchild", BiographyBN: "", BiographyEN: "", Photo: "", ParentID: "h2", Source: "", Tradition: "", Note: "", Status: "Published" }
   ],
+  Durood: [
+    { ID: "dr1", Order: 1, TitleBN: "নমুনা দরুদ", TitleEN: "Sample Durood", Arabic: "ٱللَّٰهُمَّ صَلِّ عَلَىٰ مُحَمَّدٍ", PronunciationBN: "", Transliteration: "", MeaningBN: "নমুনা — আসল দরুদ, অর্থ, ফজিলত ও উৎস অ্যাডমিন → দরুদ শরীফ থেকে যোগ করুন।", MeaningEN: "Sample — add real entries from Admin → Durood Sharif.", FazilatBN: "", FazilatEN: "", Count: "", Image: "", Reference: "", AudioURL: "", Featured: false, Status: "Published", CreatedAt: "2026-10-21", UpdatedAt: "2026-10-21" }
+  ],
   Silsilah: [
     { ID: "s1", Order: 1, NameBN: "নমুনা পীর / শায়খ", NameEN: "Sample Shaykh", RelationshipBN: "সিলসিলার শুরু", RelationshipEN: "Head of the chain", BiographyBN: "নমুনা এন্ট্রি। আসল নাম, জীবনী ও উৎস অ্যাডমিন প্যানেল → রূহানী সিলসিলাহ থেকে যোগ করুন।", BiographyEN: "Sample entry.", Photo: "", ParentID: "", SpouseID: "", Source: "", Status: "Published" },
     { ID: "s2", Order: 2, NameBN: "নমুনা খলিফা ১", NameEN: "Sample Khalifa 1", RelationshipBN: "খলিফা", RelationshipEN: "Khalifa", BiographyBN: "", Photo: "", ParentID: "s1", Source: "", Status: "Published" },
@@ -124,7 +127,7 @@ const DEMO_SEED = {
 };
 
 /* -------- শেয়ার্ড: পাবলিক ডেটা ফিল্টার (সার্ভারের সাথে একই নিয়ম) -------- */
-const CONTENT_SHEETS = ["Articles", "Books", "Courses", "Zikr", "Meditation", "Dua", "Amal", "GoldenChain", "AhlulBayt", "Silsilah", "Products"];
+const CONTENT_SHEETS = ["Articles", "Books", "Courses", "Zikr", "Meditation", "Dua", "Durood", "Amal", "GoldenChain", "AhlulBayt", "Silsilah", "Products"];
 function rkBool(v) { return v === true || String(v).toLowerCase() === "true" || v === 1 || v === "1" || String(v).toLowerCase() === "yes"; }
 function rkPublicView(db) {
   const today = new Date().toISOString().slice(0, 10);

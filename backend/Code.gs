@@ -1,16 +1,16 @@
 /* =====================================================================
-   রুহানি কাফেলা — Google Apps Script ব্যাকএন্ড (Code.gs)
+   রূহানী কাফেলা — Google Apps Script ব্যাকএন্ড (Code.gs)
    Ruhani Kafela — API + Google Sheets database
    ---------------------------------------------------------------------
    এই পুরো ফাইলটি Google Sheet → Extensions → Apps Script-এ Code.gs
    ফাইলের জায়গায় পেস্ট করুন। তারপর শিটে ফিরে রিফ্রেশ করলে উপরে
-   "রুহানি কাফেলা" মেনু আসবে → "১. শিট তৈরি করুন" চাপুন।
+   "রূহানী কাফেলা" মেনু আসবে → "১. শিট তৈরি করুন" চাপুন।
    বিস্তারিত নির্দেশনা: Ruhani-Kafela-Nirdeshika.docx
    ===================================================================== */
 
 /* ---------------- মূল সেটিংস ---------------- */
 var RK = {
-  VERSION: '1.0.0',
+  VERSION: '1.1.0',
   UPLOAD_FOLDER: 'RuhaniKafela-Uploads',
   ADMIN_SESSION_SECONDS: 6 * 60 * 60,   // অ্যাডমিন সেশন ৬ ঘণ্টা
   PUBLIC_CACHE_SECONDS: 300,            // পাবলিক ডেটা ক্যাশ ৫ মিনিট
@@ -29,10 +29,13 @@ var SCHEMA = {
   Courses: ['ID', 'TitleBN', 'TitleEN', 'ShortBN', 'ShortEN', 'DescriptionBN', 'DescriptionEN', 'Instructor', 'Image', 'Duration', 'Lessons', 'Type', 'Price', 'EnrollmentURL', 'StartDate', 'Mode', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Zikr: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'Count', 'Category', 'Reference', 'NotesBN', 'NotesEN', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Meditation: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'Duration', 'StepsBN', 'StepsEN', 'AudioURL', 'VideoURL', 'Reference', 'NotesBN', 'NotesEN', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Dua: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'Transliteration', 'PronunciationBN', 'MeaningBN', 'MeaningEN', 'Occasion', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Dua: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'Transliteration', 'PronunciationBN', 'MeaningBN', 'MeaningEN', 'Occasion', 'Image', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Durood: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'FazilatBN', 'FazilatEN', 'Count', 'Image', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Amal: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'StepsBN', 'StepsEN', 'TimeBN', 'TimeEN', 'Count', 'Reference', 'Category', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  GoldenChain: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'TeacherID', 'StudentID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
-  AhlulBayt: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
+  GoldenChain: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'RelationshipBN', 'RelationshipEN', 'TeacherID', 'StudentID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
+  AhlulBayt: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Silsilah: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Products: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Category', 'Price', 'OldPrice', 'Image', 'DescriptionBN', 'DescriptionEN', 'InStock', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Users: ['ID', 'Name', 'Email', 'Status', 'JoinedAt', 'LastLogin', 'TokenHash', 'Photo'],
   Comments: ['ID', 'ArticleID', 'UserID', 'Name', 'Email', 'Comment', 'Date', 'Status'],
   Banners: ['ID', 'Position', 'Image', 'TitleBN', 'TitleEN', 'SubtitleBN', 'SubtitleEN', 'ButtonBN', 'ButtonEN', 'URL', 'Active', 'Order', 'CreatedAt', 'UpdatedAt'],
@@ -41,15 +44,15 @@ var SCHEMA = {
   AdminUsers: ['Email', 'Name', 'PasswordHash', 'Salt', 'Role', 'Status', 'LastLogin'],
   Logs: ['Date', 'Admin', 'Action', 'Sheet', 'ItemID']
 };
-var CONTENT_SHEETS = ['Articles', 'Books', 'Courses', 'Zikr', 'Meditation', 'Dua', 'Amal', 'GoldenChain', 'AhlulBayt'];
+var CONTENT_SHEETS = ['Articles', 'Books', 'Courses', 'Zikr', 'Meditation', 'Dua', 'Durood', 'Amal', 'GoldenChain', 'AhlulBayt', 'Silsilah', 'Products'];
 // অ্যাডমিন প্যানেল থেকে যেসব শিটে সরাসরি লেখা যায়
 var EDITABLE_SHEETS = CONTENT_SHEETS.concat(['Banners', 'Sections', 'Navigation', 'Users']);
 
 var DEFAULT_SETTINGS = {
-  SiteNameBN: 'রুহানি কাফেলা', SiteNameEN: 'Ruhani Kafela', SiteNameAR: 'رُوحَانِي كَافِلَة',
+  SiteNameBN: 'রূহানী কাফেলা', SiteNameEN: 'Ruhani Kafela', SiteNameAR: 'رُوحَانِي كَافِلَة',
   TaglineBN: 'জ্ঞান, জিকির ও আত্মশুদ্ধির পথে', TaglineEN: 'On the Path of Knowledge, Remembrance and Spiritual Refinement',
   Logo: 'assets/logo/logo.svg', Favicon: 'assets/logo/favicon.svg', PrimaryColor: '#176B4D', AccentColor: '#B58A3A',
-  AboutBN: 'রুহানি কাফেলা একটি আধ্যাত্মিক জ্ঞানভান্ডার — প্রবন্ধ, জিকির, মুরাকাবা, দোয়া, আমল, বই ও কোর্সের একটি শান্ত ডিজিটাল পাঠাগার। এখানে প্রতিটি ধর্মীয় তথ্যের সাথে উৎস উল্লেখ করার নীতি অনুসরণ করা হয়।',
+  AboutBN: 'রূহানী কাফেলা একটি আধ্যাত্মিক জ্ঞানভান্ডার — প্রবন্ধ, জিকির, মুরাকাবা, দোয়া, আমল, বই ও কোর্সের একটি শান্ত ডিজিটাল পাঠাগার। এখানে প্রতিটি ধর্মীয় তথ্যের সাথে উৎস উল্লেখ করার নীতি অনুসরণ করা হয়।',
   AboutEN: 'Ruhani Kafela is a spiritual knowledge library — a calm digital home for articles, zikr, muraqabah, duas, amal, books and courses. Every religious statement here is published with its source.',
   FooterTextBN: 'জ্ঞান, জিকির ও আত্মশুদ্ধির একটি শান্ত ডিজিটাল পাঠাগার।',
   FooterTextEN: 'A calm digital library of knowledge, remembrance and spiritual refinement.',
@@ -64,6 +67,7 @@ var DEFAULT_SECTIONS = [
 var DEFAULT_NAV = [
   ['হোম', 'Home', 'index.html'], ['জিকির ও ধ্যান', 'Zikr & Meditation', 'zikr-meditation.html'], ['ইলম ও পাঠ', 'Knowledge & Reading', 'knowledge.html'],
   ['দোয়া ও আমল', 'Dua & Amal', 'dua-amal.html'], ['গোল্ডেন চেইন', 'Golden Chain', 'golden-chain.html'], ['আহলে বাইত', 'Ahl al-Bayt', 'ahlul-bayt.html'],
+  ['দরুদ শরীফ', 'Durood Sharif', 'duas.html'], ['রূহানী সিলসিলাহ', 'Ruhani Silsilah', 'silsilah.html'], ['ইমাম মাহদী', 'Imam Mahdi', 'imam-mahdi.html'], ['শপ', 'Shop', 'shop.html'],
   ['কোর্স', 'Courses', 'courses.html'], ['পরিচিতি', 'About', 'about.html']
 ];
 var DEFAULT_BANNERS = [
@@ -71,7 +75,7 @@ var DEFAULT_BANNERS = [
   { Position: 'home_mid', Image: 'assets/images/banner-courses.svg', TitleBN: 'অনলাইন ও অফলাইন আধ্যাত্মিক শিক্ষা', TitleEN: 'Online and offline spiritual learning', SubtitleBN: 'নির্দেশিত পাঠে ধাপে ধাপে শিখুন।', SubtitleEN: 'Learn step by step through guided lessons.', ButtonBN: 'কোর্স দেখুন', ButtonEN: 'View courses', URL: 'courses.html', Active: true, Order: 1 },
   { Position: 'book_promo', Image: 'assets/images/banner-books.svg', TitleBN: 'ডিজিটাল পাঠাগার', TitleEN: 'Digital library', SubtitleBN: 'বই পড়ুন অনলাইনে বা সংগ্রহ করুন।', SubtitleEN: 'Read online or get a copy.', ButtonBN: '', ButtonEN: '', URL: '', Active: true, Order: 1 },
   { Position: 'course_promo', Image: 'assets/images/banner-courses.svg', TitleBN: 'নতুন ব্যাচে ভর্তি চলছে', TitleEN: 'Enrolment open for the new batch', SubtitleBN: 'বিস্তারিত জানতে কোর্সের পাতা দেখুন।', SubtitleEN: 'See the course page for details.', ButtonBN: '', ButtonEN: '', URL: '', Active: false, Order: 1 },
-  { Position: 'announcement', Image: '', TitleBN: 'রুহানি কাফেলায় স্বাগতম।', TitleEN: 'Welcome to Ruhani Kafela.', SubtitleBN: '', SubtitleEN: '', ButtonBN: '', ButtonEN: '', URL: '', Active: false, Order: 1 },
+  { Position: 'announcement', Image: '', TitleBN: 'রূহানী কাফেলায় স্বাগতম।', TitleEN: 'Welcome to Ruhani Kafela.', SubtitleBN: '', SubtitleEN: '', ButtonBN: '', ButtonEN: '', URL: '', Active: false, Order: 1 },
   { Position: 'before_article', Image: '', TitleBN: 'আমাদের কোর্সে যোগ দিন', TitleEN: 'Join our courses', SubtitleBN: '', SubtitleEN: '', ButtonBN: 'কোর্স দেখুন', ButtonEN: 'View courses', URL: 'courses.html', Active: false, Order: 1 }
 ];
 
@@ -142,7 +146,7 @@ var PUBLIC_ROUTES = {
     cache.put('otp_wait_' + email, '1', RK.OTP_RESEND_SECONDS);
 
     var s = getSettings_();
-    var site = s.SiteNameBN || 'রুহানি কাফেলা';
+    var site = s.SiteNameBN || 'রূহানী কাফেলা';
     MailApp.sendEmail({
       to: email,
       subject: site + ' — আপনার যাচাই কোড: ' + code,
@@ -413,7 +417,10 @@ var ADMIN_ROUTES = {
   saveDua: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Dua', item: p.item }, a); },
   saveAmal: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Amal', item: p.item }, a); },
   saveGoldenChain: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'GoldenChain', item: p.item }, a); },
-  saveAhlulBayt: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'AhlulBayt', item: p.item }, a); }
+  saveAhlulBayt: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'AhlulBayt', item: p.item }, a); },
+  saveDurood: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Durood', item: p.item }, a); },
+  saveSilsilah: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Silsilah', item: p.item }, a); },
+  saveProduct: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Products', item: p.item }, a); }
 };
 
 /* একটি এন্ট্রি তৈরি / হালনাগাদ (শুধু পাঠানো ফিল্ডগুলো বদলায়) */
@@ -621,7 +628,7 @@ function esc_(s) { return String(s).replace(/[&<>"']/g, function (c) { return { 
    ৭. Google Sheet-এর মেনু (অ্যাডমিন সেটআপ)
    ===================================================================== */
 function onOpen() {
-  SpreadsheetApp.getUi().createMenu('রুহানি কাফেলা')
+  SpreadsheetApp.getUi().createMenu('রূহানী কাফেলা')
     .addItem('১. শিট তৈরি করুন (প্রথমবার)', 'setupSheets')
     .addItem('২. অ্যাডমিন যোগ করুন', 'addAdminPrompt')
     .addSeparator()
@@ -699,7 +706,7 @@ function systemCheck() {
    আসল কনটেন্ট দেওয়ার আগে এগুলো মুছে ফেলুন বা Draft করুন। */
 function seedSampleContent() {
   var t = now_(), d = today_();
-  appendRow_('Articles', { ID: newId_('ar'), Slug: 'sample-welcome', TitleBN: 'স্বাগতম — নমুনা প্রবন্ধ', TitleEN: 'Welcome — sample article', ExcerptBN: 'এটি একটি নমুনা প্রবন্ধ। অ্যাডমিন প্যানেল থেকে এটি বদলান বা মুছে দিন।', ExcerptEN: 'This is a sample article. Edit or delete it from the admin panel.', ContentBN: '<p>এটি নমুনা লেখা। অ্যাডমিন প্যানেল → প্রবন্ধ থেকে আপনার নিজের লেখা যোগ করুন।</p>', ContentEN: '<p>This is sample text. Add your own writing from Admin → Articles.</p>', Image: '', Category: 'general', Author: 'রুহানি কাফেলা', Tags: 'নমুনা', Featured: true, Status: 'Published', PublishDate: d, CreatedAt: t, UpdatedAt: t });
+  appendRow_('Articles', { ID: newId_('ar'), Slug: 'sample-welcome', TitleBN: 'স্বাগতম — নমুনা প্রবন্ধ', TitleEN: 'Welcome — sample article', ExcerptBN: 'এটি একটি নমুনা প্রবন্ধ। অ্যাডমিন প্যানেল থেকে এটি বদলান বা মুছে দিন।', ExcerptEN: 'This is a sample article. Edit or delete it from the admin panel.', ContentBN: '<p>এটি নমুনা লেখা। অ্যাডমিন প্যানেল → প্রবন্ধ থেকে আপনার নিজের লেখা যোগ করুন।</p>', ContentEN: '<p>This is sample text. Add your own writing from Admin → Articles.</p>', Image: '', Category: 'general', Author: 'রূহানী কাফেলা', Tags: 'নমুনা', Featured: true, Status: 'Published', PublishDate: d, CreatedAt: t, UpdatedAt: t });
   appendRow_('Books', { ID: newId_('bo'), TitleBN: 'নমুনা বই', TitleEN: 'Sample book', Author: '—', DescriptionBN: 'এটি একটি নমুনা এন্ট্রি।', DescriptionEN: 'A sample entry.', Cover: '', Category: 'general', Featured: true, Status: 'Published', CreatedAt: t, UpdatedAt: t });
   appendRow_('Courses', { ID: newId_('co'), TitleBN: 'নমুনা কোর্স', TitleEN: 'Sample course', ShortBN: 'এটি একটি নমুনা কোর্স।', ShortEN: 'A sample course.', Instructor: '—', Duration: '৪ সপ্তাহ', Lessons: 8, Type: 'Free', Mode: 'online', Featured: true, Status: 'Published', CreatedAt: t, UpdatedAt: t });
   clearPublicCache_();

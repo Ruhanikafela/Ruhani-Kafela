@@ -57,6 +57,12 @@
     dua: { sheet: "Dua", title: "দোয়া", order: 1, religious: 1, cols: ["Order", "TitleBN", "Arabic", "Occasion", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["Arabic", "আরবি", "arabic"], ["PronunciationBN", "বাংলা উচ্চারণ", "text"], ["Transliteration", "English transliteration", "text"],
       ["MeaningBN", "অর্থ (বাংলা)", "textarea"], ["MeaningEN", "Meaning (English)", "textarea"], ["Occasion", "উপলক্ষ / বিভাগ", "select", opt(BN.duaCat)],
+      ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে দোয়ার কার্ডে ও বিস্তারিত পাতায় দেখাবে" }],
+      ["Reference", "উৎস / রেফারেন্স", "ref"], ["AudioURL", "অডিও লিংক", "text"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
+    durood: { sheet: "Durood", title: "দরুদ শরীফ", order: 1, religious: 1, cols: ["Order", "Image", "TitleBN", "Arabic", "Status"], fields: [
+      ["TitleBN", "দরুদের নাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Name (English)", "text"], ["Arabic", "আরবি", "arabic"], ["PronunciationBN", "বাংলা উচ্চারণ", "textarea"], ["Transliteration", "English transliteration", "textarea"],
+      ["MeaningBN", "অর্থ (বাংলা)", "textarea"], ["MeaningEN", "Meaning (English)", "textarea"], ["FazilatBN", "ফজিলত (বাংলা)", "rich"], ["FazilatEN", "Virtues (English)", "rich"],
+      ["Count", "পড়ার সংখ্যা / নিয়ম (ঐচ্ছিক)", "text"], ["Image", "ছবি (ঐচ্ছিক)", "image"],
       ["Reference", "উৎস / রেফারেন্স", "ref"], ["AudioURL", "অডিও লিংক", "text"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
     amal: { sheet: "Amal", title: "আমল", order: 1, religious: 1, cols: ["Order", "TitleBN", "Category", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["DescriptionBN", "বিবরণ (বাংলা)", "rich"], ["DescriptionEN", "Description (English)", "rich"],
@@ -93,6 +99,8 @@
     navigation: { sheet: "Navigation", title: "নেভিগেশন মেনু", order: 1, cols: ["Order", "LabelBN", "URL", "Visible"], fields: [
       ["LabelBN", "মেনুর নাম (বাংলা)", "text", { req: 1 }], ["LabelEN", "Label (English)", "text"], ["URL", "লিংক", "text", { hint: "যেমন: courses.html" }], ["Order", "ক্রম", "number"], ["Visible", "দেখাবে", "bool"]] }
   };
+  // ইমাম মাহদী: প্রবন্ধ শিটেরই লেখা, শুধু ‘ইমাম মাহদী’ বিভাগেরগুলো দেখায়
+  M.mahdi = Object.assign({}, M.articles, { title: "ইমাম মাহদী — লেখা", filter: { Category: "imam_mahdi" } });
   const SETTINGS = {
     general: { title: "সাধারণ সেটিংস", fields: [["SiteNameBN", "সাইটের নাম (বাংলা)", "text"], ["SiteNameEN", "Site name (English)", "text"], ["SiteNameAR", "আরবি নাম", "arabic"], ["TaglineBN", "ট্যাগলাইন (বাংলা)", "text"], ["TaglineEN", "Tagline (English)", "text"],
       ["PrimaryColor", "প্রধান রং", "color"], ["AccentColor", "সোনালি / অ্যাকসেন্ট রং", "color"], ["FooterTextBN", "ফুটারের লেখা (বাংলা)", "textarea"], ["FooterTextEN", "Footer text (English)", "textarea"],
@@ -116,7 +124,7 @@
   }
 
   /* ================ কাঠামো ================ */
-  const NAV = [["ড্যাশবোর্ড", [["dashboard", "ড্যাশবোর্ড"]]], ["কনটেন্ট", [["articles", "প্রবন্ধ"], ["books", "বই"], ["courses", "কোর্স"], ["zikr", "জিকির"], ["meditation", "মেডিটেশন"], ["dua", "দোয়া"], ["amal", "আমল"]]],
+  const NAV = [["ড্যাশবোর্ড", [["dashboard", "ড্যাশবোর্ড"]]], ["কনটেন্ট", [["articles", "প্রবন্ধ"], ["books", "বই"], ["courses", "কোর্স"], ["zikr", "জিকির"], ["meditation", "মেডিটেশন"], ["dua", "দোয়া"], ["durood", "দরুদ শরীফ"], ["amal", "আমল"], ["mahdi", "ইমাম মাহদী"]]],
     ["বংশধারা ও সিলসিলাহ", [["silsilah", "রূহানী সিলসিলাহ"], ["golden", "গোল্ডেন চেইন"], ["ahl", "আহলে বাইত"]]], ["শপ", [["products", "পণ্য"]]], ["কমিউনিটি", [["comments", "মন্তব্য"], ["users", "ব্যবহারকারী"]]],
     ["ওয়েবসাইট", [["s-general", "সাধারণ সেটিংস"], ["homepage", "হোমপেজ সেকশন"], ["banners", "ব্যানার"], ["s-logo", "লোগো"], ["s-social", "সোশ্যাল লিংক"], ["navigation", "নেভিগেশন"]]],
     ["সিস্টেম", [["backup", "ব্যাকআপ ও SEO"], ["logs", "লগ"], ["system", "পাসওয়ার্ড ও সিস্টেম"]]]];
@@ -175,9 +183,10 @@
     const f = m.fields.find(x => x[0] === c); if (f && f[2] === "select" && Array.isArray(f[3])) { const o = f[3].find(x => x[0] === v); return esc(o ? o[1] : v); }
     return `<span class="${c.startsWith("Title") || c.startsWith("Name") || c.startsWith("Label") ? "title-cell" : ""}">${esc(String(v == null ? "" : v).slice(0, 90))}</span>`;
   }
+  const onlyMine = (m, r) => !m.filter ? r : r.filter(x => Object.keys(m.filter).every(k => String(x[k]) === String(m.filter[k])));
   async function list(key) {
     const m = M[key]; setTitle(m.title, key); loading();
-    let rows; try { rows = await fetchList(key, true); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
+    let rows; try { rows = onlyMine(m, await fetchList(key, true)); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
     const labelOf = c => (m.fields.find(f => f[0] === c) || [c, c])[1].replace(/\s*\(.*\)$/, "");
     const hasStatus = m.fields.some(f => f[0] === "Status");
     body(`${m.religious ? `<div class="help">ধর্মীয় বা ঐতিহাসিক প্রতিটি তথ্যের সাথে উৎস দিন। উৎস খালি থাকলে সাইটে "উৎস এখনো যোগ করা হয়নি" দেখাবে।</div>` : ""}
@@ -192,13 +201,13 @@
         <a class="btn btn-ghost btn-sm" href="#/${key}/edit/${encodeURIComponent(x.ID)}">সম্পাদনা</a><button class="btn btn-danger btn-sm" data-del="${esc(x.ID)}">মুছুন</button></div></td></tr>`).join("") : `<tr><td colspan="${m.cols.length + 1}" class="muted" style="text-align:center;padding:30px">কিছু নেই। "+ নতুন যোগ করুন" চাপুন।</td></tr>`;
       $$("[data-del]").forEach(b => b.onclick = async () => {
         if (!confirm("এটি স্থায়ীভাবে মুছে যাবে। নিশ্চিত?")) return;
-        try { await call("adminDelete", { sheet: m.sheet, id: b.dataset.del }); toast("মুছে ফেলা হয়েছে"); rows = await fetchList(key, true); draw(); } catch (e) { toast(e.message, true); }
+        try { await call("adminDelete", { sheet: m.sheet, id: b.dataset.del }); toast("মুছে ফেলা হয়েছে"); rows = onlyMine(m, await fetchList(key, true)); draw(); } catch (e) { toast(e.message, true); }
       });
       $$("[data-mv]").forEach(b => b.onclick = async () => {
         const i = +b.dataset.i, j = i + +b.dataset.mv; const list2 = r.slice(); [list2[i], list2[j]] = [list2[j], list2[i]];
         const items = list2.map((x, k) => ({ ID: x.ID, Order: k + 1 })).filter((x, k) => Number(list2[k].Order) !== k + 1);
         b.disabled = true;
-        try { await call("adminSaveMany", { sheet: m.sheet, items }); rows = await fetchList(key, true); draw(); toast("ক্রম হালনাগাদ হয়েছে"); } catch (e) { toast(e.message, true); }
+        try { await call("adminSaveMany", { sheet: m.sheet, items }); rows = onlyMine(m, await fetchList(key, true)); draw(); toast("ক্রম হালনাগাদ হয়েছে"); } catch (e) { toast(e.message, true); }
       });
     };
     $("#q").oninput = draw; if ($("#sf")) $("#sf").onchange = draw; draw();
@@ -288,15 +297,15 @@
     let rows; try { rows = await fetchList(key); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
     let item = id ? rows.find(r => r.ID === id) : null;
     if (id && !item) return body(`<p class="msg err">এন্ট্রিটি পাওয়া যায়নি।</p><a class="btn" href="#/${key}">তালিকায় ফিরুন</a>`);
-    if (!item) { item = { Status: "Draft", Active: true, Visible: true, InStock: true, PublishDate: new Date().toISOString().slice(0, 10) }; if (m.order) item.Order = rows.length + 1; }
+    if (!item) { item = { Status: "Draft", Active: true, Visible: true, InStock: true, PublishDate: new Date().toISOString().slice(0, 10) }; if (m.order) item.Order = rows.length + 1; if (m.filter) Object.assign(item, m.filter); }
     body(`<form id="ef"><div class="a-card"><div class="ed-grid">${m.fields.map(f => fieldHTML(f, item[f[0]], { rows, id })).join("")}</div></div>
       <div class="ed-actions"><button class="btn">সংরক্ষণ করুন</button>${m.fields.some(f => f[0] === "Status") ? `<button type="button" class="btn btn-gold" id="pub">সংরক্ষণ ও প্রকাশ</button>` : ""}<a class="btn btn-ghost" href="#/${key}">বাতিল</a>
-      ${id && key === "articles" ? `<a class="btn btn-ghost" target="_blank" href="article.html?slug=${encodeURIComponent(item.Slug || item.ID)}">সাইটে দেখুন</a>` : ""}</div></form>`);
+      ${id && m.sheet === "Articles" ? `<a class="btn btn-ghost" target="_blank" href="article.html?slug=${encodeURIComponent(item.Slug || item.ID)}">সাইটে দেখুন</a>` : ""}</div></form>`);
     const form = $("#ef"); bindFields(form);
     const save = async publish => {
       const data = readFields(form); if (id) data.ID = id; if (publish) data.Status = "Published";
       const req = m.fields.find(f => f[3] && f[3].req); if (req && !data[req[0]]) { toast(req[1] + " লিখুন", true); return; }
-      if (key === "articles") { data.Slug = slugify(data.Slug) || slugify(data.TitleEN) || ("a-" + Date.now().toString(36)); if (rows.some(r => r.Slug === data.Slug && r.ID !== id)) data.Slug += "-" + Date.now().toString(36).slice(-4); }
+      if (m.sheet === "Articles") { data.Slug = slugify(data.Slug) || slugify(data.TitleEN) || ("a-" + Date.now().toString(36)); if (rows.some(r => r.Slug === data.Slug && r.ID !== id)) data.Slug += "-" + Date.now().toString(36).slice(-4); }
       const refK = m.refKey || "Reference";
       if (m.religious && data.Status === "Published" && !data[refK] && !confirm("উৎস / রেফারেন্স খালি আছে। উৎস ছাড়া প্রকাশ করতে চান?\n(সাইটে 'উৎস এখনো যোগ করা হয়নি' দেখাবে)")) return;
       $$("button", form).forEach(b => b.disabled = true);
@@ -387,8 +396,8 @@
       try {
         const st = await call("adminList", { sheet: "Settings" }); let base = st.SiteURL || location.href.replace(/admin\.html.*$/, ""); if (!base.endsWith("/")) base += "/";
         const d = await API.getAll(true), e = s => String(s).replace(/&/g, "&amp;");
-        const urls = ["", "zikr-meditation.html", "knowledge.html", "dua-amal.html", "articles.html", "books.html", "courses.html", "golden-chain.html", "ahlul-bayt.html", "about.html"]
-          .concat(d.Articles.map(a => "article.html?slug=" + encodeURIComponent(a.Slug || a.ID)), d.Books.map(b => "book.html?id=" + b.ID), d.Courses.map(c => "course.html?id=" + c.ID), d.Zikr.map(z => "zikr.html?id=" + z.ID), d.Dua.map(x => "dua.html?id=" + x.ID), d.Amal.map(x => "amal.html?id=" + x.ID), d.Meditation.map(x => "meditation.html?id=" + x.ID));
+        const urls = ["", "zikr-meditation.html", "knowledge.html", "dua-amal.html", "articles.html", "books.html", "courses.html", "golden-chain.html", "ahlul-bayt.html", "duas.html", "silsilah.html", "imam-mahdi.html", "shop.html", "about.html"]
+          .concat(d.Articles.map(a => "article.html?slug=" + encodeURIComponent(a.Slug || a.ID)), d.Books.map(b => "book.html?id=" + b.ID), d.Courses.map(c => "course.html?id=" + c.ID), d.Zikr.map(z => "zikr.html?id=" + z.ID), d.Dua.map(x => "dua.html?id=" + x.ID), (d.Durood || []).map(x => "durood.html?id=" + x.ID), (d.Products || []).map(x => "product.html?id=" + x.ID), d.Amal.map(x => "amal.html?id=" + x.ID), d.Meditation.map(x => "meditation.html?id=" + x.ID));
         const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.map(u => `  <url><loc>${e(base + u)}</loc></url>`).join("\n")}\n</urlset>\n`;
         download("sitemap.xml", xml, "application/xml"); toast("sitemap.xml তৈরি হয়েছে");
       } catch (err) { toast(err.message, true); }
