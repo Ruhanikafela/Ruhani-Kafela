@@ -36,17 +36,18 @@ const DEMO_SEED = {
   ],
   Navigation: [
     { ID: "n1", LabelBN: "হোম", LabelEN: "Home", URL: "index.html", Order: 1, Visible: true },
-    { ID: "n2", LabelBN: "জিকির ও ধ্যান", LabelEN: "Zikr & Meditation", URL: "zikr-meditation.html", Order: 2, Visible: true },
-    { ID: "n3", LabelBN: "ইলম ও পাঠ", LabelEN: "Knowledge & Reading", URL: "knowledge.html", Order: 3, Visible: true },
+    { ID: "n2", LabelBN: "ইলম ও পাঠ", LabelEN: "Knowledge & Reading", URL: "knowledge.html", Order: 2, Visible: true },
+    { ID: "n3", LabelBN: "জিকির ও ধ্যান", LabelEN: "Zikr & Meditation", URL: "zikr-meditation.html", Order: 3, Visible: true },
     { ID: "n4", LabelBN: "দোয়া ও আমল", LabelEN: "Dua & Amal", URL: "dua-amal.html", Order: 4, Visible: true },
-    { ID: "n9", LabelBN: "দরুদ শরীফ", LabelEN: "Durood Sharif", URL: "duas.html", Order: 5, Visible: true },
-    { ID: "n10", LabelBN: "রূহানী সিলসিলাহ", LabelEN: "Ruhani Silsilah", URL: "silsilah.html", Order: 6, Visible: true },
-    { ID: "n5", LabelBN: "গোল্ডেন চেইন", LabelEN: "Golden Chain", URL: "golden-chain.html", Order: 7, Visible: true },
-    { ID: "n6", LabelBN: "আহলে বাইত", LabelEN: "Ahl al-Bayt", URL: "ahlul-bayt.html", Order: 8, Visible: true },
-    { ID: "n11", LabelBN: "ইমাম মাহদী", LabelEN: "Imam Mahdi", URL: "imam-mahdi.html", Order: 9, Visible: true },
-    { ID: "n12", LabelBN: "শপ", LabelEN: "Shop", URL: "shop.html", Order: 10, Visible: true },
-    { ID: "n7", LabelBN: "কোর্স", LabelEN: "Courses", URL: "courses.html", Order: 11, Visible: true },
-    { ID: "n8", LabelBN: "পরিচিতি", LabelEN: "About", URL: "about.html", Order: 12, Visible: true }
+    { ID: "n5", LabelBN: "কোর্স", LabelEN: "Courses", URL: "courses.html", Order: 5, Visible: true },
+    { ID: "n6", LabelBN: "দরুদ শরীফ", LabelEN: "Durood Sharif", URL: "duas.html", Order: 6, Visible: true },
+    { ID: "n7", LabelBN: "আহলে বাইত", LabelEN: "Ahl al-Bayt", URL: "ahlul-bayt.html", Order: 7, Visible: true },
+    { ID: "n8", LabelBN: "ইমাম মাহদী", LabelEN: "Imam Mahdi", URL: "imam-mahdi.html", Order: 8, Visible: true },
+    { ID: "n9", LabelBN: "গোল্ডেন চেইন", LabelEN: "Golden Chain", URL: "golden-chain.html", Order: 9, Visible: true },
+    { ID: "n10", LabelBN: "রূহানী সিলসিলাহ", LabelEN: "Ruhani Silsilah", URL: "silsilah.html", Order: 10, Visible: true },
+    { ID: "n11", LabelBN: "শ্রেষ্ঠ তরিকা", LabelEN: "Sufi Orders", URL: "tariqa.html", Order: 11, Visible: true },
+    { ID: "n12", LabelBN: "শপ", LabelEN: "Shop", URL: "shop.html", Order: 12, Visible: true },
+    { ID: "n13", LabelBN: "পরিচিতি", LabelEN: "About", URL: "about.html", Order: 13, Visible: true }
   ],
   Banners: [
     { ID: "b1", Position: "hero", Image: "assets/images/hero.svg", TitleBN: "জ্ঞান, জিকির ও আত্মশুদ্ধির পথে", TitleEN: "Knowledge, Remembrance and the Spiritual Journey", SubtitleBN: "প্রবন্ধ, জিকির, মুরাকাবা, দোয়া ও আমলের একটি শান্ত ডিজিটাল পাঠাগার — উৎসসহ।", SubtitleEN: "A calm digital library of articles, zikr, muraqabah, duas and amal — with sources.", ButtonBN: "শুরু করুন", ButtonEN: "Explore", URL: "zikr-meditation.html", Active: true, Order: 1 },
@@ -111,6 +112,12 @@ const DEMO_SEED = {
     { ID: "s5", Order: 5, NameBN: "নমুনা মুরিদ", NameEN: "Sample Murid", RelationshipBN: "মুরিদ", RelationshipEN: "Murid", BiographyBN: "", Photo: "", ParentID: "s2", Source: "", Status: "Published" },
     { ID: "s6", Order: 6, NameBN: "নমুনা মুরিদ", NameEN: "Sample Murid", RelationshipBN: "মুরিদ", RelationshipEN: "Murid", BiographyBN: "", Photo: "", ParentID: "s3", Source: "", Status: "Published" }
   ],
+  Tariqa: [
+    { ID: "t1", Order: 1, Tariqa: "qadiria", NameBN: "নমুনা: কাদরিয়া তরিকার শায়খ", NameEN: "Sample Qadiri Shaykh", RelationshipBN: "তরিকার শুরু", ParentID: "", Source: "", Status: "Published" },
+    { ID: "t2", Order: 2, Tariqa: "qadiria", NameBN: "নমুনা খলিফা ১", RelationshipBN: "খলিফা", ParentID: "t1", Source: "", Status: "Published" },
+    { ID: "t3", Order: 3, Tariqa: "qadiria", NameBN: "নমুনা খলিফা ২", RelationshipBN: "খলিফা", ParentID: "t1", Source: "", Status: "Published" },
+    { ID: "t4", Order: 4, Tariqa: "chishtia", NameBN: "নমুনা: চিশতিয়া তরিকার শায়খ", RelationshipBN: "তরিকার শুরু", ParentID: "", Source: "", Status: "Published" }
+  ],
   Products: [
     { ID: "p1", Order: 1, TitleBN: "নমুনা বই", TitleEN: "Sample book", Category: "books", Price: "৩৫০", OldPrice: "৪০০", Image: "", DescriptionBN: "নমুনা পণ্য। অ্যাডমিন → শপ থেকে আসল পণ্য, ছবি ও দাম দিন।", DescriptionEN: "Sample product.", InStock: true, Featured: true, Status: "Published" },
     { ID: "p2", Order: 2, TitleBN: "নমুনা আতর (৬ মিলি)", TitleEN: "Sample attar (6 ml)", Category: "attar", Price: "২৫০", OldPrice: "", Image: "", DescriptionBN: "নমুনা পণ্য।", DescriptionEN: "Sample product.", InStock: true, Featured: false, Status: "Published" },
@@ -127,13 +134,15 @@ const DEMO_SEED = {
 };
 
 /* -------- শেয়ার্ড: পাবলিক ডেটা ফিল্টার (সার্ভারের সাথে একই নিয়ম) -------- */
-const CONTENT_SHEETS = ["Articles", "Books", "Courses", "Zikr", "Meditation", "Dua", "Durood", "Amal", "GoldenChain", "AhlulBayt", "Silsilah", "Products"];
+const CONTENT_SHEETS = ["Articles", "Books", "Courses", "Zikr", "Meditation", "Dua", "Durood", "Amal", "GoldenChain", "AhlulBayt", "Silsilah", "Tariqa", "Products"];
 function rkBool(v) { return v === true || String(v).toLowerCase() === "true" || v === 1 || v === "1" || String(v).toLowerCase() === "yes"; }
+const RK_PAID_FIELDS = { Articles: ["ContentBN", "ContentEN"], Dua: ["Arabic", "PronunciationBN", "Transliteration", "MeaningBN", "MeaningEN", "AudioURL"], Amal: ["DescriptionBN", "DescriptionEN", "StepsBN", "StepsEN", "Count"] };
+function rkLock(s, r) { if (!RK_PAID_FIELDS[s] || !/^paid$/i.test(String(r.Access || "").trim())) return r; const o = Object.assign({}, r); RK_PAID_FIELDS[s].forEach(k => delete o[k]); o.Locked = true; return o; }
 function rkPublicView(db) {
   const today = new Date().toISOString().slice(0, 10);
   const out = { Settings: db.Settings };
   CONTENT_SHEETS.forEach(s => {
-    out[s] = (db[s] || []).filter(r => r.Status === "Published" && (s !== "Articles" || !r.PublishDate || String(r.PublishDate).slice(0, 10) <= today));
+    out[s] = (db[s] || []).filter(r => r.Status === "Published" && (s !== "Articles" || !r.PublishDate || String(r.PublishDate).slice(0, 10) <= today)).map(r => rkLock(s, r));
   });
   out.Banners = (db.Banners || []).filter(b => rkBool(b.Active));
   out.Sections = (db.Sections || []).slice().sort((a, b) => a.Order - b.Order);
@@ -170,6 +179,13 @@ const DemoBackend = (() => {
       const d = load(); let u = d.Users.find(x => x.Email === p.email.toLowerCase());
       if (!u) { u = { ID: uid("u"), Name: p.name || p.email.split("@")[0], Email: p.email.toLowerCase(), Status: "Active", JoinedAt: now().slice(0, 10), LastLogin: now(), Photo: "" }; d.Users.push(u); }
       persist(); return { token: "demo-user-" + u.ID, user: { ID: u.ID, Name: u.Name, Email: u.Email, JoinedAt: u.JoinedAt } };
+    },
+    getPaidItem: p => {
+      const d = load(), u = d.Users.find(x => "demo-user-" + x.ID === p.token); if (!u) throw new Error("লগইন প্রয়োজন");
+      const it = (d[p.sheet] || []).find(x => String(x.ID) === String(p.id) && x.Status === "Published"); if (!it) throw new Error("কনটেন্টটি পাওয়া যায়নি।");
+      const acc = String(u.Access || "").split(/[\s,]+/).filter(Boolean);
+      if (/^paid$/i.test(String(it.Access || "")) && !acc.some(x => /^all$/i.test(x) || x === String(p.id) || x === p.sheet + ":" + p.id)) throw new Error("NO_ACCESS");
+      return Object.assign({}, it);
     },
     getProfile: p => { const u = load().Users.find(x => "demo-user-" + x.ID === p.token); if (!u) throw new Error("লগইন প্রয়োজন"); return { ID: u.ID, Name: u.Name, Email: u.Email, JoinedAt: u.JoinedAt }; },
     updateProfile: p => { const u = load().Users.find(x => "demo-user-" + x.ID === p.token); if (!u) throw new Error("লগইন প্রয়োজন"); u.Name = String(p.name || u.Name).slice(0, 80); persist(); return { Name: u.Name }; },

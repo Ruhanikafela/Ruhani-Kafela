@@ -97,15 +97,20 @@ const RK = (() => {
   /* ---------------- হেডার / ফুটার ---------------- */
   const pageFile = () => (location.pathname.split("/").pop() || "index.html");
   function banner(pos) { return (S.data.Banners || []).filter(b => b.Position === pos).sort(sortOrder)[0]; }
+  /* মেনুর নির্দিষ্ট ক্রম — শিটে ক্রম যা-ই থাকুক, পরিচিত পাতাগুলো এভাবেই সাজবে।
+     নতুন (তালিকার বাইরের) মেনু "শপ"-এর পরে ও "পরিচিতি"-র আগে বসবে। */
+  const NAV_ORDER = ["index.html", "knowledge.html", "zikr-meditation.html", "dua-amal.html", "courses.html", "duas.html", "ahlul-bayt.html", "imam-mahdi.html", "golden-chain.html", "silsilah.html", "tariqa.html", "shop.html", "*", "about.html"];
+  const NAV_FALLBACK = { "duas.html": ["দরুদ শরীফ", "Durood Sharif"], "tariqa.html": ["শ্রেষ্ঠ তরিকা", "Sufi Orders"], "imam-mahdi.html": ["ইমাম মাহদী", "Imam Mahdi"], "silsilah.html": ["রূহানী সিলসিলাহ", "Ruhani Silsilah"], "shop.html": ["শপ", "Shop"] };
   function navItems() {
     const n = S.data.Navigation || [];
-    const list = (n.length ? n : DEMO_SEED.Navigation).slice().sort(sortOrder);
-    // "পরিচিতি" (about.html) সবসময় মেনুর একদম শেষে থাকবে
-    const isAbout = x => String(x.URL || "").split(/[?#]/)[0].replace(/^\.?\//, "") === "about.html";
-    // duas.html এখন দরুদ শরীফের পাতা — মেনুতে নাম সবসময় "দরুদ শরীফ"
-    const fixed = list.map(x => String(x.URL || "").split(/[?#]/)[0] === "duas.html" ? Object.assign({}, x, { LabelBN: I18N.bn.duas, LabelEN: I18N.en.duas }) : x);
-    return fixed.filter(x => !isAbout(x)).concat(fixed.filter(isAbout));
+    const file = x => String(x.URL || "").split(/[?#]/)[0].replace(/^\.?\//, "");
+    let list = (n.length ? n : DEMO_SEED.Navigation).slice().sort(sortOrder).map(x => file(x) === "duas.html" ? Object.assign({}, x, { LabelBN: I18N.bn.duas, LabelEN: I18N.en.duas }) : x);
+    // শিটে না থাকলে প্রয়োজনীয় মেনু যোগ (যেমন নতুন "শ্রেষ্ঠ তরিকা")
+    Object.keys(NAV_FALLBACK).forEach(u => { if (!list.some(x => file(x) === u)) list.push({ ID: "auto-" + u, LabelBN: NAV_FALLBACK[u][0], LabelEN: NAV_FALLBACK[u][1], URL: u, Visible: true }); });
+    const rank = x => { const i = NAV_ORDER.indexOf(file(x)); return i >= 0 ? i : NAV_ORDER.indexOf("*"); };
+    return list.map((x, i) => [x, i]).sort((a, b) => rank(a[0]) - rank(b[0]) || a[1] - b[1]).map(a => a[0]);
   }
+
   function renderHeader() {
     const st = S.data.Settings, ann = banner("announcement"), cur = pageFile();
     const annHTML = ann && L(ann, "Title") ? `<div class="announce">${esc(L(ann, "Title"))}${ann.URL && L(ann, "Button") ? `<a href="${esc(safeUrl(ann.URL))}">${esc(L(ann, "Button"))}</a>` : ""}</div>` : "";
@@ -196,7 +201,7 @@ const RK = (() => {
   }
   function renderFooter() {
     const st = S.data.Settings, y = new Date().getFullYear();
-    const links = [["zikr-meditation.html", "zikrMed"], ["knowledge.html", "knowledge"], ["dua-amal.html", "duaAmal"], ["courses.html", "courses"], ["books.html", "books"], ["duas.html", "duas"], ["silsilah.html", "silsilah"], ["golden-chain.html", "golden"], ["ahlul-bayt.html", "ahlulbayt"], ["imam-mahdi.html", "mahdi"], ["shop.html", "shop"]];
+    const links = [["knowledge.html", "knowledge"], ["zikr-meditation.html", "zikrMed"], ["dua-amal.html", "duaAmal"], ["courses.html", "courses"], ["books.html", "books"], ["duas.html", "duas"], ["ahlul-bayt.html", "ahlulbayt"], ["imam-mahdi.html", "mahdi"], ["golden-chain.html", "golden"], ["silsilah.html", "silsilah"], ["tariqa.html", "tariqa"], ["shop.html", "shop"]];
     $("#site-footer").outerHTML = `<footer class="site-footer" id="site-footer"><div class="wrap">
       <div class="foot-grid">
         <div><div class="foot-brand"><img src="${esc(safeUrl(st.Logo) || "assets/logo/logo.svg")}" alt="" width="48" height="48" loading="lazy"><div><b>${esc(st.SiteNameBN || "রূহানী কাফেলা")}</b><span>${esc(st.SiteNameEN || "Ruhani Kafela")}</span></div></div>
@@ -229,7 +234,7 @@ const RK = (() => {
   const cards = {
     article: a => `<a class="card" href="article.html?slug=${encodeURIComponent(a.Slug || a.ID)}">
       <div class="thumb">${img(a.Image, DEF.article, "")}</div>
-      <div class="body"><span class="cat">${esc(cat("articleCat", a.Category))}</span><h3>${esc(L(a, "Title"))}</h3>
+      <div class="body"><span class="cat">${esc(cat("articleCat", a.Category))}</span>${paidBadge(a)}<h3>${esc(L(a, "Title"))}</h3>
       <p class="excerpt">${esc(L(a, "Excerpt"))}</p><div class="meta"><span>${fmtDate(a.PublishDate || a.CreatedAt)}</span><span class="read">${t("readMore")}</span></div></div></a>`,
     book: b => `<a class="card book-card" href="book.html?id=${encodeURIComponent(b.ID)}">
       <div class="thumb">${img(b.Cover, DEF.book, "")}</div>
@@ -240,12 +245,12 @@ const RK = (() => {
       <div class="meta"><span>${esc(c.Instructor)}${c.Duration ? " | " + esc(c.Duration) : ""}</span><span class="read">${t("viewCourse")}</span></div></div></a>`,
     zikr: z => `<a class="card ar-card" href="zikr.html?id=${encodeURIComponent(z.ID)}">${z.Image ? `<div class="thumb">${img(z.Image, DEF.article, "")}</div>` : ""}${z.Arabic || !z.Image ? `<div class="ar" lang="ar">${esc(z.Arabic)}</div>` : ""}
       <div class="body"><h3>${esc(L(z, "Title"))}</h3><span class="muted">${z.Count ? `${t("count")}: ${esc(num(z.Count))} ${t("times")}` : esc(cat("zikrCat", z.Category))}</span><span class="read">${t("readMore")}</span></div></a>`,
-    dua: d => `<a class="card ar-card" href="dua.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${esc(d.Arabic)}</div>` : ""}
-      <div class="body"><h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(cat("duaCat", d.Occasion))}</span><span class="read">${t("readMore")}</span></div></a>`,
+    dua: d => `<a class="card ar-card" href="dua.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${d.Locked ? "🔒" : esc(d.Arabic)}</div>` : ""}
+      <div class="body">${paidBadge(d)}<h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(cat("duaCat", d.Occasion))}</span><span class="read">${t("readMore")}</span></div></a>`,
     durood: d => `<a class="card ar-card" href="durood.html?id=${encodeURIComponent(d.ID)}">${d.Image ? `<div class="thumb">${img(d.Image, DEF.article, "")}</div>` : ""}${d.Arabic || !d.Image ? `<div class="ar" lang="ar">${esc(d.Arabic)}</div>` : ""}
       <div class="body"><h3>${esc(L(d, "Title"))}</h3><span class="muted">${esc(String(L(d, "Meaning") || "").slice(0, 90))}</span><span class="read">${t("readMore")}</span></div></a>`,
-    amal: a => `<a class="card" href="amal.html?id=${encodeURIComponent(a.ID)}">${a.Image ? `<div class="thumb">${img(a.Image, DEF.article, "")}</div>` : ""}<div class="body"><span class="cat">${esc(cat("amalCat", a.Category))}</span>
-      <h3>${esc(L(a, "Title"))}</h3><p class="excerpt">${esc(String(L(a, "Description")).replace(/<[^>]+>/g, ""))}</p><div class="meta"><span>${esc(L(a, "Time"))}</span><span class="read">${t("readMore")}</span></div></div></a>`,
+    amal: a => `<a class="card" href="amal.html?id=${encodeURIComponent(a.ID)}">${a.Image ? `<div class="thumb">${img(a.Image, DEF.article, "")}</div>` : ""}<div class="body"><span class="cat">${esc(cat("amalCat", a.Category))}</span>${paidBadge(a)}
+      <h3>${esc(L(a, "Title"))}</h3><p class="excerpt">${a.Locked ? t("lockedTitle") : esc(String(L(a, "Description")).replace(/<[^>]+>/g, ""))}</p><div class="meta"><span>${esc(L(a, "Time"))}</span><span class="read">${t("readMore")}</span></div></div></a>`,
     meditation: m => `<a class="card" href="meditation.html?id=${encodeURIComponent(m.ID)}">${m.Image ? `<div class="thumb">${img(m.Image, DEF.article, "")}</div>` : ""}<div class="body"><span class="cat">${t("meditation")}</span>
       <h3>${esc(L(m, "Title"))}</h3><p class="excerpt">${esc(String(L(m, "Description")).replace(/<[^>]+>/g, ""))}</p><div class="meta"><span>${esc(m.Duration)}</span><span class="read">${t("readMore")}</span></div></div></a>`
   };
@@ -262,6 +267,29 @@ const RK = (() => {
   }
   function bindChips(attr, fn) { $$(`[data-${attr}]`).forEach(b => b.onclick = () => { $$(`[data-${attr}]`).forEach(x => x.setAttribute("aria-pressed", x === b)); fn(b.dataset[attr]); }); }
   const D = k => (S.data[k] || []);
+  /* ---------- পেইড কনটেন্ট ---------- */
+  const isPaid = x => /^paid$/i.test(String(x.Access || "").trim());
+  const paidBadge = x => isPaid(x) ? `<span class="badge paid" style="background:#B58A3A;color:#fff">🔒 ${t("paidBadge")}${x.Price ? " " + esc(money(x.Price)) : ""}</span>` : "";
+  // লগইন করা ব্যবহারকারীর জন্য খোলা থাকলে পুরো কনটেন্ট এনে পাতা আবার দেখায়
+  function unlockAfter(sheet, item) {
+    if (!item || !item.Locked) return;
+    const box = $("#lockBox"); if (!box || !S.user) return;
+    const st = $("#lockState", box); if (st) st.textContent = t("lockedChecking");
+    API.request("getPaidItem", { token: S.user.token, sheet, id: item.ID }).then(full => {
+      Object.assign(item, full); delete item.Locked; item.Unlocked = true; renderAll();
+    }).catch(e => { if (st) st.textContent = /NO_ACCESS/.test(e.message) ? t("lockedWait") : e.message; });
+  }
+  function lockBox(item) {
+    const n = shopNumber(), title = L(item, "Title");
+    const msg = `${t("buyMsg")} ${title}${item.Price ? " (" + money(item.Price) + ")" : ""}\n${location.href}${S.user ? `\n${t("myEmail")} ${S.user.email}` : ""}`;
+    return `<div id="lockBox" class="note" style="text-align:center;padding:28px 20px;margin:20px 0;border:2px dashed #B58A3A;border-radius:16px;background:#fffaf0">
+      <div style="font-size:2rem">🔒</div><h3 style="margin:6px 0">${t("lockedTitle")}${item.Price ? ` — ${esc(money(item.Price))}` : ""}</h3>
+      <p class="muted" style="max-width:560px;margin:8px auto 16px">${t("lockedText")}</p>
+      <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap">
+        ${n ? `<a class="btn btn-wa" target="_blank" rel="noopener" href="https://wa.me/${n}?text=${encodeURIComponent(msg)}">${I.whatsapp}${t("lockedPayWa")}</a>` : ""}
+        ${S.user ? "" : `<a class="btn btn-ghost" href="login.html?next=${encodeURIComponent(location.pathname.split("/").pop() + location.search)}">${t("lockedLogin")}</a>`}
+      </div><p id="lockState" class="muted" style="margin:14px 0 0;font-size:.9rem"></p></div>`;
+  }
 
   /* ================= পাতাগুলো ================= */
   const pages = {};
@@ -346,12 +374,11 @@ const RK = (() => {
   pages.knowledge = () => {
     setMeta(t("knowledge"), t("knowledgeSub"));
     const H = t("knowledgeHub"), A = D("Articles").slice().sort(byDate);
-    const tiles = [["articles.html", H.articles, A.length], ["books.html", H.books, D("Books").length], ["courses.html", H.courses, D("Courses").length], ["articles.html?cat=education", H.education, A.filter(a => a.Category === "education").length], ["articles.html?cat=research", H.research, A.filter(a => a.Category === "research").length]];
+    const tiles = [["articles.html", H.articles, A.length], ["books.html", H.books, D("Books").length], ["articles.html?cat=education", H.education, A.filter(a => a.Category === "education").length], ["articles.html?cat=research", H.research, A.filter(a => a.Category === "research").length]];
     return pageHead(t("knowledge"), t("knowledgeSub"), [[t("knowledge")]]) +
       `<section class="section"><div class="wrap"><div class="tiles" style="grid-template-columns:repeat(auto-fit,minmax(170px,1fr))">${tiles.map(([u, l, n]) => `<a class="tile" href="${u}"><b>${esc(l)}</b><span>${num(n)}</span></a>`).join("")}</div></div></section>
       <section class="section tint"><div class="wrap">${secHead(t("latestArticles"), "", "articles.html")}${grid(A.slice(0, 3), "article")}</div></section>
-      <section class="section"><div class="wrap">${promo(banner("book_promo"), true)}<div style="height:28px"></div>${secHead(t("books"), "", "books.html")}${grid(D("Books").slice(0, 4), "book", "g4 books")}</div></section>
-      <section class="section tint"><div class="wrap">${secHead(t("courses"), "", "courses.html")}${grid(D("Courses").slice(0, 3), "course")}</div></section>`;
+      <section class="section"><div class="wrap">${promo(banner("book_promo"), true)}<div style="height:28px"></div>${secHead(t("books"), "", "books.html")}${grid(D("Books").slice(0, 4), "book", "g4 books")}</div></section>`;
   };
 
   /* ---------- দোয়া ও আমল ---------- */
@@ -386,13 +413,13 @@ const RK = (() => {
     addJsonLd({ "@context": "https://schema.org", "@type": "Article", headline: title, author: { "@type": "Person", name: a.Author || "" }, datePublished: a.PublishDate || a.CreatedAt, image: a.Image ? new URL(a.Image, location.href).href : undefined, inLanguage: S.lang });
     const rel = D("Articles").filter(x => x.ID !== a.ID && x.Category === a.Category).sort(byDate).slice(0, 3);
     const tags = String(a.Tags || "").split(",").map(s => s.trim()).filter(Boolean);
-    setTimeout(() => { bindShare(); loadComments(a.ID); });
+    setTimeout(() => { bindShare(); loadComments(a.ID); unlockAfter("Articles", a); });
     return `<article class="article">
       <div class="crumbs"><a href="index.html">${t("home")}</a> / <a href="articles.html">${t("articles")}</a> / <a href="articles.html?cat=${esc(a.Category)}">${esc(cat("articleCat", a.Category))}</a></div>
       <h1>${esc(title)}</h1><div class="meta-line">${a.Author ? `<span>${t("author")}: ${esc(a.Author)}</span>` : ""}<span>${fmtDate(a.PublishDate || a.CreatedAt)}</span></div>
       ${promo(banner("before_article"), true)}
       ${a.Image ? `<figure class="cover">${img(a.Image, DEF.article, title, 'loading="eager"')}</figure>` : ""}
-      <div class="prose">${rich(L(a, "Content"))}</div>
+      ${a.Locked ? `<p class="lead">${esc(L(a, "Excerpt"))}</p>${lockBox(a)}` : `${a.Unlocked ? `<p class="badge" style="background:#e7f4ee">✓ ${t("unlocked")}</p>` : ""}<div class="prose">${rich(L(a, "Content"))}</div>`}
       ${tags.length ? `<div class="tags">${tags.map(x => `<a class="badge" href="search.html?q=${encodeURIComponent(x)}">#${esc(x)}</a>`).join("")}</div>` : ""}
       ${shareHTML(title, url)}
       ${rel.length ? `<h2 style="margin-top:36px">${t("related")}</h2><div class="grid g3" style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))">${rel.map(cards.article).join("")}</div>` : ""}
@@ -500,6 +527,7 @@ const RK = (() => {
   pages.dua = () => {
     const d = D("Dua").find(x => x.ID === qs("id")); if (!d) return pages.notfound();
     setMeta(L(d, "Title"), L(d, "Meaning"));
+    if (d.Locked) { setTimeout(() => unlockAfter("Dua", d)); return detailWrap([[t("duaAmal"), "dua-amal.html"]], L(d, "Title"), photo2(d.Image) + lockBox(d)); }
     return detailWrap([[t("duaAmal"), "dua-amal.html"]], L(d, "Title"), photo2(d.Image) + arabicDetail(d, `<dt>${t("occasion")}</dt><dd>${esc(cat("duaCat", d.Occasion))}</dd>`) + refBlock(d.Reference) + mediaBlock(d.AudioURL));
   };
   pages.durood = () => {
@@ -511,6 +539,7 @@ const RK = (() => {
   pages.amal = () => {
     const a = D("Amal").find(x => x.ID === qs("id")); if (!a) return pages.notfound();
     setMeta(L(a, "Title"), L(a, "Description"));
+    if (a.Locked) { setTimeout(() => unlockAfter("Amal", a)); return detailWrap([[t("duaAmal"), "dua-amal.html?tab=amal"]], L(a, "Title"), photo2(a.Image) + lockBox(a) + refBlock(a.Reference)); }
     const st = lines(L(a, "Steps"));
     return detailWrap([[t("duaAmal"), "dua-amal.html?tab=amal"]], L(a, "Title"),
       `${photo2(a.Image)}<div class="facts"><div><small>${t("category")}</small><b>${esc(cat("amalCat", a.Category))}</b></div>${L(a, "Time") ? `<div><small>${t("time")}</small><b>${esc(L(a, "Time"))}</b></div>` : ""}${a.Count ? `<div><small>${t("count")}</small><b>${esc(num(a.Count))}</b></div>` : ""}</div>
@@ -614,6 +643,25 @@ const RK = (() => {
       ${a.length ? `<div id="vTree">${treeBlock(a, sheet)}</div><div id="vList" hidden><ul class="chain-list" style="counter-reset:none">${sorted.map(p => `<li style="list-style:none"><button data-person="${esc(p.ID)}" data-sheet="${sheet}"><span class="nm">${esc(L(p, "Name"))}</span> <small class="muted">${esc(subLine(p))}</small><br><small class="muted">${t("source")}: ${p.Source ? esc(p.Source) : t("refMissing")}</small></button></li>`).join("")}</ul></div>` : `<p class="empty">${t("empty")}</p>`}
     </div></section>`;
   }
+  const TARIQAS = ["qadiria", "chishtia", "naqshbandia", "mujaddedia"];
+  const tariqaOf = x => { const v = String(x.Tariqa || "").trim().toLowerCase(); return TARIQAS.find(k => v === k || v === String(I18N.bn.tariqaNames[k]) || v === String(I18N.en.tariqaNames[k]).toLowerCase()) || v; };
+  pages.tariqa = () => {
+    setMeta(t("tariqa"), t("tariqaSub"));
+    const all = D("Tariqa"), names = t("tariqaNames"), st = S.data.Settings || {};
+    let cur = qs("t"); if (!TARIQAS.includes(cur)) cur = TARIQAS[0];
+    const intro = k => L(st, "TariqaIntro_" + k);
+    const panel = k => { const a = all.filter(x => tariqaOf(x) === k);
+      return `${intro(k) ? `<div class="prose" style="margin-bottom:20px">${rich(intro(k))}</div>` : ""}${a.length ? treeBlock(a, "Tariqa") : `<p class="empty">${t("empty")}</p>`}`; };
+    setTimeout(() => {
+      const draw = k => { $("#tqPanel").innerHTML = panel(k); bindTree(); try { history.replaceState(null, "", "tariqa.html?t=" + k); } catch (e) {} };
+      bindChips("tq", draw);
+      const fromHash = () => { const m = location.hash.match(/^#p-(.+)$/); if (m) openPerson("Tariqa", decodeURIComponent(m[1])); };
+      fromHash();
+    });
+    return pageHead(t("tariqa"), t("tariqaSub"), [[t("tariqa")]]) + `<section class="section"><div class="wrap">
+      <div class="chain-note">${t("tariqaNote")}</div>${chips(TARIQAS.map(k => [k, names[k]]), cur, "tq")}<div id="tqPanel">${panel(cur)}</div></div></section>`;
+  };
+  pages.tariqa.after = () => bindTree();
   pages.golden = () => treePage("golden", "golden", "goldenSub", "goldenNote");
   pages.ahl = () => treePage("ahl", "ahlulbayt", "ahlSub", "ahlNote");
   pages.silsilah = () => treePage("silsilah", "silsilah", "silsilahSub", "silsilahNote");

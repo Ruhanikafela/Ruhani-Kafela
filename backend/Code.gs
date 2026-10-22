@@ -10,7 +10,7 @@
 
 /* ---------------- মূল সেটিংস ---------------- */
 var RK = {
-  VERSION: '1.2.0',
+  VERSION: '1.3.0',
   UPLOAD_FOLDER: 'RuhaniKafela-Uploads',
   ADMIN_SESSION_SECONDS: 6 * 60 * 60,   // অ্যাডমিন সেশন ৬ ঘণ্টা
   PUBLIC_CACHE_SECONDS: 300,            // পাবলিক ডেটা ক্যাশ ৫ মিনিট
@@ -24,19 +24,20 @@ var RK = {
 /* ---------------- শিট ও কলাম (ফ্রন্টএন্ডের সাথে মিল রেখে) ---------------- */
 var SCHEMA = {
   Settings: ['Key', 'Value'],
-  Articles: ['ID', 'Slug', 'TitleBN', 'TitleEN', 'ExcerptBN', 'ExcerptEN', 'ContentBN', 'ContentEN', 'Image', 'Category', 'Author', 'Tags', 'Featured', 'Status', 'PublishDate', 'SEOTitle', 'MetaDescription', 'CreatedAt', 'UpdatedAt'],
+  Articles: ['ID', 'Slug', 'TitleBN', 'TitleEN', 'ExcerptBN', 'ExcerptEN', 'ContentBN', 'ContentEN', 'Image', 'Category', 'Author', 'Tags', 'Featured', 'Status', 'PublishDate', 'SEOTitle', 'MetaDescription', 'Access', 'Price', 'CreatedAt', 'UpdatedAt'],
   Books: ['ID', 'TitleBN', 'TitleEN', 'Author', 'DescriptionBN', 'DescriptionEN', 'Cover', 'Category', 'Price', 'PurchaseURL', 'PDFURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Courses: ['ID', 'TitleBN', 'TitleEN', 'ShortBN', 'ShortEN', 'DescriptionBN', 'DescriptionEN', 'Instructor', 'Image', 'Duration', 'Lessons', 'Type', 'Price', 'EnrollmentURL', 'StartDate', 'Mode', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Zikr: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'Count', 'Category', 'Image', 'Reference', 'NotesBN', 'NotesEN', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Meditation: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'Duration', 'StepsBN', 'StepsEN', 'AudioURL', 'VideoURL', 'Image', 'Reference', 'NotesBN', 'NotesEN', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Dua: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'Transliteration', 'PronunciationBN', 'MeaningBN', 'MeaningEN', 'Occasion', 'Image', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Dua: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'Transliteration', 'PronunciationBN', 'MeaningBN', 'MeaningEN', 'Occasion', 'Image', 'Reference', 'AudioURL', 'Access', 'Price', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   Durood: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'FazilatBN', 'FazilatEN', 'Count', 'Image', 'Reference', 'AudioURL', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Amal: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'StepsBN', 'StepsEN', 'TimeBN', 'TimeEN', 'Count', 'Image', 'Reference', 'Category', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Amal: ['ID', 'Order', 'TitleBN', 'TitleEN', 'DescriptionBN', 'DescriptionEN', 'StepsBN', 'StepsEN', 'TimeBN', 'TimeEN', 'Count', 'Image', 'Reference', 'Category', 'Access', 'Price', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
   GoldenChain: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'RelationshipBN', 'RelationshipEN', 'TeacherID', 'StudentID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
   AhlulBayt: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
   Silsilah: ['ID', 'Order', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
+  Tariqa: ['ID', 'Order', 'Tariqa', 'NameBN', 'NameEN', 'NameAR', 'RelationshipBN', 'RelationshipEN', 'Birth', 'Death', 'BiographyBN', 'BiographyEN', 'Photo', 'ParentID', 'SpouseID', 'Source', 'Tradition', 'Note', 'Status', 'CreatedAt', 'UpdatedAt'],
   Products: ['ID', 'Order', 'TitleBN', 'TitleEN', 'Category', 'Price', 'OldPrice', 'Image', 'DescriptionBN', 'DescriptionEN', 'InStock', 'Featured', 'Status', 'CreatedAt', 'UpdatedAt'],
-  Users: ['ID', 'Name', 'Email', 'Status', 'JoinedAt', 'LastLogin', 'TokenHash', 'Photo'],
+  Users: ['ID', 'Name', 'Email', 'Status', 'JoinedAt', 'LastLogin', 'TokenHash', 'Photo', 'Access'],
   Comments: ['ID', 'ArticleID', 'UserID', 'Name', 'Email', 'Comment', 'Date', 'Status'],
   Banners: ['ID', 'Position', 'Image', 'TitleBN', 'TitleEN', 'SubtitleBN', 'SubtitleEN', 'ButtonBN', 'ButtonEN', 'URL', 'Active', 'Order', 'CreatedAt', 'UpdatedAt'],
   Sections: ['Key', 'TitleBN', 'TitleEN', 'Visible', 'Order'],
@@ -44,7 +45,7 @@ var SCHEMA = {
   AdminUsers: ['Email', 'Name', 'PasswordHash', 'Salt', 'Role', 'Status', 'LastLogin'],
   Logs: ['Date', 'Admin', 'Action', 'Sheet', 'ItemID']
 };
-var CONTENT_SHEETS = ['Articles', 'Books', 'Courses', 'Zikr', 'Meditation', 'Dua', 'Durood', 'Amal', 'GoldenChain', 'AhlulBayt', 'Silsilah', 'Products'];
+var CONTENT_SHEETS = ['Articles', 'Books', 'Courses', 'Zikr', 'Meditation', 'Dua', 'Durood', 'Amal', 'GoldenChain', 'AhlulBayt', 'Silsilah', 'Tariqa', 'Products'];
 // অ্যাডমিন প্যানেল থেকে যেসব শিটে সরাসরি লেখা যায়
 var EDITABLE_SHEETS = CONTENT_SHEETS.concat(['Banners', 'Sections', 'Navigation', 'Users']);
 
@@ -65,10 +66,10 @@ var DEFAULT_SECTIONS = [
   ['ahlul_bayt', 'আহলে বাইত', 'Ahl al-Bayt'], ['community', 'কমিউনিটি', 'Community']
 ];
 var DEFAULT_NAV = [
-  ['হোম', 'Home', 'index.html'], ['জিকির ও ধ্যান', 'Zikr & Meditation', 'zikr-meditation.html'], ['ইলম ও পাঠ', 'Knowledge & Reading', 'knowledge.html'],
-  ['দোয়া ও আমল', 'Dua & Amal', 'dua-amal.html'], ['গোল্ডেন চেইন', 'Golden Chain', 'golden-chain.html'], ['আহলে বাইত', 'Ahl al-Bayt', 'ahlul-bayt.html'],
-  ['দরুদ শরীফ', 'Durood Sharif', 'duas.html'], ['রূহানী সিলসিলাহ', 'Ruhani Silsilah', 'silsilah.html'], ['ইমাম মাহদী', 'Imam Mahdi', 'imam-mahdi.html'], ['শপ', 'Shop', 'shop.html'],
-  ['কোর্স', 'Courses', 'courses.html'], ['পরিচিতি', 'About', 'about.html']
+  ['হোম', 'Home', 'index.html'], ['ইলম ও পাঠ', 'Knowledge & Reading', 'knowledge.html'], ['জিকির ও ধ্যান', 'Zikr & Meditation', 'zikr-meditation.html'],
+  ['দোয়া ও আমল', 'Dua & Amal', 'dua-amal.html'], ['কোর্স', 'Courses', 'courses.html'], ['দরুদ শরীফ', 'Durood Sharif', 'duas.html'],
+  ['আহলে বাইত', 'Ahl al-Bayt', 'ahlul-bayt.html'], ['ইমাম মাহদী', 'Imam Mahdi', 'imam-mahdi.html'], ['গোল্ডেন চেইন', 'Golden Chain', 'golden-chain.html'],
+  ['রূহানী সিলসিলাহ', 'Ruhani Silsilah', 'silsilah.html'], ['শ্রেষ্ঠ তরিকা', 'Sufi Orders', 'tariqa.html'], ['শপ', 'Shop', 'shop.html'], ['পরিচিতি', 'About', 'about.html']
 ];
 var DEFAULT_BANNERS = [
   { Position: 'hero', Image: 'assets/images/hero.svg', TitleBN: 'জ্ঞান, জিকির ও আত্মশুদ্ধির পথে', TitleEN: 'Knowledge, Remembrance and the Spiritual Journey', SubtitleBN: 'প্রবন্ধ, জিকির, মুরাকাবা, দোয়া ও আমলের একটি শান্ত ডিজিটাল পাঠাগার — উৎসসহ।', SubtitleEN: 'A calm digital library of articles, zikr, muraqabah, duas and amal — with sources.', ButtonBN: 'শুরু করুন', ButtonEN: 'Explore', URL: 'zikr-meditation.html', Active: true, Order: 1 },
@@ -199,7 +200,19 @@ var PUBLIC_ROUTES = {
 
   getProfile: function (p) {
     var u = requireUser_(p.token).data;
-    return { ID: u.ID, Name: u.Name, Email: u.Email, JoinedAt: u.JoinedAt, Photo: u.Photo };
+    return { ID: u.ID, Name: u.Name, Email: u.Email, JoinedAt: u.JoinedAt, Photo: u.Photo, Access: u.Access || '' };
+  },
+
+  /* পেইড কনটেন্ট — অ্যাডমিন অনুমতি দিলে লগইন করা ব্যবহারকারী পুরোটা পাবেন */
+  getPaidItem: function (p) {
+    var sheet = String(p.sheet || ''), id = String(p.id || '');
+    if (!PAID_FIELDS[sheet]) throw new Error('অজানা বিভাগ।');
+    var u = requireUser_(p.token).data;
+    var f = findRow_(sheet, 'ID', id);
+    if (!f || f.data.Status !== 'Published') throw new Error('কনটেন্টটি পাওয়া যায়নি।');
+    if (!isPaid_(f.data)) return f.data;
+    if (!userHasAccess_(u, sheet, id)) throw new Error('NO_ACCESS');
+    return f.data;
   },
 
   updateProfile: function (p) {
@@ -420,6 +433,7 @@ var ADMIN_ROUTES = {
   saveAhlulBayt: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'AhlulBayt', item: p.item }, a); },
   saveDurood: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Durood', item: p.item }, a); },
   saveSilsilah: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Silsilah', item: p.item }, a); },
+  saveTariqa: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Tariqa', item: p.item }, a); },
   saveProduct: function (p, a) { return ADMIN_ROUTES.adminSave({ sheet: 'Products', item: p.item }, a); }
 };
 
@@ -431,7 +445,7 @@ function saveItem_(sheet, item, admin, quiet) {
   var data = {};
   Object.keys(item).forEach(function (k) {
     if (cols.indexOf(k) < 0 || k === 'CreatedAt' || k === 'UpdatedAt') return;
-    if (sheet === 'Users' && ['Name', 'Status', 'Photo', 'ID'].indexOf(k) < 0) return; // টোকেন/ইমেইল বদলানো যাবে না
+    if (sheet === 'Users' && ['Name', 'Status', 'Photo', 'ID', 'Access'].indexOf(k) < 0) return; // টোকেন/ইমেইল বদলানো যাবে না
     data[k] = item[k];
   });
   if (sheet === 'Users' && data.Status && ['Active', 'Blocked'].indexOf(data.Status) < 0) throw new Error('অজানা অবস্থা');
@@ -456,6 +470,25 @@ function saveItem_(sheet, item, admin, quiet) {
 /* =====================================================================
    ৪. পাবলিক ডেটা (শুধু প্রকাশিত কনটেন্ট) + ক্যাশ
    ===================================================================== */
+/* ---------- পেইড কনটেন্ট: সবার জন্য মূল অংশ লুকানো থাকে ---------- */
+var PAID_FIELDS = {
+  Articles: ['ContentBN', 'ContentEN'],
+  Dua: ['Arabic', 'PronunciationBN', 'Transliteration', 'MeaningBN', 'MeaningEN', 'AudioURL'],
+  Amal: ['DescriptionBN', 'DescriptionEN', 'StepsBN', 'StepsEN', 'Count']
+};
+function isPaid_(r) { return /^paid$/i.test(String(r.Access || '').trim()); }
+function lockRow_(sheet, r) {
+  if (!PAID_FIELDS[sheet] || !isPaid_(r)) return r;
+  var o = {}; Object.keys(r).forEach(function (k) { o[k] = r[k]; });
+  PAID_FIELDS[sheet].forEach(function (k) { delete o[k]; });
+  o.Locked = true;
+  return o;
+}
+function userHasAccess_(user, sheet, id) {
+  var list = String(user.Access || '').split(/[\s,]+/).filter(String);
+  return list.some(function (x) { return /^all$/i.test(x) || x === String(id) || x === sheet + ':' + id; });
+}
+
 function getPublicData_() {
   var cached = cacheGetBig_('public_v1');
   if (cached) return cached;
@@ -464,7 +497,7 @@ function getPublicData_() {
   CONTENT_SHEETS.forEach(function (s) {
     out[s] = readSheet_(s).filter(function (r) {
       return r.Status === 'Published' && (s !== 'Articles' || !r.PublishDate || String(r.PublishDate).slice(0, 10) <= today);
-    });
+    }).map(function (r) { return lockRow_(s, r); });
   });
   out.Banners = readSheet_('Banners').filter(function (b) { return bool_(b.Active); });
   out.Sections = readSheet_('Sections').sort(function (a, b) { return Number(a.Order) - Number(b.Order); });

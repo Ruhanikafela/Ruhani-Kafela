@@ -25,13 +25,13 @@
      ফিল্ড: [কী, লেবেল, ধরন, অপশন/হিন্ট]
      ধরন: text, textarea, rich, select, image, bool, number, date, color, arabic, lines, ref, idref */
   const M = {
-    articles: { sheet: "Articles", title: "প্রবন্ধ", cols: ["Image", "TitleBN", "Category", "Status", "PublishDate"], fields: [
+    articles: { sheet: "Articles", title: "প্রবন্ধ", cols: ["Image", "TitleBN", "Category", "Access", "Status", "PublishDate"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"],
       ["Slug", "Slug (লিংকের অংশ, ইংরেজিতে)", "text", { hint: "খালি রাখলে ইংরেজি শিরোনাম থেকে তৈরি হবে। যেমন: path-of-zikr" }],
       ["Category", "বিভাগ", "select", opt(BN.articleCat), { hint: "‘দোয়া’ বিভাগের লেখা দোয়া পাতায় এবং ‘ইমাম মাহদী’ বিভাগের লেখা ইমাম মাহদী পাতায় দেখাবে।" }], ["ExcerptBN", "সারাংশ (বাংলা)", "textarea"], ["ExcerptEN", "Excerpt (English)", "textarea"],
       ["ContentBN", "মূল লেখা (বাংলা)", "rich"], ["ContentEN", "Content (English)", "rich"],
       ["Image", "ফিচার্ড ছবি", "image"], ["Author", "লেখক", "text"], ["Tags", "ট্যাগ (কমা দিয়ে আলাদা)", "text"], ["PublishDate", "প্রকাশের তারিখ", "date"],
-      ["Featured", "হোমপেজে ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS],
+      ["Access", "ফ্রি / পেইড", "select", [["Free", "ফ্রি — সবাই পড়তে পারবে"], ["Paid", "পেইড — পেমেন্টের পর অনুমতি দিলে পড়া যাবে"]], { hint: "পেইড হলে সবাই শিরোনাম, ছবি ও সারাংশ দেখবে; মূল লেখা দেখবে শুধু যাদের ‘ব্যবহারকারী’ পাতা থেকে অনুমতি দেবেন।" }], ["Price", "মূল্য (পেইড হলে, যেমন: ২০০)", "text"], ["Featured", "হোমপেজে ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS],
       ["SEOTitle", "SEO শিরোনাম (ঐচ্ছিক)", "text"], ["MetaDescription", "মেটা বিবরণ (ঐচ্ছিক, ১৬০ অক্ষর)", "textarea"]] },
     books: { sheet: "Books", title: "বই", cols: ["Cover", "TitleBN", "Author", "Status", "Featured"], fields: [
       ["TitleBN", "বইয়ের নাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["Author", "লেখক", "text"], ["Category", "বিভাগ", "select", opt(BN.bookCat)],
@@ -54,20 +54,20 @@
       ["Duration", "সময়কাল", "text"], ["StepsBN", "ধাপ (বাংলা) — প্রতি লাইনে একটি ধাপ", "lines"], ["StepsEN", "Steps (English) — one per line", "lines"],
       ["AudioURL", "অডিও লিংক", "text"], ["VideoURL", "ভিডিও লিংক (YouTube চলবে)", "text"], ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে কার্ডে ও বিস্তারিত পাতায় দেখাবে" }], ["Reference", "উৎস / রেফারেন্স", "ref"],
       ["NotesBN", "সতর্কতা / টীকা (বাংলা)", "textarea"], ["NotesEN", "Warning / notes (English)", "textarea"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
-    dua: { sheet: "Dua", title: "দোয়া", order: 1, religious: 1, cols: ["Order", "TitleBN", "Arabic", "Occasion", "Status"], fields: [
+    dua: { sheet: "Dua", title: "দোয়া", order: 1, religious: 1, cols: ["Order", "TitleBN", "Arabic", "Occasion", "Access", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["Arabic", "আরবি", "arabic"], ["PronunciationBN", "বাংলা উচ্চারণ", "text"], ["Transliteration", "English transliteration", "text"],
       ["MeaningBN", "অর্থ (বাংলা)", "textarea"], ["MeaningEN", "Meaning (English)", "textarea"], ["Occasion", "উপলক্ষ / বিভাগ", "select", opt(BN.duaCat)],
       ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে দোয়ার কার্ডে ও বিস্তারিত পাতায় দেখাবে" }],
-      ["Reference", "উৎস / রেফারেন্স", "ref"], ["AudioURL", "অডিও লিংক", "text"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
+      ["Reference", "উৎস / রেফারেন্স", "ref"], ["AudioURL", "অডিও লিংক", "text"], ["Access", "ফ্রি / পেইড", "select", [["Free", "ফ্রি — সবাই পড়তে পারবে"], ["Paid", "পেইড — পেমেন্টের পর অনুমতি দিলে পড়া যাবে"]], { hint: "পেইড হলে সবাই শিরোনাম, ছবি ও সারাংশ দেখবে; মূল লেখা দেখবে শুধু যাদের ‘ব্যবহারকারী’ পাতা থেকে অনুমতি দেবেন।" }], ["Price", "মূল্য (পেইড হলে, যেমন: ২০০)", "text"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
     durood: { sheet: "Durood", title: "দরুদ শরীফ", order: 1, religious: 1, cols: ["Order", "Image", "TitleBN", "Arabic", "Status"], fields: [
       ["TitleBN", "দরুদের নাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Name (English)", "text"], ["Arabic", "আরবি", "arabic"], ["PronunciationBN", "বাংলা উচ্চারণ", "textarea"], ["Transliteration", "English transliteration", "textarea"],
       ["MeaningBN", "অর্থ (বাংলা)", "textarea"], ["MeaningEN", "Meaning (English)", "textarea"], ["FazilatBN", "ফজিলত (বাংলা)", "rich"], ["FazilatEN", "Virtues (English)", "rich"],
       ["Count", "পড়ার সংখ্যা / নিয়ম (ঐচ্ছিক)", "text"], ["Image", "ছবি (ঐচ্ছিক)", "image"],
       ["Reference", "উৎস / রেফারেন্স", "ref"], ["AudioURL", "অডিও লিংক", "text"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
-    amal: { sheet: "Amal", title: "আমল", order: 1, religious: 1, cols: ["Order", "TitleBN", "Category", "Status"], fields: [
+    amal: { sheet: "Amal", title: "আমল", order: 1, religious: 1, cols: ["Order", "TitleBN", "Category", "Access", "Status"], fields: [
       ["TitleBN", "শিরোনাম (বাংলা)", "text", { req: 1 }], ["TitleEN", "Title (English)", "text"], ["DescriptionBN", "বিবরণ (বাংলা)", "rich"], ["DescriptionEN", "Description (English)", "rich"],
       ["StepsBN", "ধাপ (বাংলা) — প্রতি লাইনে একটি", "lines"], ["StepsEN", "Steps (English)", "lines"], ["TimeBN", "উপযুক্ত সময় (বাংলা)", "text"], ["TimeEN", "Recommended time (English)", "text"],
-      ["Count", "প্রস্তাবিত সংখ্যা", "text"], ["Category", "বিভাগ", "select", opt(BN.amalCat)], ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে কার্ডে ও বিস্তারিত পাতায় দেখাবে" }], ["Reference", "উৎস / রেফারেন্স", "ref"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
+      ["Count", "প্রস্তাবিত সংখ্যা", "text"], ["Category", "বিভাগ", "select", opt(BN.amalCat)], ["Image", "ছবি (ঐচ্ছিক)", "image", { hint: "দিলে কার্ডে ও বিস্তারিত পাতায় দেখাবে" }], ["Reference", "উৎস / রেফারেন্স", "ref"], ["Access", "ফ্রি / পেইড", "select", [["Free", "ফ্রি — সবাই পড়তে পারবে"], ["Paid", "পেইড — পেমেন্টের পর অনুমতি দিলে পড়া যাবে"]], { hint: "পেইড হলে সবাই শিরোনাম, ছবি ও সারাংশ দেখবে; মূল লেখা দেখবে শুধু যাদের ‘ব্যবহারকারী’ পাতা থেকে অনুমতি দেবেন।" }], ["Price", "মূল্য (পেইড হলে, যেমন: ২০০)", "text"], ["Order", "ক্রম", "number"], ["Featured", "ফিচার্ড", "bool"], ["Status", "অবস্থা", "select", STATUS]] },
     golden: { sheet: "GoldenChain", title: "গোল্ডেন চেইন", order: 1, religious: 1, refKey: "Source", cols: ["Order", "Photo", "NameBN", "ParentID", "Source", "Status"], fields: [
       ["NameBN", "নাম (বাংলা)", "text", { req: 1 }], ["NameEN", "Name (English)", "text"], ["NameAR", "আরবি নাম", "arabic"], ["Birth", "জন্ম (সাল)", "text"], ["Death", "ওফাত (সাল)", "text"],
       ["BiographyBN", "সংক্ষিপ্ত জীবনী (বাংলা)", "textarea"], ["BiographyEN", "Short biography (English)", "textarea"], ["Photo", "ছবি", "image"],
@@ -99,13 +99,19 @@
     navigation: { sheet: "Navigation", title: "নেভিগেশন মেনু", order: 1, cols: ["Order", "LabelBN", "URL", "Visible"], fields: [
       ["LabelBN", "মেনুর নাম (বাংলা)", "text", { req: 1 }], ["LabelEN", "Label (English)", "text"], ["URL", "লিংক", "text", { hint: "যেমন: courses.html" }], ["Order", "ক্রম", "number"], ["Visible", "দেখাবে", "bool"]] }
   };
+  // শ্রেষ্ঠ তরিকা: একটি "Tariqa" শিট, চার তরিকা আলাদা আলাদা দেখায়
+  const TQ = [["qadiria", "কাদরিয়া"], ["chishtia", "চিশতিয়া"], ["naqshbandia", "নকশবন্দিয়া"], ["mujaddedia", "মোজাদ্দেদিয়া"]];
+  TQ.forEach(([k, n]) => { M["tq_" + k] = Object.assign({}, M.silsilah, { sheet: "Tariqa", title: n + " তরিকা", filter: { Tariqa: k },
+    fields: [["Tariqa", "তরিকা", "select", TQ]].concat(M.silsilah.fields.map(f => f[0] === "ParentID" ? ["ParentID", "উপরের জন / পীর (ট্রিতে কার নিচে বসবে)", "idref", { hint: "খালি রাখলে একদম উপরে থাকবে। একই জনের নিচে একাধিক নাম দিলে পাশাপাশি (ডানে-বামে) বসবে।" }] : f)) }); });
   // ইমাম মাহদী: প্রবন্ধ শিটেরই লেখা, শুধু ‘ইমাম মাহদী’ বিভাগেরগুলো দেখায়
   M.mahdi = Object.assign({}, M.articles, { title: "ইমাম মাহদী — লেখা", filter: { Category: "imam_mahdi" } });
+  function TQ_INTRO() { return [["qadiria", "কাদরিয়া"], ["chishtia", "চিশতিয়া"], ["naqshbandia", "নকশবন্দিয়া"], ["mujaddedia", "মোজাদ্দেদিয়া"]].flatMap(([k, n]) => [["TariqaIntro_" + k + "BN", n + " — পরিচিতি (বাংলা)", "rich"], ["TariqaIntro_" + k + "EN", n + " — Introduction (English)", "rich"]]); }
   const SETTINGS = {
     general: { title: "সাধারণ সেটিংস", fields: [["SiteNameBN", "সাইটের নাম (বাংলা)", "text"], ["SiteNameEN", "Site name (English)", "text"], ["SiteNameAR", "আরবি নাম", "arabic"], ["TaglineBN", "ট্যাগলাইন (বাংলা)", "text"], ["TaglineEN", "Tagline (English)", "text"],
       ["PrimaryColor", "প্রধান রং", "color"], ["AccentColor", "সোনালি / অ্যাকসেন্ট রং", "color"], ["FooterTextBN", "ফুটারের লেখা (বাংলা)", "textarea"], ["FooterTextEN", "Footer text (English)", "textarea"],
       ["AboutBN", "পরিচিতি পাতা (বাংলা)", "rich"], ["AboutEN", "About page (English)", "rich"], ["SiteURL", "সাইটের পূর্ণ ঠিকানা (sitemap-এর জন্য)", "text", { hint: "যেমন: https://username.github.io/ruhani-kafela/" }]] },
     logo: { title: "লোগো ও ফেভিকন", fields: [["Logo", "লোগো", "image", { hint: "বর্গাকার PNG/SVG, স্বচ্ছ ব্যাকগ্রাউন্ড হলে ভালো। মূল লোগো: assets/logo/logo.svg" }], ["Favicon", "ফেভিকন (ব্রাউজার ট্যাবের ছোট আইকন)", "image"]] },
+    tariqa: { title: "তরিকা পরিচিতি", fields: TQ_INTRO(), note: "প্রতিটি তরিকার পাতার উপরে এই পরিচিতি দেখাবে (ঐচ্ছিক)।" },
     social: { title: "সোশ্যাল ও যোগাযোগ", fields: [["Facebook", "Facebook লিংক", "text"], ["YouTube", "YouTube লিংক", "text"], ["Instagram", "Instagram লিংক", "text"], ["Telegram", "Telegram লিংক", "text"],
       ["WhatsApp", "WhatsApp নম্বর (দেশের কোডসহ, যেমন 8801XXXXXXXXX)", "text"], ["ShopWhatsApp", "শপের অর্ডারের WhatsApp নম্বর (যেমন 8801682396399)", "text"], ["Email", "ইমেইল", "text"], ["Phone", "ফোন", "text"], ["CommunityURL", "কমিউনিটি গ্রুপ লিংক (ঐচ্ছিক)", "text"]] }
   };
@@ -125,7 +131,7 @@
 
   /* ================ কাঠামো ================ */
   const NAV = [["ড্যাশবোর্ড", [["dashboard", "ড্যাশবোর্ড"]]], ["কনটেন্ট", [["articles", "প্রবন্ধ"], ["books", "বই"], ["courses", "কোর্স"], ["zikr", "জিকির"], ["meditation", "মেডিটেশন"], ["dua", "দোয়া"], ["durood", "দরুদ শরীফ"], ["amal", "আমল"], ["mahdi", "ইমাম মাহদী"]]],
-    ["বংশধারা ও সিলসিলাহ", [["silsilah", "রূহানী সিলসিলাহ"], ["golden", "গোল্ডেন চেইন"], ["ahl", "আহলে বাইত"]]], ["শপ", [["products", "পণ্য"]]], ["কমিউনিটি", [["comments", "মন্তব্য"], ["users", "ব্যবহারকারী"]]],
+    ["বংশধারা ও সিলসিলাহ", [["silsilah", "রূহানী সিলসিলাহ"], ["golden", "গোল্ডেন চেইন"], ["ahl", "আহলে বাইত"]]], ["শ্রেষ্ঠ তরিকা", [["tq_qadiria", "কাদরিয়া"], ["tq_chishtia", "চিশতিয়া"], ["tq_naqshbandia", "নকশবন্দিয়া"], ["tq_mujaddedia", "মোজাদ্দেদিয়া"], ["s-tariqa", "তরিকা পরিচিতি"]]], ["শপ", [["products", "পণ্য"]]], ["কমিউনিটি", [["comments", "মন্তব্য"], ["users", "ব্যবহারকারী"]]],
     ["ওয়েবসাইট", [["s-general", "সাধারণ সেটিংস"], ["homepage", "হোমপেজ সেকশন"], ["banners", "ব্যানার"], ["s-logo", "লোগো"], ["s-social", "সোশ্যাল লিংক"], ["navigation", "নেভিগেশন"]]],
     ["সিস্টেম", [["backup", "ব্যাকআপ ও SEO"], ["logs", "লগ"], ["system", "পাসওয়ার্ড ও সিস্টেম"]]]];
   function shell() {
@@ -142,7 +148,7 @@
     checkServerVersion();
   }
   /* সার্ভারের Code.gs পুরনো থাকলে সতর্কবার্তা */
-  const NEED_VERSION = "1.2.0";
+  const NEED_VERSION = "1.3.0";
   async function checkServerVersion() {
     if (API.DEMO) return;
     let v = "অজানা";
@@ -193,13 +199,14 @@
     if (c === "Source") return v ? esc(String(v).slice(0, 40)) : `<span class="st st-Spam">উৎস নেই</span>`;
     if (c === "Arabic") return `<span class="arabic" style="font-size:1.2rem">${esc(String(v).slice(0, 40))}</span>`;
     if (c === "Price") return esc(v);
+    if (c === "Access") return /^paid$/i.test(String(v || "")) ? `<span class="st st-Pending">🔒 পেইড</span>` : `<span class="st st-true">ফ্রি</span>`;
     if (c === "InStock") return `<span class="st st-${v === "" || v == null || bool(v) ? "true" : "false"}">${v === "" || v == null || bool(v) ? "আছে" : "নেই"}</span>`;
     if (c === "ParentID") { const p = (cache[m.sheet] || []).find(x => x.ID === v); return p ? esc(p.NameBN) : "—"; }
     const f = m.fields.find(x => x[0] === c); if (f && f[2] === "select" && Array.isArray(f[3])) { const o = f[3].find(x => x[0] === v); return esc(o ? o[1] : v); }
     return `<span class="${c.startsWith("Title") || c.startsWith("Name") || c.startsWith("Label") ? "title-cell" : ""}">${esc(String(v == null ? "" : v).slice(0, 90))}</span>`;
   }
   const MAHDI_RE = /^(imam_mahdi|imam[\s_-]*(mahdi|mehdi|mahadi)|ইমাম\s*(মাহদী|মাহদি|মেহেদী|মেহেদি|মাহাদী))$/i;
-  const onlyMine = (m, r) => !m.filter ? r : r.filter(x => Object.keys(m.filter).every(k => String(x[k]).trim() === String(m.filter[k]) || (m.filter[k] === "imam_mahdi" && MAHDI_RE.test(String(x[k]).trim()))));
+  const onlyMine = (m, r) => !m.filter ? r : r.filter(x => Object.keys(m.filter).every(k => String(x[k]).trim().toLowerCase() === String(m.filter[k]) || (m.filter[k] === "imam_mahdi" && MAHDI_RE.test(String(x[k]).trim()))));
   async function list(key) {
     const m = M[key]; setTitle(m.title, key); loading();
     let rows; try { rows = onlyMine(m, await fetchList(key, true)); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
@@ -311,6 +318,7 @@
   async function editor(key, id) {
     const m = M[key]; setTitle((id ? "সম্পাদনা: " : "নতুন: ") + m.title, key); loading();
     let rows; try { rows = await fetchList(key); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
+    rows = onlyMine(m, rows);
     let item = id ? rows.find(r => r.ID === id) : null;
     if (id && !item) return body(`<p class="msg err">এন্ট্রিটি পাওয়া যায়নি।</p><a class="btn" href="#/${key}">তালিকায় ফিরুন</a>`);
     if (!item) { item = { Status: "Draft", Active: true, Visible: true, InStock: true, PublishDate: new Date().toISOString().slice(0, 10) }; if (m.order) item.Order = rows.length + 1; if (m.filter) Object.assign(item, m.filter); }
@@ -326,7 +334,7 @@
       const refK = m.refKey || "Reference";
       if (m.religious && data.Status === "Published" && !data[refK] && !confirm("উৎস / রেফারেন্স খালি আছে। উৎস ছাড়া প্রকাশ করতে চান?\n(সাইটে 'উৎস এখনো যোগ করা হয়নি' দেখাবে)")) return;
       $$("button", form).forEach(b => b.disabled = true);
-      try { const r = await call("adminSave", { sheet: m.sheet, item: data }); delete cache[m.sheet]; toast(publish ? "প্রকাশিত হয়েছে" : "সংরক্ষিত হয়েছে"); if (!id) location.hash = `#/${key}/edit/${encodeURIComponent(r.id)}`; else editor(key, id); }
+      try { const r = await call("adminSave", { sheet: m.sheet, item: data }); delete cache[m.sheet]; API.clearCache(); toast(publish ? "প্রকাশিত হয়েছে" : "সংরক্ষিত হয়েছে"); if (!id) location.hash = `#/${key}/edit/${encodeURIComponent(r.id)}`; else editor(key, id); }
       catch (e) { toast(e.message, true); $$("button", form).forEach(b => b.disabled = false); }
     };
     form.onsubmit = e => { e.preventDefault(); save(false); };
@@ -337,7 +345,7 @@
   async function settingsView(which) {
     const cfg = SETTINGS[which]; setTitle(cfg.title, "s-" + which); loading();
     let st; try { st = await call("adminList", { sheet: "Settings" }); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
-    body(`<form id="sf2"><div class="a-card"><div class="ed-grid">${cfg.fields.map(f => fieldHTML(f, st[f[0]], {})).join("")}</div></div><div class="ed-actions"><button class="btn">সংরক্ষণ করুন</button></div></form>
+    body(`${cfg.note ? `<div class="help">${esc(cfg.note)}</div>` : ""}<form id="sf2"><div class="a-card"><div class="ed-grid">${cfg.fields.map(f => fieldHTML(f, st[f[0]], {})).join("")}</div></div><div class="ed-actions"><button class="btn">সংরক্ষণ করুন</button></div></form>
       ${which === "general" ? `<p class="muted" style="margin-top:10px">রং বদলের পর সাইটে দেখতে কয়েক মিনিট লাগতে পারে (ক্যাশ)। দ্রুত দেখতে "ব্যাকআপ ও SEO" পাতায় "ক্যাশ পরিষ্কার" চাপুন।</p>` : ""}`);
     const f = $("#sf2"); bindFields(f);
     f.onsubmit = async e => { e.preventDefault(); try { await call("saveSettings", { settings: readFields(f) }); API.clearCache(); toast("সেটিংস সংরক্ষিত হয়েছে"); } catch (err) { toast(err.message, true); } };
@@ -385,15 +393,41 @@
   }
 
   /* ================ ব্যবহারকারী ================ */
+  /* -------- পেইড কনটেন্টের অনুমতি -------- */
+  const accList = v => String(v || "").split(/[\s,]+/).filter(Boolean);
+  function accessLabel(v) { const l = accList(v); if (!l.length) return `<span class="muted">—</span>`; if (l.some(x => /^all$/i.test(x))) return `<span class="st st-Approved">সব পেইড</span>`; return `<span class="st st-Approved">${l.length.toLocaleString("bn-BD")}টি</span>`; }
+  async function accessDialog(u, redraw) {
+    const sheets = [["Articles", "প্রবন্ধ"], ["Dua", "দোয়া"], ["Amal", "আমল"]];
+    let items = [];
+    try { for (const [sh, lbl] of sheets) { const r = await call("adminList", { sheet: sh }); r.filter(x => /^paid$/i.test(String(x.Access || "").trim())).forEach(x => items.push({ key: sh + ":" + x.ID, sh, lbl, title: x.TitleBN, price: x.Price })); } }
+    catch (e) { return toast(e.message, true); }
+    const cur = accList(u.Access), all = cur.some(x => /^all$/i.test(x));
+    const has = it => cur.includes(it.key) || cur.includes(String(it.key.split(":")[1]));
+    let d = $("#accDlg"); if (!d) { d = document.createElement("dialog"); d.id = "accDlg"; d.style.cssText = "max-width:560px;width:92%;border:0;border-radius:14px;padding:22px"; document.body.appendChild(d); }
+    d.innerHTML = `<h3 style="margin-top:0">পেইড অনুমতি — ${esc(u.Name || u.Email)}</h3><p class="muted" style="margin-top:-6px">${esc(u.Email)}</p>
+      <label class="switch" style="margin:10px 0 14px;display:flex;gap:8px"><input type="checkbox" id="accAll" ${all ? "checked" : ""}> <b>সব পেইড কনটেন্ট</b> (এখন ও ভবিষ্যতের সব)</label>
+      <div id="accItems" style="max-height:50vh;overflow:auto;border:1px solid #e3e8e5;border-radius:10px;padding:8px 12px">
+      ${items.length ? items.map(it => `<label style="display:flex;gap:8px;padding:6px 0;border-bottom:1px solid #f0f2f1"><input type="checkbox" value="${esc(it.key)}" ${has(it) ? "checked" : ""}><span>${esc(it.title)} <small class="muted">(${it.lbl}${it.price ? " · ৳" + esc(it.price) : ""})</small></span></label>`).join("") : `<p class="muted">এখনো কোনো লেখা "পেইড" করা হয়নি। প্রবন্ধ / দোয়া / আমলের ফর্মে "ফ্রি / পেইড" থেকে পেইড বাছুন।</p>`}</div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:16px"><button class="btn btn-ghost" id="accX">বাতিল</button><button class="btn" id="accS">সংরক্ষণ</button></div>`;
+    const sync = () => { $("#accItems", d).style.opacity = $("#accAll", d).checked ? .4 : 1; }; $("#accAll", d).onchange = sync; sync();
+    $("#accX", d).onclick = () => d.close();
+    $("#accS", d).onclick = async () => {
+      const v = $("#accAll", d).checked ? "ALL" : $$("#accItems input:checked", d).map(i => i.value).join(",");
+      try { await call("adminSave", { sheet: "Users", item: { ID: u.ID, Access: v } }); u.Access = v; d.close(); toast("অনুমতি সংরক্ষিত হয়েছে"); redraw(); } catch (e) { toast(e.message, true); }
+    };
+    d.showModal();
+  }
   async function users() {
     setTitle("ব্যবহারকারী", "users"); loading();
     let rows; try { rows = await call("adminList", { sheet: "Users" }); } catch (e) { return body(`<p class="msg err">${esc(e.message)}</p>`); }
     const draw = () => {
-      body(`<div class="help">মোট ${rows.length.toLocaleString("bn-BD")} জন। "ব্লক" করলে সেই ব্যবহারকারী আর লগইন বা মন্তব্য করতে পারবেন না।</div>
-      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>নাম</th><th>ইমেইল</th><th class="hide-m">যোগদান</th><th>অবস্থা</th><th></th></tr></thead><tbody>
+      body(`<div class="help">মোট ${rows.length.toLocaleString("bn-BD")} জন। "ব্লক" করলে সেই ব্যবহারকারী আর লগইন বা মন্তব্য করতে পারবেন না।<br>পেইড কনটেন্ট: কেউ পেমেন্ট করলে তার সারিতে <b>"পেইড অনুমতি"</b> চেপে কোন কোন লেখা খুলবে তা বেছে দিন।</div>
+      <div class="tbl-wrap"><table class="tbl"><thead><tr><th>নাম</th><th>ইমেইল</th><th class="hide-m">যোগদান</th><th>অবস্থা</th><th>পেইড অনুমতি</th><th></th></tr></thead><tbody>
       ${rows.map(u => `<tr><td class="title-cell">${esc(u.Name)}</td><td>${esc(u.Email)}</td><td class="hide-m">${esc(String(u.JoinedAt).slice(0, 10))}</td><td><span class="st st-${esc(u.Status)}">${esc(u.Status)}</span></td>
-      <td><div class="acts"><button class="btn btn-ghost btn-sm" data-tg="${esc(u.ID)}">${u.Status === "Blocked" ? "চালু করুন" : "ব্লক"}</button><button class="btn btn-danger btn-sm" data-del="${esc(u.ID)}">মুছুন</button></div></td></tr>`).join("") || `<tr><td colspan="5" class="muted" style="text-align:center;padding:30px">এখনো কেউ নিবন্ধন করেননি।</td></tr>`}</tbody></table></div>`);
+      <td>${accessLabel(u.Access)}</td>
+      <td><div class="acts"><button class="btn btn-gold btn-sm" data-acc="${esc(u.ID)}">পেইড অনুমতি</button><button class="btn btn-ghost btn-sm" data-tg="${esc(u.ID)}">${u.Status === "Blocked" ? "চালু করুন" : "ব্লক"}</button><button class="btn btn-danger btn-sm" data-del="${esc(u.ID)}">মুছুন</button></div></td></tr>`).join("") || `<tr><td colspan="6" class="muted" style="text-align:center;padding:30px">এখনো কেউ নিবন্ধন করেননি।</td></tr>`}</tbody></table></div>`);
       $$("[data-tg]").forEach(b => b.onclick = async () => { const u = rows.find(x => x.ID === b.dataset.tg); const ns = u.Status === "Blocked" ? "Active" : "Blocked"; try { await call("adminSave", { sheet: "Users", item: { ID: u.ID, Status: ns } }); u.Status = ns; draw(); toast("হালনাগাদ হয়েছে"); } catch (e) { toast(e.message, true); } });
+      $$("[data-acc]").forEach(b => b.onclick = () => accessDialog(rows.find(x => x.ID === b.dataset.acc), draw));
       $$("[data-del]").forEach(b => b.onclick = async () => { if (!confirm("ব্যবহারকারী মুছবেন?")) return; try { await call("adminDelete", { sheet: "Users", id: b.dataset.del }); rows = rows.filter(x => x.ID !== b.dataset.del); draw(); } catch (e) { toast(e.message, true); } });
     };
     draw();
